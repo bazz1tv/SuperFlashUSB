@@ -39,11 +39,13 @@
 
 uint8_t endpoint_buffer[64];
 uint16_t BytesTransferred;
+uint8_t mode;
 /** Main program entry point. This routine contains the overall program flow, including initial
  *  setup of all components and the main program loop.
  */
 int main(void)
 {
+    mode = IDLE;
 	SetupHardware();
 
 	LEDs_SetAllLEDs(LEDMASK_USB_NOTREADY);
@@ -52,6 +54,7 @@ int main(void)
 	for (;;)
 	{
 		USB_USBTask();
+        //BulkInTasks();
 	}
 }
 
@@ -77,7 +80,8 @@ void SetupHardware(void)
 	wdt_disable();
     // Disable Analog Comparator
     ACSR = 0x80;
-    
+    //PLLCSR = 4;
+    //PLLCSR |= 2;
     // SetupPorts
     SetupPorts();
 
@@ -133,6 +137,17 @@ void EVENT_USB_Device_ConfigurationChanged(void)
 	
 	/* Indicate endpoint configuration success or failure */
 	LEDs_SetAllLEDs(ConfigSuccess ? LEDMASK_USB_READY : LEDMASK_USB_ERROR);
+}
+
+static bool BulkInTasks(void)
+{
+	//uint16_t BytesTransferred;
+    if (mode == READ)
+    {
+    	
+    }
+
+	return true;
 }
 
 

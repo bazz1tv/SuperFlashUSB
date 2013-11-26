@@ -15,7 +15,7 @@ MCU          = atmega16u2
 ARCH         = AVR8
 BOARD        = NONE
 F_CPU        = 8000000
-F_USB        = $(F_CPU)
+F_USB        = 8000000
 OPTIMIZATION = s
 TARGET       = main
 SRC          = $(TARGET).c Descriptors.c sflash.c $(LUFA_SRC_USB) $(LUFA_SRC_USBCLASS)
@@ -29,7 +29,7 @@ LD_FLAGS     =
 all: pc
 	
 pc: pc.cpp common.h
-	g++ -L/opt/local/lib pc.cpp -o pc -lusb-1.0
+	g++ -I/opt/local/include/libusb-1.0 -L/opt/local/lib pc.cpp -o pc -lusb-1.0
 
 # 2 colons done on purpose
 clean:: 

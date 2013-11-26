@@ -1,6 +1,6 @@
 #include "common.h"
 #include <iostream>
-#include <libusb-1.0/libusb.h>
+#include <libusb.h>
 #include <unistd.h>
 
 using namespace std;
@@ -92,8 +92,8 @@ void Read()
     
     
     
-    chunks = numbytes / FIXED_CONTROL_ENDPOINT_SIZE;
-    leftover_bytes = numbytes % FIXED_CONTROL_ENDPOINT_SIZE; 
+    chunks = numbytes / 32;
+    leftover_bytes = numbytes % 32; 
     
     LoadReadBuffer();
     
@@ -116,19 +116,19 @@ void Read()
          {  
              //int i;
              // Get a 32K section from USB
-             r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, (uint16_t) FIXED_CONTROL_ENDPOINT_SIZE, 0x0000, &data[0], FIXED_CONTROL_ENDPOINT_SIZE, 500);
-             if(r == FIXED_CONTROL_ENDPOINT_SIZE ) //we wrote the 4 bytes successfully
+             r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, (uint16_t) 32, 0x0000, &data[0], 32, 500);
+             if(r == 32 ) //we wrote the 4 bytes successfully
              {
                  // Write it to file
-                 fwrite(&data[0], 1, FIXED_CONTROL_ENDPOINT_SIZE, fh);
+                 fwrite(&data[0], 1, 32, fh);
                   //cout<<"Read in 64 Bytes"<<endl;
-                 loadBar(i++*FIXED_CONTROL_ENDPOINT_SIZE, (FIXED_CONTROL_ENDPOINT_SIZE*storechunks)+leftover_bytes, ((FIXED_CONTROL_ENDPOINT_SIZE*storechunks)+leftover_bytes)/2, 50);
+                 loadBar(i++*32, (32*storechunks)+leftover_bytes, ((32*storechunks)+leftover_bytes)/2, 50);
              }
              else
         	     cout<<"Write Error1"<<endl;
              
              
-             usleep(5000);
+            // usleep(5000);
              
          }
      }
@@ -144,7 +144,7 @@ void Read()
              if(r == leftover_bytes ) //we wrote the 4 bytes successfully
              {
                   fwrite(&data[0], 1, leftover_bytes, fh);
-                 loadBar(i++*FIXED_CONTROL_ENDPOINT_SIZE, (FIXED_CONTROL_ENDPOINT_SIZE*storechunks)+leftover_bytes, ((FIXED_CONTROL_ENDPOINT_SIZE*storechunks)+leftover_bytes)/2, 50);
+                 loadBar(i++*32, (32*storechunks)+leftover_bytes, ((32*storechunks)+leftover_bytes)/2, 50);
                   //cout<<"Read in " << leftover_bytes <<" Bytes"<<endl;
              }
              else

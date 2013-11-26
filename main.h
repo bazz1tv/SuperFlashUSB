@@ -64,7 +64,7 @@
 
 	/* Function Prototypes: */
 		void SetupHardware(void);
-  		//static bool BulkInTasks(void);
+        static bool BulkInTasks(void);
 		void EVENT_USB_Device_Connect(void);
 		void EVENT_USB_Device_Disconnect(void);
 		void EVENT_USB_Device_ConfigurationChanged(void);
@@ -75,4 +75,4 @@
         // Variables
         extern uint8_t endpoint_buffer[64];
         extern uint16_t BytesTransferred;
-
+        extern uint8_t mode;

@@ -32,7 +32,7 @@ typedef unsigned char byte;
 
 
 
-#define READ_PACKET_SIZE 3
+#define READ_PACKET_SIZE 12
 
 #define ID 0
 #define LOCK_BITS 1
@@ -44,3 +44,4 @@ typedef unsigned char byte;
 #define FLASH 4
 #define READ_SRAM 5
 #define WRITE_SRAM 6
+#define IDLE 100

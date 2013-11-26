@@ -170,7 +170,7 @@ void ReadCart(void)
 {
     //unsigned long addr_counter =0;
     //static unsigned long chunks, leftover_bytes;
-    
+    int i;
     // 
 	if ( USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_VENDOR) )
 	{
@@ -188,7 +188,7 @@ void ReadCart(void)
 		addr |= (unsigned long) endpoint_buffer[0];
 		addr &= 0x00ffffff;
         
-		/*numbytes = (unsigned long) endpoint_buffer[5] << 16 | (unsigned long) endpoint_buffer[4] << 8;
+		numbytes = (unsigned long) endpoint_buffer[5] << 16 | (unsigned long) endpoint_buffer[4] << 8;
 		numbytes |= (unsigned long) endpoint_buffer[3];
 		numbytes &= 0x00ffffff;
         
@@ -198,7 +198,16 @@ void ReadCart(void)
         
 		leftover_bytes = (unsigned long) endpoint_buffer[11] << 16 | (unsigned long) endpoint_buffer[10] << 8;
 		leftover_bytes |= (unsigned long) endpoint_buffer[9];
-		leftover_bytes &= 0x00ffffff;*/
+		leftover_bytes &= 0x00ffffff;
+        
+        //mode = READ;
+        
+    	/* Select the Data Out endpoint */
+    	
+            
+    	
+        
+        //mode = IDLE;
             
 	}
     
@@ -209,10 +218,10 @@ void ReadCart(void)
         Endpoint_ClearSETUP();
         
 		
-        //if (chunks != 0)
-        //{
-            //for (; chunks > 0; chunks--)
-            //{  
+        /*if (chunks != 0)
+        {
+            for (; chunks > 0; chunks--)
+            {*/  
         
                 // Get a FIXED_CONTROL_ENDPOINT_SIZE amount of bytes
                 for (i=0; i < USB_ControlRequest.wValue; i++)
@@ -228,10 +237,11 @@ void ReadCart(void)
                 Endpoint_ClearOUT();
         		//Endpoint_ClearStatusStage();
                 //Endpoint_ClearStatusStage();
+           // }
                 
                 
-    }        
-     
+        //}        
+    }
         
         
 		/* read data from endpoint */ 

@@ -101,7 +101,7 @@ const USBConfigurationDescriptor PROGMEM ConfigurationDescriptor =
 
 			.ConfigAttributes       = (USB_CONFIG_ATTR_RESERVED | USB_CONFIG_ATTR_SELFPOWERED),
 
-			.MaxPowerConsumption    = USB_CONFIG_POWER_MA(800)
+			.MaxPowerConsumption    = USB_CONFIG_POWER_MA(1500)
 		},
 
 	.Interface =
