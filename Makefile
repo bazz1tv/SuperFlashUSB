@@ -26,14 +26,23 @@ LD_FLAGS     =
 
 
 # Default target
-all: pc
+all: prog
 	
-pc: pc.cpp common.h
-	g++ -I/opt/local/include/libusb-1.0 -L/opt/local/lib pc.cpp -o pc -lusb-1.0
+prog: pc/main.cpp main.h common.h pc/graphics.o pc/USB.o pc/menu.o sflash.o
+	g++ -o prog -L/opt/local/lib -I.. -I/opt/local/include/libusb-1.0 pc/main.cpp pc/graphics.o pc/USB.o pc/menu.o pc/sflash.o -lusb-1.0 
+
+pc/graphics.o: pc/graphics.cpp pc/graphics.h common.h main.h
+	g++ -c -o pc/graphics.o -I.. -I/opt/local/include/libusb-1.0 pc/graphics.cpp
+pc/USB.o: pc/USB.h pc/USB.cpp common.h main.h
+	g++ -c -o pc/USB.o -I.. -I/opt/local/include/libusb-1.0 pc/USB.cpp
+pc/menu.o: pc/menu.h pc/menu.cpp common.h main.h
+	g++ -c -o pc/menu.o -I.. -I/opt/local/include/libusb-1.0 pc/menu.cpp
+sflash.o: pc/sflash.cpp pc/sflash.h common.h main.h
+	g++ -c -o pc/sflash.o -I.. -I/opt/local/include/libusb-1.0 pc/sflash.cpp
 
 # 2 colons done on purpose
 clean:: 
-	rm -f pc
+	rm -f prog
 # Include LUFA build script makefiles
 include $(LUFA_PATH)/Build/lufa_core.mk
 include $(LUFA_PATH)/Build/lufa_sources.mk

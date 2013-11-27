@@ -28,6 +28,7 @@ typedef unsigned char byte;
 #define FF_ADDR_LOW (1)
 #define FF_ADDR_HIGH (1 << 1)
 #define FF_ADDR_BANK (1 << 2)
+#define CLK_THING   (1 << 3)
 //#define FF_CLK (1 << 3)
 
 

@@ -50,11 +50,20 @@ int main(void)
 
 	LEDs_SetAllLEDs(LEDMASK_USB_NOTREADY);
 	GlobalInterruptEnable();
-	//sei();
+	sei();
+    
+    byte derp=0;
+    
+    
+    
+    
 	for (;;)
 	{
 		USB_USBTask();
         //BulkInTasks();
+        
+        //PORTD = ((CLKSTA&1)<<3);
+        
 	}
 }
 
@@ -70,6 +79,8 @@ void SetupPorts(void)
     
     SNES_CTRL_DIR = 0xff;
     SNES_CTRL_PORT = (CART)|(RD)|(WR);
+    
+    
 }
 /** Configures the board hardware and chip peripherals for the demo's functionality. */
 void SetupHardware(void)
@@ -80,13 +91,20 @@ void SetupHardware(void)
 	wdt_disable();
     // Disable Analog Comparator
     ACSR = 0x80;
-    //PLLCSR = 4;
+    
+    //CLKSEL1 = 0b00101111;
+    //CLKSEL0 = 0b00110100;
+    
+    //PLLCSR = 0b00000110;
     //PLLCSR |= 2;
     // SetupPorts
     SetupPorts();
 
 	/* Disable clock division */
-	clock_prescale_set(clock_div_1);
+	//clock_prescale_set(clock_div_1);
+    CLKPR = 0x81;
+    
+    
 #elif (ARCH == ARCH_XMEGA)
 	/* Start the PLL to multiply the 2MHz RC oscillator to 32MHz and switch the CPU core to run from it */
 	XMEGACLK_StartPLL(CLOCK_SRC_INT_RC2MHZ, 2000000, F_CPU);
@@ -101,7 +119,7 @@ void SetupHardware(void)
 
 	/* Hardware Initialization */
 	LEDs_Init();
-	USB_Init();
+	USB_Init(USB_DEVICE_OPT_FULLSPEED | USB_OPT_REG_ENABLED | USB_OPT_AUTO_PLL);
 }
 
 /** Event handler for the library USB Connection event. */

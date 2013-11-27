@@ -166,81 +166,35 @@ void GetChipID(void)
     
 }
 
+#define OUT_VENDOR_REQUEST ( USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_VENDOR) )
+#define IN_VENDOR_REQUEST ( USB_ControlRequest.bmRequestType == (REQDIR_DEVICETOHOST | REQTYPE_VENDOR) )
 void ReadCart(void)
 {
-    //unsigned long addr_counter =0;
-    //static unsigned long chunks, leftover_bytes;
-    int i;
-    // 
-	if ( USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_VENDOR) )
+	if ( OUT_VENDOR_REQUEST  )
 	{
         
 		Endpoint_ClearSETUP();
-		/* read data from endpoint */ 
 		Endpoint_Read_Control_Stream_LE(endpoint_buffer, READ_PACKET_SIZE); 
-        //Endpoint_ClearOUT();
-		/* and mark the whole request as successful: */
-        //while ( !(Endpoint_IsINReady())); 
 		Endpoint_ClearStatusStage();
 		
         
 		addr = (unsigned long) endpoint_buffer[2] << 16 | (unsigned long) endpoint_buffer[1] << 8;
 		addr |= (unsigned long) endpoint_buffer[0];
 		addr &= 0x00ffffff;
-        
-		numbytes = (unsigned long) endpoint_buffer[5] << 16 | (unsigned long) endpoint_buffer[4] << 8;
-		numbytes |= (unsigned long) endpoint_buffer[3];
-		numbytes &= 0x00ffffff;
-        
-		chunks = (unsigned long) endpoint_buffer[8] << 16 | (unsigned long) endpoint_buffer[7] << 8;
-		chunks |= (unsigned long) endpoint_buffer[6];
-		chunks &= 0x00ffffff;
-        
-		leftover_bytes = (unsigned long) endpoint_buffer[11] << 16 | (unsigned long) endpoint_buffer[10] << 8;
-		leftover_bytes |= (unsigned long) endpoint_buffer[9];
-		leftover_bytes &= 0x00ffffff;
-        
-        //mode = READ;
-        
-    	/* Select the Data Out endpoint */
-    	
-            
-    	
-        
-        //mode = IDLE;
-            
 	}
-    
-	else if ( USB_ControlRequest.bmRequestType == (REQDIR_DEVICETOHOST | REQTYPE_VENDOR) )
+	else if ( IN_VENDOR_REQUEST )
 	{
         unsigned long i;
         
         Endpoint_ClearSETUP();
-        
-		
-        /*if (chunks != 0)
+        for (i=0; i < USB_ControlRequest.wValue; i++)
         {
-            for (; chunks > 0; chunks--)
-            {*/  
-        
-                // Get a FIXED_CONTROL_ENDPOINT_SIZE amount of bytes
-                for (i=0; i < USB_ControlRequest.wValue; i++)
-                {
-                    endpoint_buffer[i] = ReadByte(addr++);
-                }
-                
-                //Endpoint_WaitUntilReady();
-                // write it to USB
-                Endpoint_Write_Control_Stream_LE(endpoint_buffer, (uint16_t)USB_ControlRequest.wValue);
-                //Endpoint_ClearIN();
-        		/* and mark the whole request as successful: */
-                Endpoint_ClearOUT();
-        		//Endpoint_ClearStatusStage();
-                //Endpoint_ClearStatusStage();
-           // }
+            endpoint_buffer[i] = ReadByte(addr++);
+        }
                 
                 
-        //}        
+        Endpoint_Write_Control_Stream_LE(endpoint_buffer, (uint16_t)USB_ControlRequest.wValue);
+        Endpoint_ClearOUT();
     }
         
         

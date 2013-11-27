@@ -2,6 +2,7 @@
 
 int InitUSB()
 {
+    ctx = NULL;
 	r = libusb_init(&ctx); //initialize the library for the session we just declared
 	if(r < 0) {
 		cout<<"Init Error "<<r<<endl; //there was an error
