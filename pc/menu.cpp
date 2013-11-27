@@ -90,21 +90,7 @@ int GetSelection()
     
     // we subtract here because the definitions start from 0, not 1 (like the input numbers)
     input--;
-    if (input == FLASH || input == READ)
-    {
-        printf ("Enter Start Address: 0x");
-		scanf("%lx", &startaddr);
-		printf ("Enter Number of bytes: 0x");
-		scanf ("%lx", &numbytes);
-
-		l = numbytes&0xff;
-		h = (numbytes&0xff00)>>8;
-		b = (numbytes&0xff0000)>>16;
-
-		aal = startaddr&0xff;
-		aah = (startaddr&0xff00)>>8;
-		aab = (startaddr&0xff0000)>>16;
-    }
+    
     
 
     
@@ -112,19 +98,44 @@ int GetSelection()
 	 
 }
 
+void GetStartAddress()
+{
+    printf ("Enter Start Address: 0x");
+	scanf("%lx", &startaddr);
+    aal = startaddr&0xff;
+	aah = (startaddr&0xff00)>>8;
+	aab = (startaddr&0xff0000)>>16;
+}
+
+void GetNumBytes()
+{
+	printf ("Enter Number of bytes: 0x");
+	scanf ("%lx", &numbytes);
+
+	l = numbytes&0xff;
+	h = (numbytes&0xff00)>>8;
+	b = (numbytes&0xff0000)>>16;
+}
+
 void ProcessSelection()
 {
+    if (input == FLASH || input == READ)
+    {
+        GetStartAddress();
+		GetNumBytes();
+    }
+    
     switch (input)
     {
         case READ_IDENTIFIER_CODES:
         {
-            ReadIDCodes();
+            ReadIDCodes();  // sflash 
             break;
         }
             
         case READ:
         {
-            Read();
+            Read();         // sflash module
             break;
         }
         

@@ -3,10 +3,11 @@
 #include <iostream>
 #include "main.h"
 
-using namespace std;
+#include "sflash/read.h"
+#include "sflash/write.h"
+#include "sflash/id.h"
 
-void LoadReadBuffer();
-void Read();
-void GetLockBits();
-void GetChipID();
-void ReadIDCodes();
+
+
+
+

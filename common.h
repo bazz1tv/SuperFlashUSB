@@ -33,7 +33,7 @@ typedef unsigned char byte;
 
 
 
-#define READ_PACKET_SIZE 12
+#define READ_PACKET_SIZE 3
 
 #define ID 0
 #define LOCK_BITS 1

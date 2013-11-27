@@ -2,6 +2,9 @@
 
 #include "USB.h"
 #include "../common.h"
+#include <iostream>
+using namespace std;
+
 typedef unsigned char byte;
 
 extern libusb_device **devs; //pointer to pointer of device, used to retrieve a list of devices
