@@ -20,7 +20,7 @@ int r; //for return values
 
 byte data[64];
 FILE * fh;
-int input;
+int input, MajorCommand,MinorCommand;
 unsigned char l,h,b, aal,aah,aab;
 unsigned long numbytes,startaddr;
 unsigned long chunks, leftover_bytes;
