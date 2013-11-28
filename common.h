@@ -35,12 +35,20 @@ typedef unsigned char byte;
 
 #define READ_PACKET_SIZE 3
 
+
+// MAJOR
+#define READ_IDENTIFIER_CODES 0
+// MINOR
 #define ID 0
 #define LOCK_BITS 1
-
-#define READ_IDENTIFIER_CODES 0
+// ------------------
+// MAJOR 
 #define ERASE 1
-#define ERASE_SECTOR 2
+// MINOR
+#define ERASE_CHIP 0
+#define ERASE_BLOCK_USING_ADDRESS 1
+#define ERASE_BLOCK_USING_BLOCKNUM 2
+//--------------------
 #define READ 3
 #define FLASH 4
 #define READ_SRAM 5

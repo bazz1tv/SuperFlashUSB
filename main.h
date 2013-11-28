@@ -37,6 +37,7 @@
 #pragma once
 
 	/* Includes: */
+#include "common.h"
 		#include <avr/io.h>
 		#include <avr/wdt.h>
 		#include <avr/power.h>
@@ -65,7 +66,7 @@
 
 	/* Function Prototypes: */
 		void SetupHardware(void);
-        static bool BulkInTasks(void);
+        //static bool BulkInTasks(void);
 		void EVENT_USB_Device_Connect(void);
 		void EVENT_USB_Device_Disconnect(void);
 		void EVENT_USB_Device_ConfigurationChanged(void);

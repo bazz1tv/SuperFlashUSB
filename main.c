@@ -191,21 +191,12 @@ void EVENT_USB_Device_ControlRequest(void)
 		case READ:
             ReadCart();
 			break;
-		case ERASE_SECTOR:
-				/*if ( USB_ControlRequest.bmRequestType == (REQDIR_DEVICETOHOST | REQTYPE_VENDOR) )
-				{
-				
-				
-					Endpoint_ClearSETUP();
-					 read data from endpoint 
-					Endpoint_Write_Control_Stream_LE(endpoint_buffer, 6);
-					Endpoint_ClearStatusStage();
-					//count++;
-				}*/
-				break;
+		case ERASE:
+            Erase();
+			break;
                 
-            default:
-            break;
+        default:
+        break;
 	}
 }
 

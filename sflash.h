@@ -11,14 +11,16 @@
 
 #include "common.h"
 #include "main.h"
+#include "sflash/read.h"
+#include "sflash/id.h"
+#include "sflash/erase.h"
+
+typedef uint8_t byte;
 
 //extern static uint16_t BytesTransferred;
-unsigned long addr,numbytes;
+extern unsigned long addr; //,numbytes;
 
-void GetChipID(void);
-void ReadCart(void);
-
-unsigned long chunks, leftover_bytes;
+//unsigned long chunks, leftover_bytes;
 /*void Erase();
 void Erase_Sector();
 void Read();
