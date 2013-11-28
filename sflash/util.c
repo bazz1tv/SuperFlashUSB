@@ -76,6 +76,13 @@ void LatchBankByte(byte B)
     DATA_PORT = B;
     FF_PORT |= FF_ADDR_BANK;
 }
+
+void LatchStatus(byte B)
+{
+    FF_PORT &= ~FF_STATUS;
+    DATA_PORT = B;
+    FF_PORT |= FF_STATUS;
+}
 void LatchAddress(unsigned long addr)
 {
     byte old_data_dir = DATA_DIR;

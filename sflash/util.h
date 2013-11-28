@@ -27,6 +27,7 @@ void NoReadNoWrite(void);
 
 /////////////////////////////////////////////
 // EXPECTS DATA_PORT OUT-Direction
+void LatchStatus(byte B);
 void LatchLowByte(byte B);
 
 

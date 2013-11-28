@@ -52,18 +52,9 @@ int main(void)
 	GlobalInterruptEnable();
 	sei();
     
-    byte derp=0;
-    
-    
-    
-    
 	for (;;)
 	{
 		USB_USBTask();
-        //BulkInTasks();
-        
-        //PORTD = ((CLKSTA&1)<<3);
-        
 	}
 }
 
@@ -79,8 +70,6 @@ void SetupPorts(void)
     
     SNES_CTRL_DIR = 0xff;
     SNES_CTRL_PORT = (CART)|(RD)|(WR);
-    
-    
 }
 /** Configures the board hardware and chip peripherals for the demo's functionality. */
 void SetupHardware(void)
@@ -157,16 +146,7 @@ void EVENT_USB_Device_ConfigurationChanged(void)
 	LEDs_SetAllLEDs(ConfigSuccess ? LEDMASK_USB_READY : LEDMASK_USB_ERROR);
 }
 
-static bool BulkInTasks(void)
-{
-	//uint16_t BytesTransferred;
-    if (mode == READ)
-    {
-    	
-    }
 
-	return true;
-}
 
 
 /** Event handler for the library USB Control Request reception event. */
