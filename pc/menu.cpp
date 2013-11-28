@@ -78,8 +78,8 @@ int GetSelection()
 {
     printf ("Select: \n");
 	printf ("1) Get Flash Chip ID\n");
-	printf ("2) Erase ROM Chip\n");
-	printf ("3) Erase Sector\n");
+	printf ("2) Erase\n");
+	//printf ("3) Erase Sector\n");
 	printf ("4) Read\n");
 	printf ("5) Flash\n\n");
 	printf ("6) Read SRAM\n");
@@ -91,11 +91,42 @@ int GetSelection()
     // we subtract here because the definitions start from 0, not 1 (like the input numbers)
     input--;
     
-    
-
-    
+    if (input == ERASE)
+    {
+        MajorCommand = ERASE;
+        
+        printf ("1) Erase ROM Chip\n");
+        printf ("2) Erase Block\n");
+        
+        scanf("%d",&input);
+        
+        if (input == 1)
+        {
+            // ERASE ROM CHIP PROCESSING
+        }
+        else if (input == 2)
+        {
+            printf ("1) Use Block Address\n");
+            printf ("2) Use Block Number\n");
+            
+            scanf("%d",&input);
+            
+            if (input == 1)
+            {
+                MinorCommand = ERASE_BLOCK_USING_ADDRESS;  
+            }
+            else if (input == 2)
+            {
+                MinorCommand = ERASE_BLOCK_USING_BLOCKNUM;
+            }
+            else
+            {
+                printf ("FAIL");
+                exit(0);
+            }
+        }
+    }
     return 0;
-	 
 }
 
 void GetStartAddress()

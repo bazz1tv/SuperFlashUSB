@@ -15,7 +15,7 @@ extern ssize_t cnt; //holding number of devices in list
 
 extern byte data[64];
 extern FILE * fh;
-extern int input;
+extern int input, MinorCommand, MajorCommand;
 extern unsigned char l,h,b, aal,aah,aab;
 extern unsigned long numbytes,startaddr;
 extern unsigned long chunks, leftover_bytes;
