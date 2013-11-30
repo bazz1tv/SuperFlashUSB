@@ -10,7 +10,7 @@ int InitUSB()
 	}
     
     // SetUSBDebugMessages
-	libusb_set_debug(ctx, 3); //set verbosity level to 3, as suggested in the documentation
+	//libusb_set_debug(ctx, 3); //set verbosity level to 3, as suggested in the documentation
     return 0;
 }
 
@@ -55,6 +55,14 @@ int OpenUSBDevice()
 	cout<<"Claimed Interface"<<endl;
 #endif
     
+    /*r =  libusb_set_configuration(dev_handle, 1);
+	if(r < 0) 
+    {
+#ifdef DEBUG
+		cout<<"Cannot Set Configuration USB"<<endl;
+#endif
+		exit(1);
+	}*/
     return 0;
 }
 

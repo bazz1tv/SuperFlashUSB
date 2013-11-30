@@ -92,10 +92,9 @@ sflash/erase.o: sflash/erase.c sflash/erase.h sflash/../main.h \
  LUFA/LUFA/../LUFA/Drivers/USB/Class/Device/../Common/CDCClassCommon.h \
  LUFA/LUFA/../LUFA/Drivers/USB/Class/StillImageClass.h \
  sflash/../Config/AppConfig.h LUFA/LUFA/../LUFA/Drivers/Board/LEDs.h \
- LUFA/LUFA/../LUFA/Drivers/Board/../../Common/Common.h \
- LUFA/LUFA/../LUFA/Platform/Platform.h \
- LUFA/LUFA/../LUFA/Platform/../Common/Common.h sflash/util.h \
- sflash/common.h
+ LUFA/LUFA/../LUFA/Drivers/Board/../../Common/Common.h Board/LEDs.h \
+ Board/../sflash/util.h LUFA/LUFA/../LUFA/Platform/Platform.h \
+ LUFA/LUFA/../LUFA/Platform/../Common/Common.h sflash/common.h
 
 sflash/erase.h:
 
@@ -293,10 +292,12 @@ LUFA/LUFA/../LUFA/Drivers/Board/LEDs.h:
 
 LUFA/LUFA/../LUFA/Drivers/Board/../../Common/Common.h:
 
+Board/LEDs.h:
+
+Board/../sflash/util.h:
+
 LUFA/LUFA/../LUFA/Platform/Platform.h:
 
 LUFA/LUFA/../LUFA/Platform/../Common/Common.h:
-
-sflash/util.h:
 
 sflash/common.h:

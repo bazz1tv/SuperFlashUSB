@@ -65,9 +65,9 @@ const USBDeviceDescriptor PROGMEM DeviceDescriptor =
 	.Header                 = {.Size = sizeof(USB_Descriptor_Device_t), .Type = DTYPE_Device},
 
 	.USBSpecification       = VERSION_BCD(01.10),
-	.Class                  = USB_CSCP_NoDeviceClass,
-	.SubClass               = USB_CSCP_NoDeviceSubclass,
-	.Protocol               = USB_CSCP_NoDeviceProtocol,
+	.Class                  = 0xff,
+	.SubClass               = 0xff, //USB_CSCP_NoDeviceSubclass,
+	.Protocol               = 0xff, //USB_CSCP_NoDeviceProtocol,
 
 	.Endpoint0Size          = FIXED_CONTROL_ENDPOINT_SIZE,
 
@@ -99,9 +99,9 @@ const USBConfigurationDescriptor PROGMEM ConfigurationDescriptor =
 			.ConfigurationNumber    = 1,
 			.ConfigurationStrIndex  = NO_DESCRIPTOR,
 
-			.ConfigAttributes       = (USB_CONFIG_ATTR_RESERVED | USB_CONFIG_ATTR_SELFPOWERED),
+			.ConfigAttributes       = (USB_CONFIG_ATTR_RESERVED),
 
-			.MaxPowerConsumption    = USB_CONFIG_POWER_MA(1500)
+			.MaxPowerConsumption    = USB_CONFIG_POWER_MA(500)
 		},
 
 	.Interface =
@@ -111,19 +111,19 @@ const USBConfigurationDescriptor PROGMEM ConfigurationDescriptor =
 			.InterfaceNumber        = 0x00,
 			.AlternateSetting       = 0x00,
 
-			.TotalEndpoints         = 2,
+			.TotalEndpoints         = 0,
 
 			.Class                  = 0xff,
 			.SubClass               = 0xff,
 			.Protocol               = 0xff,
 
 			.InterfaceStrIndex      = NO_DESCRIPTOR
-		},
+		}
 
 	
 		
 		
-		.InEndpoint = {
+		/*.InEndpoint = {
 			.Header = {
 				.Size = sizeof(USBEndpointDescriptor),
 				.Type = DTYPE_Endpoint
@@ -142,7 +142,7 @@ const USBConfigurationDescriptor PROGMEM ConfigurationDescriptor =
 			.Attributes = (EP_TYPE_BULK | ENDPOINT_ATTR_NO_SYNC | ENDPOINT_USAGE_DATA),
 			.EndpointSize = ENDPOINT_SIZE,
 			.PollingIntervalMS = 0xFF
-		}
+		}*/
 };
 
 /** Language descriptor structure. This descriptor, located in FLASH memory, is returned when the host requests

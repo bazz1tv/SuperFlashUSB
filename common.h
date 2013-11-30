@@ -1,6 +1,6 @@
 #pragma once
 
-#define FIXED_CONTROL_ENDPOINT_SIZE      64
+#define FIXED_CONTROL_ENDPOINT_SIZE     8
 
 #define IN_BULK_ENDPOINT 0x81
 #define OUT_BULK_ENDPOINT 0x02
@@ -30,7 +30,7 @@ typedef unsigned char byte;
 #define FF_ADDR_BANK (1 << 2)
 #define FF_STATUS   (1 << 3)
 //#define FF_CLK (1 << 3)
-
+#define DEBUG
 
 
 #define READ_PACKET_SIZE 3
@@ -54,3 +54,6 @@ typedef unsigned char byte;
 #define READ_SRAM 5
 #define WRITE_SRAM 6
 #define IDLE 100
+
+#define RESET_ADDRESS 99
+#define SET_LED 98

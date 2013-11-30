@@ -1,4 +1,7 @@
 #include "../main.h"
 
-void BlockErase(unsigned long);
+void Erase();
+int VerifyErase();
+void EraseBlockUsingAddress(unsigned long block_address);
+void EraseBlockUsingBlockNum(int blocknum);
 

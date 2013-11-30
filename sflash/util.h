@@ -7,6 +7,9 @@ void WriteByte(unsigned long addr, byte B);
 byte ReadByte(unsigned long addr);
 unsigned long ConvertToUlong(byte *);
 
+byte ReadByteNoAddr();
+void WriteByteNoAddr(byte B);
+
 byte ReadStatusUsingCommand(void);
 byte ReadStatusWithoutCommand(void);
 
@@ -23,6 +26,7 @@ void WriteHigh(void);
 void WriteLow(void);
 
 void NoReadNoWrite(void);
+
 
 
 /////////////////////////////////////////////

@@ -8,25 +8,31 @@ void ReadCart(void)
 	{
         
 		Endpoint_ClearSETUP();
-		Endpoint_Read_Control_Stream_LE(endpoint_buffer, READ_PACKET_SIZE); 
+        WriteByteNoAddr(0xff);
+		Endpoint_Read_Control_Stream_LE(endpoint_buffer, READ_PACKET_SIZE);
+        addr = ConvertToUlong (endpoint_buffer); 
 		Endpoint_ClearStatusStage();
 		
         
-        addr = ConvertToUlong (endpoint_buffer);
+        
 	}
 	else if ( IN_VENDOR_REQUEST )
 	{
         unsigned long i;
         
-        Endpoint_ClearSETUP();
+        
         for (i=0; i < USB_ControlRequest.wValue; i++)
         {
             endpoint_buffer[i] = ReadByte(addr++);
         }
+        
+        Endpoint_ClearSETUP();
                 
-                
+       // while (!(Endpoint_IsINReady()));       
         Endpoint_Write_Control_Stream_LE(endpoint_buffer, (uint16_t)USB_ControlRequest.wValue);
         Endpoint_ClearOUT();
+        
+        //Endpoint_ClearStatusStage();
     }        
 	
 }

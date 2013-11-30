@@ -40,7 +40,10 @@ void InitRead()
     
     LoadReadBuffer();
     
-	r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,READ, 0x0000, 0x0000, &data[0], READ_PACKET_SIZE, 50);
+    uint8_t bmrt = LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT;
+    cout << "bmrt = ";
+    printf ( "%x\n", bmrt);
+	r = libusb_control_transfer(dev_handle, bmrt,READ, 0x0000, 0x0000, &data[0], READ_PACKET_SIZE, 500);
   	if(r == READ_PACKET_SIZE ) //we wrote successfully
     {
 #ifdef DEBUG
@@ -48,7 +51,7 @@ void InitRead()
 #endif
     }
   	else
-  		cout<<"Write Error"<<endl;
+  		cout<<"Write Error " << r <<endl;
 }
 
 void ReadDataToFile()
@@ -59,6 +62,7 @@ void ReadDataToFile()
         for (; chunks > 0; chunks--)
         {  
             // Get a 32K section from USB
+            redo:
             r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, (uint16_t) FIXED_CONTROL_ENDPOINT_SIZE, 0x0000, &data[0], FIXED_CONTROL_ENDPOINT_SIZE, 500);
             if(r == FIXED_CONTROL_ENDPOINT_SIZE ) //we wrote the 4 bytes successfully
             {
@@ -67,8 +71,18 @@ void ReadDataToFile()
               //cout<<"Read in 64 Bytes"<<endl;
              loadBar(i++*FIXED_CONTROL_ENDPOINT_SIZE, (FIXED_CONTROL_ENDPOINT_SIZE*storechunks)+leftover_bytes, ((FIXED_CONTROL_ENDPOINT_SIZE*storechunks)+leftover_bytes)/2, 50);
             }
+            else if (r == LIBUSB_ERROR_PIPE || r == LIBUSB_ERROR_OTHER)
+            {
+                cout << "Read: PIPE/Other Error: " << r << endl;
+                printf( "%d\n", errno );
+                ResetAddress();
+                goto redo;
+            }
             else
-    	    cout<<"Write Error1"<<endl;
+            {
+    	        cout<<"Write Error1: " << r <<endl;
+                printf( "%d\n", errno );
+            }
         }
     }
 

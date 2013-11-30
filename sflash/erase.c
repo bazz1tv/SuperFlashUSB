@@ -28,15 +28,23 @@ wIndex	the index field for the setup packet */
         {
             EraseBlockUsingBlockNum(USB_ControlRequest.wIndex);
         }
+        
+        LatchStatus(1);
+        
+        Endpoint_ClearStatusStage();
 	}
 	else if ( IN_VENDOR_REQUEST )
 	{
-        Endpoint_ClearSETUP();
+        byte b;
         
-        endpoint_buffer[0] = ReadStatusWithoutCommand() >> 7;      
+        b = endpoint_buffer[0] = ReadStatusWithoutCommand(); //>> 7;
                 
+        Endpoint_ClearSETUP();
         Endpoint_Write_Control_Stream_LE(endpoint_buffer, 1);
         Endpoint_ClearOUT();
+        
+        if (b & 0x80)
+            LatchStatus(0);
     }
 
 }
@@ -52,7 +60,7 @@ void EraseBlockUsingBlockNum(word blocknum)
     
     // Erase Confirm Command D0h
     // ADDR = X
-    WriteByte (0, 0xD0);
+    WriteByteNoAddr (0xD0);
     
     // Read Status Register
     // Do this from PC
@@ -69,5 +77,5 @@ void EraseBlockUsingBlockAddress(unsigned long BA)
     
     // Erase Confirm Command D0h
     // ADDR = X
-    WriteByte (0, 0xD0);
+    WriteByteNoAddr (0xD0);
 }

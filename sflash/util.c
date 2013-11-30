@@ -12,13 +12,17 @@ unsigned long ConvertToUlong(byte *p)
 
 byte ReadStatusWithoutCommand(void)
 {
-    return ReadByte(0);
+    return ReadByteNoAddr();
 }
 
 byte ReadStatusUsingCommand(void)
 {
     // TODO
+    
+    return ReadByteNoAddr();
 }
+
+
 
 /* 
 CONTROL
@@ -79,9 +83,13 @@ void LatchBankByte(byte B)
 
 void LatchStatus(byte B)
 {
+     byte old_data_dir = DATA_DIR;
+     DATA_DIR = 0xff;
     FF_PORT &= ~FF_STATUS;
     DATA_PORT = B;
+    //_delay_us(1);
     FF_PORT |= FF_STATUS;
+     DATA_DIR = old_data_dir;
 }
 void LatchAddress(unsigned long addr)
 {
@@ -103,7 +111,21 @@ void LatchAddress(unsigned long addr)
     
 }
 
-
+void WriteByteNoAddr(byte B)
+{
+    CartLow();
+    NoReadNoWrite();
+    
+    
+    
+    // Set Address
+    //LatchAddress(addr);
+    DATA_DIR = 0xff;
+    DATA_PORT = B;
+    
+    WriteLow();
+    WriteHigh();
+}
 void WriteByte(unsigned long addr, byte B)
 {
     CartLow();
@@ -120,6 +142,26 @@ void WriteByte(unsigned long addr, byte B)
     WriteHigh();
 }
 
+
+byte ReadByteNoAddr()
+{
+    byte B;
+    CartLow();
+    NoReadNoWrite();
+    
+   // LatchAddress(addr);
+    
+    DATA_DIR = 0x00;
+    DATA_PORT = 0xff;
+    ReadLow();
+    
+    //_delay_us(2);
+    B = DATA_PIN;
+    
+    ReadHigh();
+    //DATA_DIR = 0xff;
+    return B;
+}
 byte ReadByte(unsigned long addr)
 {
     byte B;

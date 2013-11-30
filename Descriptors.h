@@ -52,7 +52,7 @@
 		 */
 			  //#define CONTROL_ENDPOINT_ADDR  1
 
-#define ENDPOINT_SIZE 64
+#define ENDPOINT_SIZE 8
 		
 			  
 			  typedef USB_Descriptor_Device_t USBDeviceDescriptor;
@@ -65,8 +65,8 @@
 			  	USBConfigurationDescriptorHeader Config;
 			  	USBInterfaceDescriptor           Interface;
 				//USBEndpointDescriptor            ControlEndpoint;
-			  	USBEndpointDescriptor            InEndpoint;
-			  	USBEndpointDescriptor            OutEndpoint;
+			  	//USBEndpointDescriptor            InEndpoint;
+			  	//USBEndpointDescriptor            OutEndpoint;
 			  } USBConfigurationDescriptor;	  
 		/*typedef struct
 		{
@@ -91,10 +91,10 @@
 
 	/* Macros: */
 		/** Endpoint address of the Generic HID reporting IN endpoint. */
-		#define GENERIC_IN_EPADDR         (ENDPOINT_DIR_IN | 1)
+		//#define GENERIC_IN_EPADDR         (ENDPOINT_DIR_IN | 1)
 
 		/** Size in bytes of the Generic HID reporting endpoint. */
-		#define GENERIC_EPSIZE            8
+		//#define GENERIC_EPSIZE            8
 
 	/* Function Prototypes: */
 		uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,

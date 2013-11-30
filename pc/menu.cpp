@@ -1,5 +1,6 @@
 #include "menu.h"
 #include "../common.h"
+#include "util.h"
 
 int OpenForWriteBin(const char *filename)
 {
@@ -28,7 +29,7 @@ int OpenFiles()
     
 	if ( argc > 1)
 	{
-    	if (input == READ || input == READ_SRAM )
+    	if (MajorCommand == READ || MajorCommand == READ_SRAM )
     	{
     		printf ("Opening File %s for writing to\n", filename);
     		fh = fopen(filename, "wb");
@@ -38,7 +39,7 @@ int OpenFiles()
     		}
     		printf ("File Opened\n");
     	}
-    	else if ( input == FLASH || input == WRITE_SRAM )
+    	else if ( MajorCommand == FLASH || MajorCommand == WRITE_SRAM )
     	{
     		printf ("Opening File %s for reading from\n", filename);
     		fh = fopen(filename, "rb");
@@ -52,16 +53,18 @@ int OpenFiles()
     else
     {
         // Input a filename
-        printf ("File to ");
         
-        if (input == FLASH)
+        
+        if (MajorCommand == FLASH)
         {
+            printf ("File to ");
             printf ("write from: ");
             scanf ("%s",filename);
             OpenForReadBin(filename);
         }
-        else if (input == READ)
+        else if (MajorCommand == READ)
         {
+            printf ("File to ");
             printf ("read to: ");
             scanf ("%s",filename);
             
@@ -84,12 +87,17 @@ int GetSelection()
 	printf ("5) Flash\n\n");
 	printf ("6) Read SRAM\n");
 	printf ("7) Write SRAM\n");
+    printf ("8) SetLED\n");
 
 
 	scanf("%d",&input);
     
+    if (input == 8)
+        SetLED();
+    
     // we subtract here because the definitions start from 0, not 1 (like the input numbers)
     input--;
+    MajorCommand = input;
     
     if (input == ERASE)
     {
@@ -113,11 +121,16 @@ int GetSelection()
             
             if (input == 1)
             {
-                MinorCommand = ERASE_BLOCK_USING_ADDRESS;  
+                MinorCommand = ERASE_BLOCK_USING_ADDRESS; 
+                printf ("Enter Block Address: ");
+                scanf("%lx", &block_address);
+                // Error Checking 
             }
             else if (input == 2)
             {
                 MinorCommand = ERASE_BLOCK_USING_BLOCKNUM;
+                printf ("Enter BlockNumber: ");
+                scanf("%d", &blocknum);
             }
             else
             {
@@ -150,13 +163,13 @@ void GetNumBytes()
 
 void ProcessSelection()
 {
-    if (input == FLASH || input == READ)
+    if (MajorCommand == FLASH || MajorCommand == READ)
     {
         GetStartAddress();
 		GetNumBytes();
     }
     
-    switch (input)
+    switch (MajorCommand)
     {
         case READ_IDENTIFIER_CODES:
         {
@@ -168,6 +181,11 @@ void ProcessSelection()
         {
             Read();         // sflash module
             break;
+        }
+        
+        case ERASE:
+        {
+            Erase();
         }
         
         default:

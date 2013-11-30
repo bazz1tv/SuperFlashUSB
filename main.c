@@ -37,7 +37,7 @@
 #include "main.h"
 #include "sflash.h"
 
-uint8_t endpoint_buffer[64];
+uint8_t endpoint_buffer[128];
 uint16_t BytesTransferred;
 uint8_t mode;
 /** Main program entry point. This routine contains the overall program flow, including initial
@@ -50,7 +50,7 @@ int main(void)
 
 	LEDs_SetAllLEDs(LEDMASK_USB_NOTREADY);
 	GlobalInterruptEnable();
-	sei();
+	//sei();
     
 	for (;;)
 	{
@@ -132,21 +132,28 @@ void EVENT_USB_Device_ConfigurationChanged(void)
 
 	//USB_Device_EnableSOFEvents();
 	
-	ConfigSuccess &= Endpoint_ConfigureEndpoint(IN_BULK_ENDPOINT_ADDR,
+	/*ConfigSuccess &= Endpoint_ConfigureEndpoint(IN_BULK_ENDPOINT_ADDR,
 	                                  EP_TYPE_BULK,
 	                                  ENDPOINT_SIZE,
-									  1);
+									  1);*/
 	
-	ConfigSuccess &= Endpoint_ConfigureEndpoint(OUT_BULK_ENDPOINT_ADDR,
+                                      /*ConfigSuccess &= Endpoint_ConfigureEndpoint(OUT_BULK_ENDPOINT_ADDR,
 	                                  EP_TYPE_BULK,
 	                                  ENDPOINT_SIZE,
-	                                  1);
+	                                  1);*/
 	
 	/* Indicate endpoint configuration success or failure */
-	LEDs_SetAllLEDs(ConfigSuccess ? LEDMASK_USB_READY : LEDMASK_USB_ERROR);
+   LEDs_SetAllLEDs(ConfigSuccess ? LEDMASK_USB_READY : LEDMASK_USB_ERROR);
 }
 
-
+#include "sflash.h"
+void ResetAddress()
+{	
+    Endpoint_ClearSETUP();
+	addr -= USB_ControlRequest.wValue;
+    
+    Endpoint_ClearStatusStage();
+}
 
 
 /** Event handler for the library USB Control Request reception event. */
@@ -171,9 +178,17 @@ void EVENT_USB_Device_ControlRequest(void)
 		case READ:
             ReadCart();
 			break;
+        case RESET_ADDRESS:
+            ResetAddress();
 		case ERASE:
             Erase();
 			break;
+        case SET_LED:
+            LatchStatus((byte)USB_ControlRequest.wValue);
+            Endpoint_ClearSETUP();
+            Endpoint_ClearStatusStage();
+            
+            break;
                 
         default:
         break;
