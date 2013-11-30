@@ -21,7 +21,10 @@ void GetLockBits()
              
          for (c=0; c < 64; c++)
          {
-             printf ("Sector %d: %s\n",c, ( (data[c] & 1) == 1) ? "Locked":"Unlocked");
+             printf ("Block ");
+             if (c < 10)
+                 printf(" ");
+             printf ("%d: %s\n",c, ( (data[c] & 1) == 1) ? "Locked":"Unlocked");
          }
          //GetLockBits();
      }

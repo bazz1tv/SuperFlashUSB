@@ -81,6 +81,7 @@ int VerifyErase()
         if (data[0] == 0x80)
         {
             cout << "Complete!\n";
+            SetLEDWithByte(0);
             return 0;
         }
         else

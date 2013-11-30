@@ -102,5 +102,7 @@ void ReadDataToFile()
         else
          cout<<"Write Error2"<<endl;
     }
+    
+    SetLEDWithByte(0);
 }
 

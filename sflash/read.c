@@ -6,7 +6,7 @@ void ReadCart(void)
 {
 	if ( OUT_VENDOR_REQUEST  )
 	{
-        
+        LatchStatus(1);
 		Endpoint_ClearSETUP();
         WriteByteNoAddr(0xff);
 		Endpoint_Read_Control_Stream_LE(endpoint_buffer, READ_PACKET_SIZE);

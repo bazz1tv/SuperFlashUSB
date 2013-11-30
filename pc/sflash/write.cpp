@@ -102,7 +102,7 @@ void WriteDataFromFile()
         if(r == leftover_bytes ) //we wrote the 4 bytes successfully
         {
             while (VerifyWrite() != 0);
-            SetLEDWithByte(0);
+            
           loadBar(i++*FIXED_CONTROL_ENDPOINT_SIZE,(FIXED_CONTROL_ENDPOINT_SIZE*storechunks)+leftover_bytes, ((FIXED_CONTROL_ENDPOINT_SIZE*storechunks)+leftover_bytes)/2, 50);
           //cout<<"Read in " << leftover_bytes <<" Bytes"<<endl;
         }
@@ -120,6 +120,8 @@ void WriteDataFromFile()
             goto redo2;
         }
     }
+    
+    SetLEDWithByte(0);
 }
 
 int VerifyWrite()
@@ -129,7 +131,7 @@ int VerifyWrite()
     if(r == 1 ) 
     {
         //cout << "Flash Status Byte: ";
-        printf ("%x\n", data[0]);
+        //printf ("%x\n", data[0]);
         
         if (data[0] == 0x80)
         {
