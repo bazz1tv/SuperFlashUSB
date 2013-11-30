@@ -6,3 +6,5 @@ void ReadDataToFile();
 void InitRead();
 void Read();
 void LoadReadBuffer();
+
+#define DERP 8

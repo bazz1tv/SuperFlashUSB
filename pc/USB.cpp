@@ -1,5 +1,38 @@
 #include "USB.h"
 
+int SendPacket (uint8_t inout, uint8_t bRequest, uint16_t wValue, uint16_t wIndex, unsigned char *data, uint16_t wLength, unsigned int timeout)
+{
+    uint8_t bmRequestType;
+    if (inout == OUT)
+        bmRequestType = LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT;
+    else if (inout == IN)
+        bmRequestType = LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN;
+    //int 	libusb_control_transfer (libusb_device_handle *dev_handle, uint8_t bmRequestType, uint8_t bRequest, uint16_t wValue, uint16_t wIndex, unsigned char *data, uint16_t wLength, unsigned int timeout)
+    redo:
+    int r = libusb_control_transfer(dev_handle, bmRequestType,bRequest, wValue, wIndex, data, wLength, timeout);
+    if (r < 0)
+    {
+        cout << "Error: " << r << endl;
+        printf( "%d\n", errno );
+        //ResetAddress();
+        goto redo;
+    }
+    
+    return r;
+}
+
+int SendPacketNoRepeat (uint8_t inout, uint8_t bRequest, uint16_t wValue, uint16_t wIndex, unsigned char *data, uint16_t wLength, unsigned int timeout)
+{
+    uint8_t bmRequestType;
+    if (inout == OUT)
+        bmRequestType = LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT;
+    else if (inout == IN)
+        bmRequestType = LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN;
+    //int 	libusb_control_transfer (libusb_device_handle *dev_handle, uint8_t bmRequestType, uint8_t bRequest, uint16_t wValue, uint16_t wIndex, unsigned char *data, uint16_t wLength, unsigned int timeout)
+    redo:
+    return libusb_control_transfer(dev_handle, bmRequestType,bRequest, wValue, wIndex, data, wLength, timeout);
+}
+
 int InitUSB()
 {
     ctx = NULL;
@@ -55,14 +88,14 @@ int OpenUSBDevice()
 	cout<<"Claimed Interface"<<endl;
 #endif
     
-    /*r =  libusb_set_configuration(dev_handle, 1);
+    r =  libusb_set_configuration(dev_handle, 1);
 	if(r < 0) 
     {
 #ifdef DEBUG
 		cout<<"Cannot Set Configuration USB"<<endl;
 #endif
 		exit(1);
-	}*/
+	}
     return 0;
 }
 

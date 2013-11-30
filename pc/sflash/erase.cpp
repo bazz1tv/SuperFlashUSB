@@ -9,11 +9,20 @@ void Erase()
     }
     else if (MinorCommand == ERASE_BLOCK_USING_BLOCKNUM)
     {
-        EraseBlockUsingBlockNum(blocknum);
+        EraseBlocks(blocknum_start,blocknum_end);
     }
 }
 
-void EraseBlockUsingBlockNum(int blocknum)
+void EraseBlocks(int blocknum_start, int blocknum_end)
+{
+    for (; blocknum_start <= blocknum_end; blocknum_start++)
+    {
+        EraseBlock(blocknum_start);
+    }
+}
+
+
+void EraseBlock(int blocknum)
 {
     redo:
 	/*data[0] = block_address&0xff;
@@ -75,8 +84,8 @@ int VerifyErase()
     r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,ERASE, ERASE_BLOCK_USING_ADDRESS, 0x0000, &data[0], 1, 500);
     if(r == 1 ) 
     {
-        cout << "Erase Status Byte: ";
-        printf ("%x\n", data[0]);
+        //cout << "Erase Status Byte: ";
+        //printf ("%x\n", data[0]);
         
         if (data[0] == 0x80)
         {

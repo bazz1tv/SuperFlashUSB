@@ -35,6 +35,8 @@ typedef unsigned char byte;
 
 #define READ_PACKET_SIZE 3
 
+#define IN 0
+#define OUT 1
 
 // MAJOR
 #define READ_IDENTIFIER_CODES 0
@@ -57,6 +59,9 @@ typedef unsigned char byte;
 
 #define ADDR 0
 #define DATA 1
+#define NUMBYTESTOREAD 2
+#define READYTOREAD 3
 
-#define RESET_ADDRESS 99
+#define UNLOCK_ALL_BLOCKS 97
 #define SET_LED 98
+#define RESET_ADDRESS 99

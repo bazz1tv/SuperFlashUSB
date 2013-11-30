@@ -3,8 +3,12 @@
 
 void ReadIDCodes()
 {
+    SetLEDWithByte(1);
     GetLockBits();
+    //SetLEDWithByte(0);
+    //SetLEDWithByte(1);
     GetChipID();
+    SetLEDWithByte(0);
 }
 
 
@@ -53,8 +57,10 @@ void GetChipID()
     {
 		//cout<<"Writing control transfer Successful!"<<endl;
         cout <<"Chip ID: ";
-        printf("0x%x\n",data[0]);
-        printf("Device Code: 0x%x\n",data[1]);
+        printf("0x%x : ",data[0]);
+        (data[0] == 0x89) ? printf("Correct\n") : printf("Incorrect\n");
+        printf("Device Code: 0x%x : ",data[1]);
+        (data[1] == 0x17) ? printf("Correct\n") : printf("Incorrect\n");
     }
 	else
     {

@@ -88,12 +88,18 @@ int GetSelection()
 	printf ("6) Read SRAM\n");
 	printf ("7) Write SRAM\n");
     printf ("8) SetLED\n");
+    printf ("9) Unlock All Blocks\n");
+    printf ("10) Lock Block\n");
 
 
 	scanf("%d",&input);
     
     if (input == 8)
         SetLED();
+    else if (input == 9)
+    {
+        UnlockAllBlocks();
+    }
     
     // we subtract here because the definitions start from 0, not 1 (like the input numbers)
     input--;
@@ -129,8 +135,8 @@ int GetSelection()
             else if (input == 2)
             {
                 MinorCommand = ERASE_BLOCK_USING_BLOCKNUM;
-                printf ("Enter BlockNumber: ");
-                scanf("%d", &blocknum);
+                printf ("Enter BlockNumbers (x-y): ");
+                scanf("%d-%d", &blocknum_start,&blocknum_end);
             }
             else
             {
@@ -186,11 +192,13 @@ void ProcessSelection()
         case ERASE:
         {
             Erase();
+            break;
         }
         
         case WRITE:
         {
             Write();
+            break;
         }
         
         default:

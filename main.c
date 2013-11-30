@@ -37,9 +37,15 @@
 #include "main.h"
 #include "sflash.h"
 
+
 uint8_t endpoint_buffer[128];
 uint16_t BytesTransferred;
 uint8_t mode;
+
+void SetThingsUp()
+{
+      
+}
 /** Main program entry point. This routine contains the overall program flow, including initial
  *  setup of all components and the main program loop.
  */
@@ -55,8 +61,10 @@ int main(void)
 	for (;;)
 	{
 		USB_USBTask();
+        //SetThingsUp();
 	}
 }
+
 
 
 
@@ -90,8 +98,8 @@ void SetupHardware(void)
     SetupPorts();
 
 	/* Disable clock division */
-	//clock_prescale_set(clock_div_1);
-    CLKPR = 0x81;
+	clock_prescale_set(clock_div_1);
+    //CLKPR = 0x81;
     
     
 #elif (ARCH == ARCH_XMEGA)
@@ -173,25 +181,45 @@ void EVENT_USB_Device_ControlRequest(void)
 #define READ_SRAM 5
 #define WRITE_SRAM 6 */
 		case READ_IDENTIFIER_CODES:
+        {
             GetChipID();
 			break;
+        }
 		case READ:
+        {
             ReadCart();
 			break;
+        }
         case WRITE:
+        {
             WriteCart();
             break;
+        }
         case RESET_ADDRESS:
+        {
             ResetAddress();
+            break;
+        }
 		case ERASE:
+        {
             Erase();
 			break;
+        }
         case SET_LED:
+        {
             LatchStatus((byte)USB_ControlRequest.wValue);
             Endpoint_ClearSETUP();
             Endpoint_ClearStatusStage();
             
             break;
+        }
+        case UNLOCK_ALL_BLOCKS:
+        {
+            UnlockAllBlocks();
+            Endpoint_ClearSETUP();
+            Endpoint_ClearStatusStage();
+            break;
+        }
                 
         default:
         break;

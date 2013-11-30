@@ -17,7 +17,7 @@ libusb_device_handle *dev_handle; //a device handle
 libusb_context *ctx = NULL; //a libusb session
 int r; //for return values
 //ssize_t cnt; //holding number of devices in list
-int blocknum;
+int blocknum_start,blocknum_end;
 unsigned long block_address;
 
 byte data[64*2];

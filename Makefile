@@ -15,10 +15,10 @@ MCU          = atmega16u2
 ARCH         = AVR8
 BOARD        = USER
 F_CPU        = 8000000
-F_USB        = $(F_CPU)
+F_USB        = 8000000
 OPTIMIZATION = s
 TARGET       = main
-SRC          = $(TARGET).c Descriptors.c sflash.c sflash/read.c sflash/id.c sflash/util.c sflash/erase.c sflash/write.c $(LUFA_SRC_USB) $(LUFA_SRC_USBCLASS)
+SRC          = $(TARGET).c Descriptors.c sflash.c sflash/read.c sflash/id.c sflash/util.c sflash/erase.c sflash/write.c sflash/unlock_blocks.c $(LUFA_SRC_USB) $(LUFA_SRC_USBCLASS)
 LUFA_PATH    = ./LUFA/LUFA
 CC_FLAGS     = -DUSE_LUFA_CONFIG_HEADER -IConfig/
 LD_FLAGS     =
@@ -28,8 +28,8 @@ LD_FLAGS     =
 # Default target
 all: prog
 	
-prog: pc/main.cpp main.h common.h pc/graphics.o pc/USB.o pc/menu.o pc/sflash/id.o pc/sflash/read.o pc/sflash/util.o pc/sflash/erase.o pc/sflash/write.o
-	g++ -o prog -L/opt/local/lib  -I/opt/local/include/libusb-1.0 pc/main.cpp pc/graphics.o pc/USB.o pc/menu.o pc/sflash/read.o pc/sflash/id.o pc/sflash/util.o pc/sflash/erase.o pc/sflash/write.o -lusb-1.0 
+prog: pc/main.cpp main.h common.h pc/graphics.o pc/USB.o pc/menu.o pc/sflash/id.o pc/sflash/read.o pc/sflash/util.o pc/sflash/erase.o pc/sflash/write.o pc/sflash/unlock_blocks.o
+	g++ -o prog -L/opt/local/lib  -I/opt/local/include/libusb-1.0 pc/main.cpp pc/graphics.o pc/USB.o pc/menu.o pc/sflash/read.o pc/sflash/id.o pc/sflash/util.o pc/sflash/erase.o pc/sflash/write.o pc/sflash/unlock_blocks.o -lusb-1.0 
 
 pc/sflash/util.o: pc/sflash/util.h pc/sflash/util.cpp
 	g++ -c -o pc/sflash/util.o -I/opt/local/include/libusb-1.0 pc/sflash/util.cpp
@@ -53,6 +53,9 @@ pc/sflash/erase.o: pc/sflash/erase.h pc/sflash/erase.cpp main.h
 	
 pc/sflash/write.o: pc/sflash/write.h pc/sflash/write.cpp main.h 
 	g++ -c -o pc/sflash/write.o -I/opt/local/include/libusb-1.0 pc/sflash/write.cpp
+	
+pc/sflash/unlock_blocks.o: pc/sflash/unlock_blocks.h pc/sflash/unlock_blocks.cpp main.h 
+	g++ -c -o pc/sflash/unlock_blocks.o -I/opt/local/include/libusb-1.0 pc/sflash/unlock_blocks.cpp
 # 2 colons done on purpose
 clean:: 
 	rm -f prog

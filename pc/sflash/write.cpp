@@ -41,7 +41,7 @@ void InitWrite()
     LoadWriteBuffer();
     
     uint8_t bmrt = LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT;
-    cout << "bmrt = ";
+    cout << "Write: bmrt = ";
     printf ( "%x\n", bmrt);
     redo:
 	r = libusb_control_transfer(dev_handle, bmrt,WRITE, ADDR, 0x0000, &data[0], WRITE_PACKET_SIZE, 500);
