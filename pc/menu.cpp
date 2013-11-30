@@ -39,7 +39,7 @@ int OpenFiles()
     		}
     		printf ("File Opened\n");
     	}
-    	else if ( MajorCommand == FLASH || MajorCommand == WRITE_SRAM )
+    	else if ( MajorCommand == WRITE || MajorCommand == WRITE_SRAM )
     	{
     		printf ("Opening File %s for reading from\n", filename);
     		fh = fopen(filename, "rb");
@@ -55,7 +55,7 @@ int OpenFiles()
         // Input a filename
         
         
-        if (MajorCommand == FLASH)
+        if (MajorCommand == WRITE)
         {
             printf ("File to ");
             printf ("write from: ");
@@ -84,7 +84,7 @@ int GetSelection()
 	printf ("2) Erase\n");
 	//printf ("3) Erase Sector\n");
 	printf ("4) Read\n");
-	printf ("5) Flash\n\n");
+	printf ("5) Write\n\n");
 	printf ("6) Read SRAM\n");
 	printf ("7) Write SRAM\n");
     printf ("8) SetLED\n");
@@ -163,7 +163,7 @@ void GetNumBytes()
 
 void ProcessSelection()
 {
-    if (MajorCommand == FLASH || MajorCommand == READ)
+    if (MajorCommand == WRITE || MajorCommand == READ)
     {
         GetStartAddress();
 		GetNumBytes();
@@ -186,6 +186,11 @@ void ProcessSelection()
         case ERASE:
         {
             Erase();
+        }
+        
+        case WRITE:
+        {
+            Write();
         }
         
         default:

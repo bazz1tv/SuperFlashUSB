@@ -14,6 +14,7 @@
 #include "sflash/read.h"
 #include "sflash/id.h"
 #include "sflash/erase.h"
+#include "sflash/write.h"
 
 typedef uint8_t byte;
 

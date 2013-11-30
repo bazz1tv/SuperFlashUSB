@@ -50,10 +50,13 @@ typedef unsigned char byte;
 #define ERASE_BLOCK_USING_BLOCKNUM 2
 //--------------------
 #define READ 3
-#define FLASH 4
+#define WRITE 4
 #define READ_SRAM 5
 #define WRITE_SRAM 6
 #define IDLE 100
+
+#define ADDR 0
+#define DATA 1
 
 #define RESET_ADDRESS 99
 #define SET_LED 98

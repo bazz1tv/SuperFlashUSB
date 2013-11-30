@@ -26,14 +26,9 @@ void ResetAddress()
     }
 }
 
-void SetLED()
+void SetLedControlTransfer(byte B)
 {
-    unsigned int B;
-    printf ("Enter 0-FF: ");
-    scanf("%x", &B);
     redo:
-    cout << "Setting LED to ";
-    printf ("%x\n", B);
     r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,SET_LED, (uint16_t) B, (uint16_t) B, NULL, 0, 500);
     if(r == 0) //we wrote the 4 bytes successfully
     {
@@ -54,5 +49,20 @@ void SetLED()
     {
         cout<<"\tSetLED Error: " << r <<endl;
         goto redo;
-    }
+    }   
+}
+
+void SetLEDWithByte(byte b)
+{
+    SetLedControlTransfer(b);
+}
+void SetLED()
+{
+    unsigned int B;
+    printf ("Enter 0-FF: ");
+    scanf("%x", &B);
+    redo:
+    cout << "Setting LED to ";
+    printf ("%x\n", B);
+    SetLedControlTransfer(B);
 }

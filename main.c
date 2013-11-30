@@ -178,6 +178,9 @@ void EVENT_USB_Device_ControlRequest(void)
 		case READ:
             ReadCart();
 			break;
+        case WRITE:
+            WriteCart();
+            break;
         case RESET_ADDRESS:
             ResetAddress();
 		case ERASE:

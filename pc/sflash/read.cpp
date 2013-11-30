@@ -43,6 +43,7 @@ void InitRead()
     uint8_t bmrt = LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT;
     cout << "bmrt = ";
     printf ( "%x\n", bmrt);
+    redo:
 	r = libusb_control_transfer(dev_handle, bmrt,READ, 0x0000, 0x0000, &data[0], READ_PACKET_SIZE, 500);
   	if(r == READ_PACKET_SIZE ) //we wrote successfully
     {
@@ -51,7 +52,10 @@ void InitRead()
 #endif
     }
   	else
+    {
   		cout<<"Write Error " << r <<endl;
+        goto redo;
+    }
 }
 
 void ReadDataToFile()
