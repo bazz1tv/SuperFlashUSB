@@ -7,4 +7,4 @@ void InitRead();
 void Read();
 void LoadReadBuffer();
 
-#define DERP 8
+#define DERP 32

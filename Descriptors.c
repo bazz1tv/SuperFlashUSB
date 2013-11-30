@@ -101,7 +101,7 @@ const USBConfigurationDescriptor PROGMEM ConfigurationDescriptor =
 
 			.ConfigAttributes       = (USB_CONFIG_ATTR_RESERVED),
 
-			.MaxPowerConsumption    = USB_CONFIG_POWER_MA(500)
+			.MaxPowerConsumption    = USB_CONFIG_POWER_MA(500) // 500ma is max USB 2.0
 		},
 
 	.Interface =

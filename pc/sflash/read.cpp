@@ -67,11 +67,41 @@ void ReadDataToFile()
         for (; chunks > 0; chunks--)
         {  
             // Get a 32K section from USB
-            //SendPacketNoRepeat(OUT, READ, NUMBYTESTOREAD, (uint16_t)DERP,NULL,0, 50);
+            //SendPacket(OUT, READ, FETCH, (uint16_t)DERP,NULL,0, 50);
+            restart:
+            r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,READ, FETCH, (uint16_t) DERP, NULL, 0, 200);
+            if (r == 0)
+            {
+                //cout << "Fetch OUT success\n";
+            }
+            else 
+            {
+                cout << "Fetch OUT fail\n";
+                cout << "Restart\n";
+                goto restart;
+            }
             
+            for (;;)
+            {
+                //usleep(1000);
+                r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, FETCH, (uint16_t) DERP, &data[0], 1, 50);
+                if (r == 1)
+                {
+                    //cout << "Fetch IN success\n";
+                    if (data[0] == 0)
+                        break;
+                    else cout << "herp!\n";
+                }
+                else 
+                {
+                    cout << "Fetch IN fail : " << r <<endl;
+                    //cout << "Restart\n";
+                    //goto dero;
+                }
+                //r = SendPacket(IN, READ, FETCH, (uint16_t)DERP,&data[0],1, 50);
+            }
             redo:
-            r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, DATA, (uint16_t) DERP, &data[0], (uint16_t)DERP, 200);
-            
+            r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, DATA, (uint16_t) DERP, &data[0], (uint16_t)DERP, 50);
             //usleep(10000);
             if(r == DERP ) //we wrote the 4 bytes successfully
             {
@@ -85,7 +115,7 @@ void ReadDataToFile()
             {
                 cout << "Read: Error: " << r << endl;
                 printf( "%d\n", errno );
-                ResetAddress();
+                //ResetAddress();
                 goto redo;
             }
             
@@ -95,8 +125,40 @@ void ReadDataToFile()
 
     if (leftover_bytes != 0)
     {
+        r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,READ, FETCH, (uint16_t) DERP, NULL, 0, 200);
+        if (r == 0)
+        {
+            //cout << "Fetch OUT success\n";
+        }
+        else 
+        {
+            cout << "Fetch OUT fail\n";
+            cout << "Restart\n";
+            goto restart;
+        }
+        
+        for (;;)
+        {
+            //usleep(1000);
+            r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, FETCH, (uint16_t) DERP, &data[0], 1, 50);
+            if (r == 1)
+            {
+                //cout << "Fetch IN success\n";
+                if (data[0] == 0)
+                    break;
+                else cout << "herp!\n";
+            }
+            else 
+            {
+                cout << "Fetch IN fail : " << r <<endl;
+                //cout << "Restart\n";
+                //goto dero;
+            }
+            //r = SendPacket(IN, READ, FETCH, (uint16_t)DERP,&data[0],1, 50);
+        }
         //SendPacketNoRepeat(OUT, READ, NUMBYTESTOREAD, (uint16_t)leftover_bytes,NULL,0, 50);
-        //r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, DATA , leftover_bytes, &data[0], leftover_bytes, 50);
+        FUCKFACE:
+        r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, DATA , leftover_bytes, &data[0], leftover_bytes, 50);
         if(r == leftover_bytes ) //we wrote the 4 bytes successfully
         {
           fwrite(&data[0], 1, leftover_bytes, fh);
@@ -104,7 +166,10 @@ void ReadDataToFile()
           //cout<<"Read in " << leftover_bytes <<" Bytes"<<endl;
         }
         else
-         cout<<"Read Error"<<endl;
+        {
+            cout<<"Leftover Read Error: "<< r << endl;
+            goto FUCKFACE;
+        }
     }
     
     SetLEDWithByte(0);

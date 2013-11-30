@@ -52,6 +52,7 @@ typedef unsigned char byte;
 #define ERASE_BLOCK_USING_BLOCKNUM 2
 //--------------------
 #define READ 3
+//
 #define WRITE 4
 #define READ_SRAM 5
 #define WRITE_SRAM 6
@@ -59,7 +60,7 @@ typedef unsigned char byte;
 
 #define ADDR 0
 #define DATA 1
-#define NUMBYTESTOREAD 2
+#define FETCH 2
 #define READYTOREAD 3
 
 #define UNLOCK_ALL_BLOCKS 97

@@ -44,7 +44,15 @@ uint8_t mode;
 
 void SetThingsUp()
 {
-      
+    byte i;
+    if (GetData == TRUE)
+    {
+        for (i=0; i < numreadbytes; i++)
+        {
+            endpoint_buffer[i] = ReadByte(addr++);
+        }   
+        GetData = FALSE;
+    } 
 }
 /** Main program entry point. This routine contains the overall program flow, including initial
  *  setup of all components and the main program loop.
@@ -61,7 +69,7 @@ int main(void)
 	for (;;)
 	{
 		USB_USBTask();
-        //SetThingsUp();
+        SetThingsUp();
 	}
 }
 

@@ -3,7 +3,7 @@ void ResetAddress()
 {
     redo:
     cout << "Resetting Address and resending data\n";
-    r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,RESET_ADDRESS, (uint16_t) FIXED_CONTROL_ENDPOINT_SIZE, 0x0000, NULL, 0, 500);
+    r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,RESET_ADDRESS, (uint16_t) DERP, 0x0000, NULL, 0, 500);
     if(r == 0) //we wrote the 4 bytes successfully
     {
      // Write it to file

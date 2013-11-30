@@ -6,11 +6,11 @@
 #define FALSE 0
 #define TRUE 1
 
-#define NUMBYTESTOREAD 2
 
-extern uint16_t numbytes;
+
+extern uint16_t numreadbytes;
 extern byte ReadyToWrite;
 extern byte LoadBuffer;
-extern byte ReadyToRead;
+extern byte GetData;
 
 void ReadCart(void);
