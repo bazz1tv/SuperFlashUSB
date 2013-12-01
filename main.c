@@ -41,6 +41,7 @@
 uint8_t endpoint_buffer[128];
 uint16_t BytesTransferred;
 uint8_t mode;
+unsigned long numbytes;
 
 void SetThingsUp()
 {
@@ -52,7 +53,15 @@ void SetThingsUp()
             endpoint_buffer[i] = ReadByte(addr++);
         }   
         GetData = FALSE;
-    } 
+    }
+    else if (start_writing == TRUE)
+    {
+        for (i=0; i < numbytes; i++)
+        {
+            WriteSRAMByte(addr++, endpoint_buffer[i]);
+        }   
+        start_writing = FALSE;
+    }
 }
 /** Main program entry point. This routine contains the overall program flow, including initial
  *  setup of all components and the main program loop.
@@ -68,7 +77,7 @@ int main(void)
     
 	for (;;)
 	{
-		USB_USBTask();
+		//USB_USBTask();
         SetThingsUp();
 	}
 }

@@ -76,5 +76,6 @@
 		
         // Variables
         extern uint8_t endpoint_buffer[128];
+        extern unsigned long numbytes;
         extern uint16_t BytesTransferred;
         extern uint8_t mode;

@@ -9,3 +9,4 @@ void LoadWriteBuffer();
 int VerifyWrite();
 
 #define WRITE_PACKET_SIZE 3
+#define DERP_SIZE 16

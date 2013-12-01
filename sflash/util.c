@@ -22,6 +22,30 @@ byte ReadStatusUsingCommand(void)
     return ReadByteNoAddr();
 }
 
+void WriteSRAMByte(unsigned long addr, byte B)
+{
+    CartHigh();
+    WriteHigh();
+    DATA_DIR = 0;
+    ReadLow();
+    
+    
+    
+    
+    // Set Address
+    LatchAddress(addr);
+    
+    ReadHigh();
+    CartLow();
+    DATA_DIR = 0xff;
+    DATA_PORT = B;
+    WriteLow();
+    
+    //_delay_us(1);
+    WriteHigh();
+    ReadLow();
+}
+
 
 
 /* 

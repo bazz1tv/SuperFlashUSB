@@ -93,6 +93,7 @@ int GetSelection()
 
 
 	scanf("%d",&input);
+      MajorCommand = input-1;
     
     if (input == 8)
         SetLED();
@@ -100,10 +101,28 @@ int GetSelection()
     {
         UnlockAllBlocks();
     }
+    else if (input == 5)
+    {
+        rom_or_sram = ROM;
+    }
+    else if (input == 4)
+    {
+        rom_or_sram = ROM;
+    }
+    else if (input == 6)
+    {
+        MajorCommand = READ;
+        rom_or_sram = SRAM;
+    }
+    else if (input == 7)
+    {
+        MajorCommand = WRITE;
+        rom_or_sram = SRAM;
+    }
+    
     
     // we subtract here because the definitions start from 0, not 1 (like the input numbers)
     input--;
-    MajorCommand = input;
     
     if (input == ERASE)
     {
@@ -169,10 +188,28 @@ void GetNumBytes()
 
 void ProcessSelection()
 {
-    if (MajorCommand == WRITE || MajorCommand == READ)
+    if (rom_or_sram == ROM)
     {
-        GetStartAddress();
-		GetNumBytes();
+        if (MajorCommand == WRITE || MajorCommand == READ)
+        {
+            GetStartAddress();
+    		GetNumBytes();
+        }
+    }
+    else if (rom_or_sram == SRAM)
+    {
+        if (MajorCommand == WRITE || MajorCommand == READ)
+        {
+            startaddr = 0xfe0000;
+            aal = startaddr&0xff;
+            aah = (startaddr&0xff00)>>8;
+            aab = (startaddr&0xff0000)>>16;
+            /*numbytes = 0x20000;
+            l = numbytes&0xff;
+            h = (numbytes&0xff00)>>8;
+            b = (numbytes&0xff0000)>>16;*/
+            GetNumBytes();
+        }
     }
     
     switch (MajorCommand)

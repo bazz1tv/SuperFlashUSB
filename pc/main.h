@@ -24,6 +24,7 @@ extern unsigned long numbytes,startaddr;
 extern unsigned long chunks, leftover_bytes;
 extern int argc;
 extern char **argv;
+extern byte rom_or_sram;
 
 //extern static int keeprunning = 1;
 extern char filename[200];

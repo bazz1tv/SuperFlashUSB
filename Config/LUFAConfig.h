@@ -61,8 +61,8 @@
 //		#define USE_STATIC_OPTIONS               (USB_DEVICE_OPT_FULLSPEED | USB_OPT_REG_ENABLED | USB_OPT_AUTO_PLL)
 		#define USB_DEVICE_ONLY
 //		#define USB_HOST_ONLY
-		#define USB_STREAM_TIMEOUT_MS            50
-//		#define NO_LIMITED_CONTROLLER_CONNECT
+		#define USB_STREAM_TIMEOUT_MS            50000
+     	#define NO_LIMITED_CONTROLLER_CONNECT
 		#define NO_SOF_EVENTS
 
 		/* USB Device Mode Driver Related Tokens: */
@@ -74,8 +74,8 @@
 //		#define DEVICE_STATE_AS_GPIOR            {Insert Value Here}
 		#define FIXED_NUM_CONFIGURATIONS         1
 		#define CONTROL_ONLY_DEVICE
-//		#define INTERRUPT_CONTROL_ENDPOINT
-		#define NO_DEVICE_REMOTE_WAKEUP
+		#define INTERRUPT_CONTROL_ENDPOINT
+//		#define NO_DEVICE_REMOTE_WAKEUP
         #define NO_DEVICE_SELF_POWER
 
 		/* USB Host Mode Driver Related Tokens: */

@@ -48,7 +48,7 @@ void GetChipID(void)
             Endpoint_Write_Control_Stream_LE(endpoint_buffer, 64);
         }
 		
-		Endpoint_ClearStatusStage();
+		Endpoint_ClearOUT();
         
         // Exit that mode, return to read mode
 		WriteByte(0,0xff);

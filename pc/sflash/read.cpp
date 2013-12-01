@@ -69,8 +69,8 @@ void ReadDataToFile()
             // Get a 32K section from USB
             //SendPacket(OUT, READ, FETCH, (uint16_t)DERP,NULL,0, 50);
             restart:
-            r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,READ, FETCH, (uint16_t) DERP, NULL, 0, 200);
-            if (r == 0)
+            r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,READ, FETCH, (uint16_t) DERP, &data[0], 1, 500);
+            if (r ==1)
             {
                 //cout << "Fetch OUT success\n";
             }
@@ -84,13 +84,13 @@ void ReadDataToFile()
             for (;;)
             {
                 //usleep(1000);
-                r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, FETCH, (uint16_t) DERP, &data[0], 1, 50);
+                r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, FETCH, (uint16_t) DERP, &data[0], 1, 500);
                 if (r == 1)
                 {
                     //cout << "Fetch IN success\n";
                     if (data[0] == 0)
                         break;
-                    else cout << "herp!\n";
+                    else cout << "herp! : " << (int)data[0] << "\n";
                 }
                 else 
                 {
@@ -101,7 +101,9 @@ void ReadDataToFile()
                 //r = SendPacket(IN, READ, FETCH, (uint16_t)DERP,&data[0],1, 50);
             }
             redo:
-            r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, DATA, (uint16_t) DERP, &data[0], (uint16_t)DERP, 50);
+            //libusb_clear_halt(dev_handle,0);
+            //usleep(10000);
+            r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, DATA, (uint16_t) DERP, &data[0], (uint16_t)DERP, 500);
             //usleep(10000);
             if(r == DERP ) //we wrote the 4 bytes successfully
             {
@@ -113,6 +115,7 @@ void ReadDataToFile()
             }
             else
             {
+                //CLEAR_FEATURE(ENDPOINT_STALL);
                 cout << "Read: Error: " << r << endl;
                 printf( "%d\n", errno );
                 //ResetAddress();
@@ -125,6 +128,7 @@ void ReadDataToFile()
 
     if (leftover_bytes != 0)
     {
+        ughh:
         r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,READ, FETCH, (uint16_t) DERP, NULL, 0, 200);
         if (r == 0)
         {
@@ -134,7 +138,7 @@ void ReadDataToFile()
         {
             cout << "Fetch OUT fail\n";
             cout << "Restart\n";
-            goto restart;
+            goto ughh;
         }
         
         for (;;)
@@ -150,7 +154,7 @@ void ReadDataToFile()
             }
             else 
             {
-                cout << "Fetch IN fail : " << r <<endl;
+                cout << " hahaFetch IN fail : " << r <<endl;
                 //cout << "Restart\n";
                 //goto dero;
             }

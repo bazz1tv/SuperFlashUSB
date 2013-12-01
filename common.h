@@ -1,5 +1,8 @@
 #pragma once
 
+#define FALSE 0
+#define TRUE 1
+
 #define FIXED_CONTROL_ENDPOINT_SIZE     8
 
 #define IN_BULK_ENDPOINT 0x81
@@ -31,6 +34,9 @@ typedef unsigned char byte;
 #define FF_STATUS   (1 << 3)
 //#define FF_CLK (1 << 3)
 #define DEBUG
+
+#define ROM 0
+#define SRAM 1
 
 
 #define READ_PACKET_SIZE 3

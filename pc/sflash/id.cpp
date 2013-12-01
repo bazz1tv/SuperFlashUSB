@@ -16,7 +16,7 @@ void GetLockBits()
 {
     redo:
 	r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,
-		 READ_IDENTIFIER_CODES, LOCK_BITS, LOCK_BITS, &data[0], 64, 500);
+		 READ_IDENTIFIER_CODES, LOCK_BITS, LOCK_BITS, &data[0], 64, 1000);
          
  	if(r == 64 ) //we wrote the 4 bytes successfully
      {

@@ -4,6 +4,7 @@
 // IMPORTANT
 void LatchAddress(unsigned long addr);
 void WriteByte(unsigned long addr, byte B);
+void WriteSRAMByte(unsigned long addr, byte B);
 byte ReadByte(unsigned long addr);
 unsigned long ConvertToUlong(byte *);
 
