@@ -18,7 +18,7 @@ libusb_context *ctx = NULL; //a libusb session
 int r; //for return values
 //ssize_t cnt; //holding number of devices in list
 int blocknum_start,blocknum_end;
-unsigned long block_address;
+unsigned long block_address_start, block_address_end;
 byte rom_or_sram=ROM;
 
 byte data[64*2];

@@ -103,6 +103,7 @@ void SetupHardware(void)
 	/* Disable watchdog if enabled by bootloader/fuses */
 	MCUSR &= ~(1 << WDRF);
 	wdt_disable();
+    //OSCCAL = 0xff;
     // Disable Analog Comparator
     ACSR = 0x80;
     
@@ -225,9 +226,11 @@ void EVENT_USB_Device_ControlRequest(void)
         case SET_LED:
         {
             LatchStatus((byte)USB_ControlRequest.wValue);
+            
             Endpoint_ClearSETUP();
             Endpoint_ClearStatusStage();
             
+            //OSCCAL = (byte)USB_ControlRequest.wValue;
             break;
         }
         case UNLOCK_ALL_BLOCKS:

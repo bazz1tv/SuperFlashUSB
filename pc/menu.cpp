@@ -96,7 +96,10 @@ int GetSelection()
       MajorCommand = input-1;
     
     if (input == 8)
+    {
         SetLED();
+        return 1;
+    }
     else if (input == 9)
     {
         UnlockAllBlocks();
@@ -146,9 +149,12 @@ int GetSelection()
             
             if (input == 1)
             {
-                MinorCommand = ERASE_BLOCK_USING_ADDRESS; 
-                printf ("Enter Block Address: ");
-                scanf("%lx", &block_address);
+                MinorCommand = ERASE_BLOCK_USING_BLOCKNUM;
+                printf ("Block Address range (x-y): ");
+                scanf("%lx-%lx", &block_address_start, &block_address_end);
+                
+                blocknum_start = block_address_start / 0x20000;
+                blocknum_end = block_address_end / 0x20000;
                 // Error Checking 
             }
             else if (input == 2)
@@ -246,7 +252,9 @@ int EnterTextInterface()
 {
     while (1)
     {
-        GetSelection();
+        beginning:
+        if (GetSelection() == 1)
+            goto beginning;
         OpenFiles();
         ProcessSelection();
         

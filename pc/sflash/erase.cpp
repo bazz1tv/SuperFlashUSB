@@ -3,14 +3,14 @@
 // FOR PC
 void Erase()
 {
-    if (MinorCommand == ERASE_BLOCK_USING_ADDRESS)
+    /*if (MinorCommand == ERASE_BLOCK_USING_ADDRESS)
     {
         EraseBlockUsingAddress(block_address);
-    }
-    else if (MinorCommand == ERASE_BLOCK_USING_BLOCKNUM)
-    {
+    }*/
+    //else if (MinorCommand == ERASE_BLOCK_USING_BLOCKNUM)
+    //{
         EraseBlocks(blocknum_start,blocknum_end);
-    }
+    //}
 }
 
 void EraseBlocks(int blocknum_start, int blocknum_end)
@@ -51,32 +51,7 @@ void EraseBlock(int blocknum)
     }
 }
 
-void EraseBlockUsingAddress(unsigned long block_address)
-{
-    redo:
-	data[0] = block_address&0xff;
-	data[1] = (block_address&0xff00)>>8;
-	data[2] = (block_address&0xff0000)>>16;
-    r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,ERASE, ERASE_BLOCK_USING_ADDRESS, 0x0000, &data[0], 3, 500);
-    if(r == 3 ) 
-    {
-        cout << "Erase Cmd Sent, Verifying: \n";
-        
-        while (VerifyErase() != 0);
-    }
-    else if (r == LIBUSB_ERROR_PIPE || r == LIBUSB_ERROR_OTHER)
-    {
-        cout << "EraseBlockUsingAddress: PIPE/Other Error: " << r << endl;
-        printf( "%d\n", errno );
-        //ResetAddress();
-        goto redo;
-    }
-    else
-    {
-        cout<<"EraseBlockUsingAddress Error: " << r <<endl;
-        printf( "%d\n", errno );
-    }
-}
+
 
 int VerifyErase()
 {
