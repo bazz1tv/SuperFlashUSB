@@ -1,6 +1,7 @@
 #include "menu.h"
 #include "../common.h"
-#include "util.h"
+#include "sflash/util.h"
+#include <stdlib.h>
 
 int OpenForWriteBin(const char *filename)
 {
@@ -259,7 +260,10 @@ int EnterTextInterface()
         ProcessSelection();
         
         if (fh)
+        {
             fclose(fh);
+            fh = NULL;
+        }
     }
     return 0;
 }

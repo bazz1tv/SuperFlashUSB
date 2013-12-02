@@ -4,6 +4,7 @@
 #include "../common.h"
 #include <iostream>
 #include <errno.h>
+#include <stdio.h>
 using namespace std;
 
 typedef unsigned char byte;

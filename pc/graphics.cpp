@@ -1,5 +1,6 @@
 #include "graphics.h"
 #include <iostream>
+#include <stdio.h>
 
 void loadBar(int x, int n, int r, int w)
 {

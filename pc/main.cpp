@@ -6,6 +6,9 @@
 #include <libusb.h>
 #include <unistd.h>
 #include "main.h"
+#include <signal.h>
+#include <stdlib.h>
+#include <string.h>
 
 using namespace std;
 
@@ -75,8 +78,12 @@ void intHandler(int dummy)
 	libusb_close(dev_handle); //close the device we opened
 	libusb_exit(ctx); //needs to be called to end the
     
-    if (fh)
+    if (fh != NULL)
+    {
         fclose(fh);
+        fh = NULL;
+    }
+
     exit(1);
 }
 

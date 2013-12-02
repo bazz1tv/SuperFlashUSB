@@ -3,6 +3,7 @@
 #include <iostream>
 #include <libusb.h>
 #include "main.h"
+#include <stdio.h>
 
 using namespace std;
 

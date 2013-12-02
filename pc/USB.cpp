@@ -1,4 +1,5 @@
 #include "USB.h"
+#include <stdlib.h>
 
 int SendPacket (uint8_t inout, uint8_t bRequest, uint16_t wValue, uint16_t wIndex, unsigned char *data, uint16_t wLength, unsigned int timeout)
 {
@@ -88,14 +89,14 @@ int OpenUSBDevice()
 	cout<<"Claimed Interface"<<endl;
 #endif
     
-    r =  libusb_set_configuration(dev_handle, 1);
+    /*r =  libusb_set_configuration(dev_handle, 1);
 	if(r < 0) 
     {
 #ifdef DEBUG
-		cout<<"Cannot Set Configuration USB"<<endl;
+		cout<<"Cannot Set Configuration USB: "<<endl;
 #endif
 		exit(1);
-	}
+	}*/
     return 0;
 }
 
