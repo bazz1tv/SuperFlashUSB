@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['memspace_5feeprom',['MEMSPACE_EEPROM',['../group___group___device.html#ggafb53820420167674bfd70a7d2b94df79a8b848b66d69dba4d6a814f6706c00d6c',1,'DeviceStandardReq.h']]],
+  ['memspace_5fflash',['MEMSPACE_FLASH',['../group___group___device.html#ggafb53820420167674bfd70a7d2b94df79ac47b1355c928ccc3e2b8b393a330dbb7',1,'DeviceStandardReq.h']]],
+  ['memspace_5fram',['MEMSPACE_RAM',['../group___group___device.html#ggafb53820420167674bfd70a7d2b94df79a56a98b96811e440f214403f52d13e5fb',1,'DeviceStandardReq.h']]],
+  ['midi_5fenumerror_5finvalidconfigdescriptor',['MIDI_ENUMERROR_InvalidConfigDescriptor',['../group___group___u_s_b_class_m_i_d_i_host.html#ggaebedf57a87da61977a474a8fb3313a96a35f4b346d73f8e3f5b45867b24214a1c',1,'MIDIClassHost.h']]],
+  ['midi_5fenumerror_5fnocompatibleinterfacefound',['MIDI_ENUMERROR_NoCompatibleInterfaceFound',['../group___group___u_s_b_class_m_i_d_i_host.html#ggaebedf57a87da61977a474a8fb3313a96a72771e025bdc77251320586fc5da4c17',1,'MIDIClassHost.h']]],
+  ['midi_5fenumerror_5fnoerror',['MIDI_ENUMERROR_NoError',['../group___group___u_s_b_class_m_i_d_i_host.html#ggaebedf57a87da61977a474a8fb3313a96a63a841bbf423179931957c0e3657d661',1,'MIDIClassHost.h']]],
+  ['midi_5fenumerror_5fpipeconfigurationfailed',['MIDI_ENUMERROR_PipeConfigurationFailed',['../group___group___u_s_b_class_m_i_d_i_host.html#ggaebedf57a87da61977a474a8fb3313a96a880f7b51a814e09eeff1b5066af9670a',1,'MIDIClassHost.h']]],
+  ['midi_5fjacktype_5fembedded',['MIDI_JACKTYPE_Embedded',['../group___group___u_s_b_class_m_i_d_i_common.html#ggad22d4141b1fc2ba1f1eac0fd9b95adf3ada92b02780419929070e9049ffc7720e',1,'MIDIClassCommon.h']]],
+  ['midi_5fjacktype_5fexternal',['MIDI_JACKTYPE_External',['../group___group___u_s_b_class_m_i_d_i_common.html#ggad22d4141b1fc2ba1f1eac0fd9b95adf3a01b261567c20449e509e23858d431457',1,'MIDIClassCommon.h']]],
+  ['ms_5fcscp_5fbulkonlytransportprotocol',['MS_CSCP_BulkOnlyTransportProtocol',['../group___group___u_s_b_class_m_s_common.html#ggaf0437035f937c07079854504970e62b9a1c9f4ef417814b33d860df67dd6e044e',1,'MassStorageClassCommon.h']]],
+  ['ms_5fcscp_5fmassstorageclass',['MS_CSCP_MassStorageClass',['../group___group___u_s_b_class_m_s_common.html#ggaf0437035f937c07079854504970e62b9ab88b043f87dd225ef226aadf7f0562ce',1,'MassStorageClassCommon.h']]],
+  ['ms_5fcscp_5fscsitransparentsubclass',['MS_CSCP_SCSITransparentSubclass',['../group___group___u_s_b_class_m_s_common.html#ggaf0437035f937c07079854504970e62b9ac016397da2928e8af0b600cc8df20a06',1,'MassStorageClassCommon.h']]],
+  ['ms_5fenumerror_5finvalidconfigdescriptor',['MS_ENUMERROR_InvalidConfigDescriptor',['../group___group___u_s_b_class_mass_storage_host.html#gga54e6647c15f102357187c57aa3635acaafbbef39c881abade045797c510908d47',1,'MassStorageClassHost.h']]],
+  ['ms_5fenumerror_5fnocompatibleinterfacefound',['MS_ENUMERROR_NoCompatibleInterfaceFound',['../group___group___u_s_b_class_mass_storage_host.html#gga54e6647c15f102357187c57aa3635acaa9dc0d68669c609c73026f50fbdbd0317',1,'MassStorageClassHost.h']]],
+  ['ms_5fenumerror_5fnoerror',['MS_ENUMERROR_NoError',['../group___group___u_s_b_class_mass_storage_host.html#gga54e6647c15f102357187c57aa3635acaad8196f8e2ffcf357898deb9d07431e31',1,'MassStorageClassHost.h']]],
+  ['ms_5fenumerror_5fpipeconfigurationfailed',['MS_ENUMERROR_PipeConfigurationFailed',['../group___group___u_s_b_class_mass_storage_host.html#gga54e6647c15f102357187c57aa3635acaa16cda4858fd3fc25c719f018f6a2e7f6',1,'MassStorageClassHost.h']]],
+  ['ms_5freq_5fgetmaxlun',['MS_REQ_GetMaxLUN',['../group___group___u_s_b_class_m_s_common.html#gga4d9d5f0f4e489990938bc68778c461a2a9310add4f6968efe85f1b9326f479ca7',1,'MassStorageClassCommon.h']]],
+  ['ms_5freq_5fmassstoragereset',['MS_REQ_MassStorageReset',['../group___group___u_s_b_class_m_s_common.html#gga4d9d5f0f4e489990938bc68778c461a2af5f46bf47fdc78374600b68caa3461e2',1,'MassStorageClassCommon.h']]],
+  ['ms_5fscsi_5fcommand_5ffail',['MS_SCSI_COMMAND_Fail',['../group___group___u_s_b_class_m_s_common.html#ggad65cbd8e097fd3336dd232513f23ad0daf3c6ff4e7641d095feedef084933654f',1,'MassStorageClassCommon.h']]],
+  ['ms_5fscsi_5fcommand_5fpass',['MS_SCSI_COMMAND_Pass',['../group___group___u_s_b_class_m_s_common.html#ggad65cbd8e097fd3336dd232513f23ad0daf967ad7931a50e1d8333e892cc28782a',1,'MassStorageClassCommon.h']]],
+  ['ms_5fscsi_5fcommand_5fphaseerror',['MS_SCSI_COMMAND_PhaseError',['../group___group___u_s_b_class_m_s_common.html#ggad65cbd8e097fd3336dd232513f23ad0da97ed93844b871d8dd059f973389266d8',1,'MassStorageClassCommon.h']]]
+];

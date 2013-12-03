@@ -1,0 +1,21 @@
+var searchData=
+[
+  ['acspecification',['ACSpecification',['../struct_u_s_b___audio___descriptor___interface___a_c__t.html#ae992e133451d8f73b42669959ea8b780',1,'USB_Audio_Descriptor_Interface_AC_t']]],
+  ['adaptermacaddress',['AdapterMACAddress',['../struct_u_s_b___class_info___r_n_d_i_s___device__t.html#aea2f6e5767297051b80ffdc00fc572c7',1,'USB_ClassInfo_RNDIS_Device_t']]],
+  ['adaptervendordescription',['AdapterVendorDescription',['../struct_u_s_b___class_info___r_n_d_i_s___device__t.html#a8cb3cab39d1ad24668d2d03df796bad7',1,'USB_ClassInfo_RNDIS_Device_t']]],
+  ['additionallength',['AdditionalLength',['../struct_s_c_s_i___request___sense___response__t.html#ada205ab1a11659b75dbe647810e44b4d',1,'SCSI_Request_Sense_Response_t::AdditionalLength()'],['../struct_s_c_s_i___inquiry___response__t.html#a3d29c10a1a4cffc19bf1696d48629697',1,'SCSI_Inquiry_Response_t::AdditionalLength()']]],
+  ['additionalsensecode',['AdditionalSenseCode',['../struct_s_c_s_i___request___sense___response__t.html#aa73c08e171deef17703162ea3e6432e4',1,'SCSI_Request_Sense_Response_t']]],
+  ['additionalsensequalifier',['AdditionalSenseQualifier',['../struct_s_c_s_i___request___sense___response__t.html#a36185401f8377104910663d124d11fe6',1,'SCSI_Request_Sense_Response_t']]],
+  ['address',['Address',['../struct_u_s_b___endpoint___table__t.html#ac553dbed481c26859eed553c53f3e752',1,'USB_Endpoint_Table_t::Address()'],['../struct_u_s_b___pipe___table__t.html#a66ac50aac6d7d2f3b007afb52384ebba',1,'USB_Pipe_Table_t::Address()']]],
+  ['addressingreset',['AddressingReset',['../struct_r_n_d_i_s___reset___complete__t.html#a466f1cd566c1f4177900e41f67bc4a01',1,'RNDIS_Reset_Complete_t']]],
+  ['aerc',['AERC',['../struct_s_c_s_i___inquiry___response__t.html#acddc213d43c0a5673bb0fe3d6b1fe0b8',1,'SCSI_Inquiry_Response_t']]],
+  ['aflistoffset',['AFListOffset',['../struct_r_n_d_i_s___initialize___complete__t.html#a6dc8e7754344a7833ed3c87250988dc3',1,'RNDIS_Initialize_Complete_t']]],
+  ['aflistsize',['AFListSize',['../struct_r_n_d_i_s___initialize___complete__t.html#a500dfc28fae55c85bc910dacf3369315',1,'RNDIS_Initialize_Complete_t']]],
+  ['alternatesetting',['AlternateSetting',['../struct_u_s_b___class_info___p_r_n_t___host__t.html#a5ae5b19cdf335ed1710c2e921dffdd15',1,'USB_ClassInfo_PRNT_Host_t::AlternateSetting()'],['../struct_u_s_b___descriptor___interface__t.html#adbf681d6e7d01ad8dc9d0419a6de4523',1,'USB_Descriptor_Interface_t::AlternateSetting()']]],
+  ['associatedinputterminal',['AssociatedInputTerminal',['../struct_u_s_b___audio___descriptor___output_terminal__t.html#a0805f92190f2209e29aad768addf79e5',1,'USB_Audio_Descriptor_OutputTerminal_t']]],
+  ['associatedjackid',['AssociatedJackID',['../struct_u_s_b___m_i_d_i___descriptor___jack___endpoint__t.html#ab627a1abd197fe9af0c1828e91af5ba5',1,'USB_MIDI_Descriptor_Jack_Endpoint_t']]],
+  ['associatedoutputterminal',['AssociatedOutputTerminal',['../struct_u_s_b___audio___descriptor___input_terminal__t.html#acca2af415cc333445da8ae006829adb9',1,'USB_Audio_Descriptor_InputTerminal_t']]],
+  ['attributes',['Attributes',['../struct_u_s_b___audio___descriptor___stream_endpoint___spc__t.html#a2a1ead8b888e0cd1b373b3add7ce2a91',1,'USB_Audio_Descriptor_StreamEndpoint_Spc_t::Attributes()'],['../struct_h_i_d___report_item__t.html#a1ff67250009c33509549f1ddd8905299',1,'HID_ReportItem_t::Attributes()'],['../struct_u_s_b___descriptor___endpoint__t.html#a1519903a247e0809a16597d56b2f1d6c',1,'USB_Descriptor_Endpoint_t::Attributes()']]],
+  ['audioformat',['AudioFormat',['../struct_u_s_b___audio___descriptor___interface___a_s__t.html#a45fcac24e74e0991567e830df43879a7',1,'USB_Audio_Descriptor_Interface_AS_t']]],
+  ['audiospecification',['AudioSpecification',['../struct_u_s_b___m_i_d_i___descriptor___audio_interface___a_s__t.html#a6c308ff3449f8028eea3329c451ae69c',1,'USB_MIDI_Descriptor_AudioInterface_AS_t']]]
+];

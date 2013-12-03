@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['req_5fclearfeature',['REQ_ClearFeature',['../group___group___std_request.html#gga677969861705f7148f96c464e76c79d2a0b43219969607951b15ea3e49fae39b3',1,'StdRequestType.h']]],
+  ['req_5fgetconfiguration',['REQ_GetConfiguration',['../group___group___std_request.html#gga677969861705f7148f96c464e76c79d2a571f74edd218f30fec062011b908899a',1,'StdRequestType.h']]],
+  ['req_5fgetdescriptor',['REQ_GetDescriptor',['../group___group___std_request.html#gga677969861705f7148f96c464e76c79d2a88c7bffa0d345dd0b3d9598ca6ba31cd',1,'StdRequestType.h']]],
+  ['req_5fgetinterface',['REQ_GetInterface',['../group___group___std_request.html#gga677969861705f7148f96c464e76c79d2a104428fd5a45d154fda7332979ef3013',1,'StdRequestType.h']]],
+  ['req_5fgetstatus',['REQ_GetStatus',['../group___group___std_request.html#gga677969861705f7148f96c464e76c79d2a5892786a0451b9d8f5d0384271b4fe44',1,'StdRequestType.h']]],
+  ['req_5fsetaddress',['REQ_SetAddress',['../group___group___std_request.html#gga677969861705f7148f96c464e76c79d2a770e84561a6039de36e24a3acf14e035',1,'StdRequestType.h']]],
+  ['req_5fsetconfiguration',['REQ_SetConfiguration',['../group___group___std_request.html#gga677969861705f7148f96c464e76c79d2a84e0eb0b9ced98ce7004e124af8a857f',1,'StdRequestType.h']]],
+  ['req_5fsetdescriptor',['REQ_SetDescriptor',['../group___group___std_request.html#gga677969861705f7148f96c464e76c79d2a15817dac0d27f15ca826b3e1ee663cdd',1,'StdRequestType.h']]],
+  ['req_5fsetfeature',['REQ_SetFeature',['../group___group___std_request.html#gga677969861705f7148f96c464e76c79d2a872ff93c50d35b60282c6f27e0fcb57a',1,'StdRequestType.h']]],
+  ['req_5fsetinterface',['REQ_SetInterface',['../group___group___std_request.html#gga677969861705f7148f96c464e76c79d2a5219c390455a2c028c735df18a16e4e1',1,'StdRequestType.h']]],
+  ['req_5fsynchframe',['REQ_SynchFrame',['../group___group___std_request.html#gga677969861705f7148f96c464e76c79d2a8f9e3be78471708c4d9dea781d86d933',1,'StdRequestType.h']]],
+  ['rndis_5fdata_5finitialized',['RNDIS_Data_Initialized',['../group___group___u_s_b_class_r_n_d_i_s_common.html#gga5ce5cfe44a6515e0e6f44338e9e84f5da4f18bb8ffbb8f39b4ef2d7ead96c3300',1,'RNDISClassCommon.h']]],
+  ['rndis_5fenumerror_5finvalidconfigdescriptor',['RNDIS_ENUMERROR_InvalidConfigDescriptor',['../group___group___u_s_b_class_r_n_d_i_s_host.html#ggaa623b2f2f90262d9a0c5d2de0651dbb0a384d731b7d0f7acb01e07cdf208ec35d',1,'RNDISClassHost.h']]],
+  ['rndis_5fenumerror_5fnocompatibleinterfacefound',['RNDIS_ENUMERROR_NoCompatibleInterfaceFound',['../group___group___u_s_b_class_r_n_d_i_s_host.html#ggaa623b2f2f90262d9a0c5d2de0651dbb0a1bade8bf21bbb459a124109aefc9c88f',1,'RNDISClassHost.h']]],
+  ['rndis_5fenumerror_5fnoerror',['RNDIS_ENUMERROR_NoError',['../group___group___u_s_b_class_r_n_d_i_s_host.html#ggaa623b2f2f90262d9a0c5d2de0651dbb0a4cc708447f49cb0fa7924966a720d46b',1,'RNDISClassHost.h']]],
+  ['rndis_5fenumerror_5fpipeconfigurationfailed',['RNDIS_ENUMERROR_PipeConfigurationFailed',['../group___group___u_s_b_class_r_n_d_i_s_host.html#ggaa623b2f2f90262d9a0c5d2de0651dbb0ae309a4359609fb5d17b68eedee43981d',1,'RNDISClassHost.h']]],
+  ['rndis_5finitialized',['RNDIS_Initialized',['../group___group___u_s_b_class_r_n_d_i_s_common.html#gga5ce5cfe44a6515e0e6f44338e9e84f5daead138dcb1c722ca77935bca1a4cd73f',1,'RNDISClassCommon.h']]],
+  ['rndis_5fnotif_5fresponseavailable',['RNDIS_NOTIF_ResponseAvailable',['../group___group___u_s_b_class_r_n_d_i_s_common.html#ggaab61190b311d845254a78c4dd91dbfdba708d8db1a3541692ee76d8601d7cfc93',1,'RNDISClassCommon.h']]],
+  ['rndis_5freq_5fgetencapsulatedresponse',['RNDIS_REQ_GetEncapsulatedResponse',['../group___group___u_s_b_class_r_n_d_i_s_common.html#ggadbbb15caa6a2fc21e87468ff75313ab7aa499b3b05b95271b987f878851ce5fa5',1,'RNDISClassCommon.h']]],
+  ['rndis_5freq_5fsendencapsulatedcommand',['RNDIS_REQ_SendEncapsulatedCommand',['../group___group___u_s_b_class_r_n_d_i_s_common.html#ggadbbb15caa6a2fc21e87468ff75313ab7aefafe92345ea401ad0559f73f7cda6fc',1,'RNDISClassCommon.h']]],
+  ['rndis_5funinitialized',['RNDIS_Uninitialized',['../group___group___u_s_b_class_r_n_d_i_s_common.html#gga5ce5cfe44a6515e0e6f44338e9e84f5dab4bfe2fab2a93439983e40fc64d26858',1,'RNDISClassCommon.h']]]
+];

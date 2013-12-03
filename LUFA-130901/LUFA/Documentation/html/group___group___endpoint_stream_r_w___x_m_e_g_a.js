@@ -1,0 +1,25 @@
+var group___group___endpoint_stream_r_w___x_m_e_g_a =
+[
+    [ "Endpoint_Discard_Stream", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#gaa829c209690100243e9b32e7261cb51b", null ],
+    [ "Endpoint_Null_Stream", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#gab9903cea1df4be871aeb29cb6224503f", null ],
+    [ "Endpoint_Read_Control_EStream_BE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#gaff111cba1aa09cd1095c33d8bf8028d5", null ],
+    [ "Endpoint_Read_Control_EStream_LE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#ga8a85851154bfb7aca602e5f575e888c5", null ],
+    [ "Endpoint_Read_Control_Stream_BE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#ga115cef51e68d6f0f2665cd825f92e526", null ],
+    [ "Endpoint_Read_Control_Stream_LE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#gad7c090a3b16c980884bda08957dff760", null ],
+    [ "Endpoint_Read_EStream_BE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#ga9579c24ee43db737e21e6409f194126e", null ],
+    [ "Endpoint_Read_EStream_LE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#gae4179cb6d30a02a54140f5c955274e3a", null ],
+    [ "Endpoint_Read_Stream_BE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#ga1eb69bac6c0d227d1cfaac4bc7d2e27b", null ],
+    [ "Endpoint_Read_Stream_LE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#ga583da8b69e4c4cea7946f6304b338668", null ],
+    [ "Endpoint_Write_Control_EStream_BE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#ga5a9332efe9b8850d943c1b6a602f5d7d", null ],
+    [ "Endpoint_Write_Control_EStream_LE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#gabc501d62857000764b03ac63d5e079b4", null ],
+    [ "Endpoint_Write_Control_PStream_BE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#ga79a70911499ee6e483147f3282f1de81", null ],
+    [ "Endpoint_Write_Control_PStream_LE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#gad8dc9186992b8bab4b59ad4827742849", null ],
+    [ "Endpoint_Write_Control_Stream_BE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#gae44a3ada1925d23f5fd30a725e92b941", null ],
+    [ "Endpoint_Write_Control_Stream_LE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#gaeceef4513a67715fd2495af93f3a06a8", null ],
+    [ "Endpoint_Write_EStream_BE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#gac7d169869bfee44aaaa486746d164e21", null ],
+    [ "Endpoint_Write_EStream_LE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#gaa0da2ddefe8f3dd074239ea06f3f36dd", null ],
+    [ "Endpoint_Write_PStream_BE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#ga3ffd09d6bf0604ff04db62a4454d4ed3", null ],
+    [ "Endpoint_Write_PStream_LE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#ga0b7278d142151babd472a1d56a8fd153", null ],
+    [ "Endpoint_Write_Stream_BE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#ga17c206c46b1acf417b475d45fbaeb0c8", null ],
+    [ "Endpoint_Write_Stream_LE", "group___group___endpoint_stream_r_w___x_m_e_g_a.html#ga1373965e66df66877ae7bd8b6191fa48", null ]
+];
