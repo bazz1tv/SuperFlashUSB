@@ -15,8 +15,9 @@
 #include "sflash/id.h"
 #include "sflash/erase.h"
 #include "sflash/write.h"
+#include "sflash/unlock_blocks.h"
 
-typedef uint8_t byte;
+//typedef uint8_t byte;
 
 //extern static uint16_t BytesTransferred;
 extern unsigned long addr; //,numbytes;

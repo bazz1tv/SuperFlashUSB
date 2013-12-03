@@ -65,14 +65,14 @@ clean::
 	rm -f pc/*.o
 	rm -f pc/sflash/*.o
 # Include LUFA build script makefiles
-#include $(LUFA_PATH)/Build/lufa_core.mk
-#include $(LUFA_PATH)/Build/lufa_sources.mk
-#include $(LUFA_PATH)/Build/lufa_build.mk
-#include $(LUFA_PATH)/Build/lufa_cppcheck.mk
-#include $(LUFA_PATH)/Build/lufa_doxygen.mk
-#include $(LUFA_PATH)/Build/lufa_dfu.mk
-#include $(LUFA_PATH)/Build/lufa_hid.mk
-#include $(LUFA_PATH)/Build/lufa_avrdude.mk
-#include $(LUFA_PATH)/Build/lufa_atprogram.mk
+include $(LUFA_PATH)/Build/lufa_core.mk
+include $(LUFA_PATH)/Build/lufa_sources.mk
+include $(LUFA_PATH)/Build/lufa_build.mk
+include $(LUFA_PATH)/Build/lufa_cppcheck.mk
+include $(LUFA_PATH)/Build/lufa_doxygen.mk
+include $(LUFA_PATH)/Build/lufa_dfu.mk
+include $(LUFA_PATH)/Build/lufa_hid.mk
+include $(LUFA_PATH)/Build/lufa_avrdude.mk
+include $(LUFA_PATH)/Build/lufa_atprogram.mk
 
 

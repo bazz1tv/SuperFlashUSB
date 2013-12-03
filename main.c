@@ -116,7 +116,8 @@ void SetupHardware(void)
     SetupPorts();
 
 	/* Disable clock division */
-	clock_prescale_set(clock_div_1);
+	// DISABLE THROUGH FUSES already
+	//clock_prescale_set(clock_div_1);
     //CLKPR = 0x81;
     
     

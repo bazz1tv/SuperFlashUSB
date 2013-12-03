@@ -1,4 +1,3 @@
-// Derp
 /*
              LUFA Library
      Copyright (C) Dean Camera, 2013.
