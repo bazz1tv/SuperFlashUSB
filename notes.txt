@@ -1,0 +1,1 @@
+After using hexdiff on the Tototek Stock Loader image (roms/sfbotx2.gs) with a loader binary produced from the ucon64 --multi command (roms/loader.smc), I can confirm that the only part of the loader rom that has changed is the Strings for the Game titles. Everything else stays the same!
