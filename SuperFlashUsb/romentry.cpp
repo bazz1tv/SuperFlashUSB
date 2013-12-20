@@ -77,6 +77,7 @@ void RomEntry::dropEvent(QDropEvent * event)
 void RomEntry::dragLeaveEvent(QDragLeaveEvent * event)
 {
     setStyleSheet("background-color: #fff");
+    event->accept();
 }
 
 void RomEntry::dragMoveEvent(QDragMoveEvent *event)

@@ -87,13 +87,28 @@ public:
 
         // Get ROM Size
         RomSizeByte = data[0x7fd7+offset];
+
+
         // Get SRAM Size
         SramSizeByte = data[0x7fd8+offset];
         // Headered
 
-        if (RomSizeByte > 14 || SramSizeByte > 14)
+        if (RomSizeByte > 14 || SramSizeByte > 14 || RomSizeByte == 0)
         {
             QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Something's Wrong. Did you load the correct file?"));
+            //qApp->quit();
+            return -1;
+        }
+
+        // Check for Correlation between RomSizeByte and actual RomFileSize
+        // map RomSizeByte to actual number of bytes
+        qint64 targetbytesize = 2048<<(RomSizeByte-1);
+        qint64 romfilesize = file->size();
+        if (headered)
+            romfilesize -= 0x200;
+        if (targetbytesize != romfilesize)
+        {
+            QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("The file is not the same size as the ROM header says it should be"));
             //qApp->quit();
             return -1;
         }

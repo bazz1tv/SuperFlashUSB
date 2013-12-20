@@ -38,6 +38,7 @@ private slots:
 private:
     ROM rom1,rom2,rom3,rom4;
     Ui::MainWindow *ui;
+    QStatusBar *statusBar;
 };
 
 

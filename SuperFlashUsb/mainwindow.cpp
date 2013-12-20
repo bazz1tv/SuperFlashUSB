@@ -11,8 +11,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 
     ui->setupUi(this);
+    statusBar = QMainWindow::statusBar();
+    //ui->statusBar;
+    statusBar->showMessage("Used Space: 0Mb | Available Space: 64Mb");
 
-    ui->progressBar->reset();
+    //ui->progressBar->reset();
+    //ui->progressBar->setValue(0);
+    ui->progressBar->setFormat("Progress");
 
     ui->textEdit1->rom.num = 1;
     ui->textEdit2->rom.num = 2;
