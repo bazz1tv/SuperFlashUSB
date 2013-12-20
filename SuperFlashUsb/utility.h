@@ -108,9 +108,14 @@ public:
             romfilesize -= 0x200;
         if (targetbytesize != romfilesize)
         {
-            QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("The file is not the same size as the ROM header says it should be"));
+            //QMessageBox::question()zzzz
+            if (QMessageBox::question(NULL, QObject::tr("Hm..."), QObject::tr("This file is not the same size as the ROM header says it should be\n\nLoad it anyways?")) == QMessageBox::No)
+            {
+                return -1;
+            }
+            //QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("The file is not the same size as the ROM header says it should be"));
             //qApp->quit();
-            return -1;
+
         }
 
 

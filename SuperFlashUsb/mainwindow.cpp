@@ -29,6 +29,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->textEdit3->rom.finalString = "<b>3) </b> &lt;EMPTY&gt;";
     ui->textEdit4->rom.finalString = "<b>4) </b> &lt;EMPTY&gt;";
 
+    ui->textEdit->sram.finalString = "&lt;EMPTY&gt;";
+
+    ui->textEdit->setHtml(ui->textEdit->sram.finalString);
     ui->textEdit1->setHtml(ui->textEdit1->rom.finalString);
     ui->textEdit2->setHtml(ui->textEdit2->rom.finalString);
     ui->textEdit3->setHtml(ui->textEdit3->rom.finalString);
