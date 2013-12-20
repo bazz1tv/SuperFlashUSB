@@ -35,6 +35,7 @@ void RomEntry::dragEnterEvent(QDragEnterEvent * event)
     //event->setDropAction(Qt::MoveAction);
             //event->accept();
     //event->setDropAction(Qt::CopyAction);
+    activateWindow();
 }
 
 void RomEntry::dropEvent(QDropEvent * event)
@@ -87,6 +88,7 @@ void RomEntry::dragMoveEvent(QDragMoveEvent *event)
         //setStyleSheet("background-color: #ccc");
         event->acceptProposedAction();
     }
+    activateWindow();
 
 }
 
@@ -106,7 +108,7 @@ void RomEntry::contextMenuEvent(QContextMenuEvent * event)
     if (selectedItem)
     {
         rom.filename = QFileDialog::getOpenFileName(this, QObject::tr("Open File"), QString(),
-                                                     QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
+                                                     QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);; Any (*.*)"));
         //QMessageBox::critical(this, QObject::tr("Error"), rom.filename);
         dothedo(rom);
         setHtml(rom.finalString);
