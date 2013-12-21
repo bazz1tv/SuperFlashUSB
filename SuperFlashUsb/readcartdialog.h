@@ -21,7 +21,7 @@ public slots:
     void accept();
 
 private slots:
-    //void on_addrSlider_valueChanged(int value);
+    void on_basicButton_clicked();
 
 public:
     Ui::ReadCartDialog *ui;

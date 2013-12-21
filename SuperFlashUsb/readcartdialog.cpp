@@ -53,3 +53,8 @@ int ReadCartDialog::getNumBytes()
 
     return hex;
 }
+
+void ReadCartDialog::on_basicButton_clicked()
+{
+    //  Take me to Basic Mode
+}

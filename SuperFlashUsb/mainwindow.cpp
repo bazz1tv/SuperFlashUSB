@@ -13,7 +13,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     statusBar = QMainWindow::statusBar();
     //ui->statusBar;
-    statusBar->showMessage("Used Space: 0Mb | Available Space: 64Mb");
+    timer = new QTimer(this);
+    connect(timer,SIGNAL(timeout()),this,SLOT(connect_USB()));
+    timer->start(1000);
+    //statusBar->showMessage("Used Space: 0Mb | Available Space: 64Mb");
 
     //ui->progressBar->reset();
     ui->progressBar->setValue(100);
@@ -37,32 +40,24 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->textEdit3->setHtml(ui->textEdit3->rom.finalString);
     ui->textEdit4->setHtml(ui->textEdit4->rom.finalString);
 
-    //ui->textEdit1->setSty
-    //
-    //ui->textEdit1->setAcceptDrops(true);
-    /*ui->textEdit1->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->textEdit1, SIGNAL(customContextMenuRequested(const QPoint&)),
-        this, SLOT(ShowContextMenu1(const QPoint&)));
+
+    // see are we connecteD??
 
 
-    ui->textEdit2->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->textEdit2, SIGNAL(customContextMenuRequested(const QPoint&)),
-        this, SLOT(ShowContextMenu2(const QPoint&)));
-
-    ui->textEdit3->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->textEdit3, SIGNAL(customContextMenuRequested(const QPoint&)),
-        this, SLOT(ShowContextMenu3(const QPoint&)));
-
-    ui->textEdit4->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->textEdit4, SIGNAL(customContextMenuRequested(const QPoint&)),
-        this, SLOT(ShowContextMenu4(const QPoint&)));*/
-
-    //setAcceptDrops(true);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::connect_USB()
+{
+    static int derp=0;
+
+    derp++;
+
+    statusBar->showMessage(QString("%1").arg(derp));
 }
 
 /*void MainWindow::derp(QDragEnterEvent *p)

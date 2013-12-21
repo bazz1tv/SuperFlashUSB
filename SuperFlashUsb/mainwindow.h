@@ -26,6 +26,7 @@ private slots:
     //void derp(QDragEnterEvent *);
     //void derp2(QDropEvent *event);
     void on_actionQuit_triggered();
+    void connect_USB();
     /*void ShowContextMenu1(const QPoint& pos);
     void ShowContextMenu2(const QPoint& pos);
     void ShowContextMenu3(const QPoint& pos);
@@ -39,6 +40,7 @@ private:
     ROM rom1,rom2,rom3,rom4;
     Ui::MainWindow *ui;
     QStatusBar *statusBar;
+    QTimer *timer;
 };
 
 
