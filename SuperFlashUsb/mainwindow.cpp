@@ -17,19 +17,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //ui->progressBar->reset();
     ui->progressBar->setValue(100);
-    ui->progressBar->setFormat("Progress");
+    ui->progressBar->setFormat("Progress Bar");
 
     ui->textEdit1->rom.num = 1;
     ui->textEdit2->rom.num = 2;
     ui->textEdit3->rom.num = 3;
     ui->textEdit4->rom.num = 4;
 
-    ui->textEdit1->rom.finalString = "<b>1) </b> &lt;EMPTY&gt;";
-    ui->textEdit2->rom.finalString = "<b>2) </b> &lt;EMPTY&gt;";
-    ui->textEdit3->rom.finalString = "<b>3) </b> &lt;EMPTY&gt;";
-    ui->textEdit4->rom.finalString = "<b>4) </b> &lt;EMPTY&gt;";
+    ui->textEdit1->rom.finalString = "<b>1) </b> &lt;DRAG ROM-FILE HERE&gt;";
+    ui->textEdit2->rom.finalString = "<b>2) </b> &lt;DRAG ROM-FILE HERE&gt;";
+    ui->textEdit3->rom.finalString = "<b>3) </b> &lt;DRAG ROM-FILE HERE&gt;";
+    ui->textEdit4->rom.finalString = "<b>4) </b> &lt;DRAG ROM-FILE HERE&gt;";
 
-    ui->textEdit->sram.finalString = "&lt;EMPTY&gt;";
+    ui->textEdit->sram.finalString = "&lt;DRAG SAVE-FILE HERE&gt;";
 
     ui->textEdit->setHtml(ui->textEdit->sram.finalString);
     ui->textEdit1->setHtml(ui->textEdit1->rom.finalString);
@@ -202,17 +202,27 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
     {
         // Query a Filename to Save to
         QString filename = QFileDialog::getSaveFileName(this, QObject::tr("Save File"), QString("derp.bin"),
-                                                                        QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
+                                                           QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
+
+
+        //d.ui->addrLineEdit->text();
+        int startaddr = d.getStartAddress();
+        int numbytes = d.getNumBytes();
+
+        // setup progress bar
+        ui->progressBar->setMaximum(numbytes);
+        ui->progressBar->setMinimum(0);
+        ui->progressBar->resetFormat();
+
 
         // Now Call our PC Command line functions to Read the Cart
-        for (int i=0; i <= 100; i++)
-        {
-            ui->progressBar->setValue(i);
-        }
+
+
+        // we are finished
     }
     else
     {
-
+        // Nothing
     }
     //sleep(1000);
     //delete d;

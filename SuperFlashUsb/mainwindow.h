@@ -4,12 +4,12 @@
 #include <QMainWindow>
 
 #include "utility.h"
-
+//#include "readcartdialog.h"
 
 
 namespace Ui {
 class MainWindow;
-
+//class ReadCartDialog;
 }
 
 class MainWindow : public QMainWindow

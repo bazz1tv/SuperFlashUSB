@@ -14,6 +14,8 @@ class ReadCartDialog : public QDialog
 public:
     explicit ReadCartDialog(QWidget *parent = 0);
     ~ReadCartDialog();
+    int getStartAddress();
+    int getNumBytes();
 
 public slots:
     void accept();
@@ -21,8 +23,10 @@ public slots:
 private slots:
     //void on_addrSlider_valueChanged(int value);
 
-private:
+public:
     Ui::ReadCartDialog *ui;
 };
+
+
 
 #endif // READCARTDIALOG_H
