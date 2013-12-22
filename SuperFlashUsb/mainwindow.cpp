@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "usb.h"
+#include "readcartdialog.h"
 
 #include <QtWidgets>
 
@@ -51,11 +52,12 @@ MainWindow::~MainWindow()
     USB::CloseUSBDevice();
     USB::EndUSB();
     delete ui;
-
+    delete timer;
 }
 
 
-
+// don't worry about it
+//
 void MainWindow::connect_USB()
 {
     //InitUSB();
@@ -71,131 +73,13 @@ void MainWindow::connect_USB()
 
 }
 
-/*void MainWindow::derp(QDragEnterEvent *p)
-{
-    p->acceptProposedAction();
-}
-void MainWindow::derp2(QDropEvent *event)
-{
-    QMessageBox::critical(this, QObject::tr("Error"), QObject::tr("HERP DERP"));
-    event->acceptProposedAction();
-}
-
-
-void MainWindow::ShowContextMenu1(const QPoint& pos) // this is a slot
-{
-    // for most widgets
-    QPoint globalPos = ui->textEdit1->mapToGlobal(pos);
-    // for QAbstractScrollArea and derived classes you would use:
-    // QPoint globalPos = myWidget->viewport()->mapToGlobal(pos);
-
-    QMenu myMenu;
-    //int offset=0;
-    myMenu.addAction("Load Game1");
-    // ...
-
-    QAction* selectedItem = myMenu.exec(globalPos);
-    if (selectedItem)
-    {
-        rom1.filename = QFileDialog::getOpenFileName(this, QObject::tr("Open File"), QString(),
-                                                     QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
-
-        dothedo(rom1);
-        ui->textEdit1->setHtml(rom1.finalString);
-    }
-    else
-    {
-        // nothing was chosen
-    }
-}
-
-void MainWindow::ShowContextMenu2(const QPoint& pos) // this is a slot
-{
-    // for most widgets
-    QPoint globalPos = ui->textEdit2->mapToGlobal(pos);
-    // for QAbstractScrollArea and derived classes you would use:
-    // QPoint globalPMenu Item 1os = myWidget->viewport()->mapToGlobal(pos);
-
-    QMenu myMenu;
-    myMenu.addAction("Load Game2");
-    // ...
-
-    QAction* selectedItem = myMenu.exec(globalPos);
-    if (selectedItem)
-    {
-        rom2.filename = QFileDialog::getOpenFileName(this, QObject::tr("Open File"), QString(),
-                                                     QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
-
-        dothedo(rom2,2);
-        ui->textEdit2->setHtml(rom2.finalString);
-
-    }
-    else
-    {
-        // nothing was chosen
-    }
-}
-
-void MainWindow::ShowContextMenu3(const QPoint& pos) // this is a slot
-{
-    // for most widgets
-    QPoint globalPos = ui->textEdit3->mapToGlobal(pos);
-    // for QAbstractScrollArea and derived classes you would use:
-    // QPoint globalPos = myWidget->viewport()->mapToGlobal(pos);
-
-    QMenu myMenu;
-    myMenu.addAction("Load Game3");
-    // ...
-
-    QAction* selectedItem = myMenu.exec(globalPos);
-    if (selectedItem)
-    {
-        rom3.filename = QFileDialog::getOpenFileName(this, QObject::tr("Open File"), QString(),
-                                                     QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
-
-        dothedo(rom3, 3);
-        ui->textEdit3->setHtml(rom3.finalString);
-    }
-    else
-    {
-        // nothing was chosen
-    }
-}
-
-void MainWindow::ShowContextMenu4(const QPoint& pos) // this is a slot
-{
-    // for most widgets
-    QPoint globalPos = ui->textEdit4->mapToGlobal(pos);
-    // for QAbstractScrollArea and derived classes you would use:
-    // QPoint globalPos = myWidget->viewport()->mapToGlobal(pos);
-
-    QMenu myMenu;
-    myMenu.addAction("Load Game4");
-    // ...
-
-    QAction* selectedItem = myMenu.exec(globalPos);
-    if (selectedItem)
-    {
-        // something was chosen, do stuff
-        rom4.filename = QFileDialog::getOpenFileName(this, QObject::tr("Open File"), QString(),
-                                                             QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
-
-        dothedo(rom4, 4);
-        ui->textEdit4->setHtml(rom4.finalString);
-    }
-    else
-    {
-        // nothing was chosen
-    }
-}*/
-
 void MainWindow::on_actionQuit_triggered()
 {
     qApp->quit();
 }
 
-//#include <time.h>
-#include "readcartdialog.h"
+
+
 void MainWindow::on_pushButton_Cart_Read_clicked()
 {
     int accepted=0;
@@ -206,12 +90,15 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
 
     if (accepted == QDialog::Accepted)
     {
+        ROM rom;
         // Query a Filename to Save to
-        QString filename = QFileDialog::getSaveFileName(this, QObject::tr("Save File"), QString("derp.bin"),
+        rom.filename = QFileDialog::getSaveFileName(this, QObject::tr("Save File"), QString("derp.bin"),
                                                            QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
-
-
-        //d.ui->addrLineEdit->text();
+        if (rom.open() < 0)
+        {
+            QMessageBox::critical(this, "File Error", "Could not Open File");
+            return;
+        }
         int startaddr = d.getStartAddress();
         int numbytes = d.getNumBytes();
 
@@ -220,15 +107,9 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
         ui->progressBar->setMinimum(0);
         ui->progressBar->resetFormat();
 
-        for (int i=0; i < numbytes; i++)
-        {
-            ui->progressBar->setValue(i+1);
-        }
-
-
-
-
         // Now Call our PC Command line functions to Read the Cart
+
+
 
 
         // we are finished

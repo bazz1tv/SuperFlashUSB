@@ -17,6 +17,12 @@ bool is_headered(QFile &file);
 
 bool isHirom(uchar *data);
 
+int OpenFiles();
+int OpenForReadBin(const char *filename);
+int OpenForWriteBin(const char *filename);
+
+//extern uchar MajorCommand,MinorCommand;
+
 
 
 class ROM
@@ -46,6 +52,25 @@ public:
             file->close();
             delete file;
         }
+    }
+
+    int open()
+    {
+        if (rom.file)
+        {
+            rom.file->close();
+            delete rom.file;
+        }
+
+        rom.file = new QFile(rom.filename);
+
+        if (!rom.file->open(QIODevice::ReadWrite))
+        {
+            QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Could not open file"));
+            return -1;
+        }
+
+        return 1;
     }
 
     bool isHeadered()

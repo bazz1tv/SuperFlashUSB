@@ -75,75 +75,75 @@ int AllASCII(unsigned char *b, int size)
 
 int ScoreHiROM(unsigned char *data)
 {
-        int score = 0;
+    int score = 0;
 
-        if ((data[0xFFDC] + data[0xFFDD]*256 + data[0xFFDE] + data[0xFFDF]*256) == 0xFFFF)
-        {
-                score += 2;
-        }
+    if ((data[0xFFDC] + data[0xFFDD]*256 + data[0xFFDE] + data[0xFFDF]*256) == 0xFFFF)
+    {
+        score += 2;
+    }
 
-        if (data[0xFFDA] == 0x33)
-        {
-                score += 2;
-        }
-        if ((data[0xFFD5] & 0xf) < 4)
-        {
-                score += 2;
-        }
-        if (!(data[0xFFFD] & 0x80))
-        {
-                score -= 4;
-        }
-        if ((1 << (data[0xFFD7] - 7)) > 48)
-        {
-                score -= 1;
-        }
-        if (!AllASCII(&data[0xFFB0], 6))
-        {
-                score -= 1;
-        }
-        if (!AllASCII(&data[0xFFC0], 20))
-        {
-                score -= 1;
-        }
+    if (data[0xFFDA] == 0x33)
+    {
+        score += 2;
+    }
+    if ((data[0xFFD5] & 0xf) < 4)
+    {
+        score += 2;
+    }
+    if (!(data[0xFFFD] & 0x80))
+    {
+        score -= 4;
+    }
+    if ((1 << (data[0xFFD7] - 7)) > 48)
+    {
+        score -= 1;
+    }
+    if (!AllASCII(&data[0xFFB0], 6))
+    {
+        score -= 1;
+    }
+    if (!AllASCII(&data[0xFFC0], 20))
+    {
+        score -= 1;
+    }
 
-        return (score);
+    return (score);
 }
 
 int ScoreLoROM(unsigned char *data)
 {
-        int score = 0;
+    int score = 0;
 
-        if ((data[0x7FDC] + data[0x7FDD]*256 + data[0x7FDE] + data[0x7FDF]*256) == 0xFFFF)
-        {
-                score += 2;
-        }
-        if (data[0x7FDA] == 0x33)
-        {
-                score += 2;
-        }
-        if ((data[0x7FD5] & 0xf) < 4)
-        {
-                score += 2;
-        }
-        if (!(data[0x7FFD] & 0x80))
-        {
-                score -= 4;
-        }
-        if ((1 << (data[0x7FD7] - 7)) > 48)
-        {
-                score -= 1;
-        }
-        if (!AllASCII(&data[0x7FB0], 6))
-        {
-                score -= 1;
-        }
-        if (!AllASCII(&data[0x7FC0], 20))
-        {
-                score -= 1;
-        }
+    if ((data[0x7FDC] + data[0x7FDD]*256 + data[0x7FDE] + data[0x7FDF]*256) == 0xFFFF)
+    {
+        score += 2;
+    }
+    if (data[0x7FDA] == 0x33)
+    {
+        score += 2;
+    }
+    if ((data[0x7FD5] & 0xf) < 4)
+    {
+        score += 2;
+    }
+    if (!(data[0x7FFD] & 0x80))
+    {
+        score -= 4;
+    }
+    if ((1 << (data[0x7FD7] - 7)) > 48)
+    {
+        score -= 1;
+    }
+    if (!AllASCII(&data[0x7FB0], 6))
+    {
+        score -= 1;
+    }
+    if (!AllASCII(&data[0x7FC0], 20))
+    {
+        score -= 1;
+    }
 
-        return (score);
+    return (score);
 }
 
 bool is_headered(QFile &file)
@@ -172,4 +172,81 @@ bool isHirom(uchar *data)
         hirom = false;
     }
     return hirom;
+}
+
+int OpenForWriteBin(const char *filename)
+{
+    fh = fopen(filename, "wb");
+    if(fh == NULL)
+    {
+        //printf("Cant open source file\n");
+        return 1;
+    }
+
+    return 0;
+}
+
+int OpenForReadBin(const char *filename)
+{
+    fh = fopen(filename, "rb");
+    if(fh == NULL)
+    {
+        //printf("Cant open source file\n");
+        return 1;
+    }
+
+    return 0;
+}
+
+int OpenFiles()
+{
+
+    if ( argc > 1)
+    {
+        if (MajorCommand == READ || MajorCommand == READ_SRAM )
+        {
+            //printf ("Opening File %s for writing to\n", filename);
+            fh = fopen(filename, "wb");
+            if(fh == NULL) {
+                //printf("Cant open source file\n");
+                return 1;
+            }
+            //printf ("File Opened\n");
+        }
+        else if ( MajorCommand == WRITE || MajorCommand == WRITE_SRAM )
+        {
+            //printf ("Opening File %s for reading from\n", filename);
+            fh = fopen(filename, "rb");
+            if(fh == NULL) {
+                //printf("Cant open source file\n");
+                return 1;
+            }
+            //printf ("File Opened\n");
+        }
+    }
+    else
+    {
+        // Input a filename
+
+
+        if (MajorCommand == WRITE)
+        {
+            //printf ("File to ");
+            //printf ("write from: ");
+            //scanf ("%s",filename);
+            //OpenForReadBin(filename);
+        }
+        else if (MajorCommand == READ)
+        {
+            //printf ("File to ");
+            //printf ("read to: ");
+            //scanf ("%s",filename);
+
+            //OpenForWriteBin(filename);
+        }
+    }
+
+
+
+    return 0;
 }
