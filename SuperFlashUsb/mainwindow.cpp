@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "usb.h"
 
 #include <QtWidgets>
 
@@ -41,23 +42,33 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->textEdit4->setHtml(ui->textEdit4->rom.finalString);
 
 
-    // see are we connecteD??
-
-
+    // init libUSB
+    USB::InitUSB();
 }
 
 MainWindow::~MainWindow()
 {
+    USB::CloseUSBDevice();
+    USB::EndUSB();
     delete ui;
+
 }
+
+
 
 void MainWindow::connect_USB()
 {
-    static int derp=0;
+    //InitUSB();
+    if (USB::OpenUSBDevice() < 0)
+    {
+        statusBar->showMessage("USB Device Not Connected or Not Found");
+    }
+    else
+    {
+        statusBar->showMessage("USB Device Connected");
+        timer->stop();
+    }
 
-    derp++;
-
-    statusBar->showMessage(QString("%1").arg(derp));
 }
 
 /*void MainWindow::derp(QDragEnterEvent *p)
@@ -208,6 +219,13 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
         ui->progressBar->setMaximum(numbytes);
         ui->progressBar->setMinimum(0);
         ui->progressBar->resetFormat();
+
+        for (int i=0; i < numbytes; i++)
+        {
+            ui->progressBar->setValue(i+1);
+        }
+
+
 
 
         // Now Call our PC Command line functions to Read the Cart
