@@ -25,7 +25,7 @@ protected:
 
 
 public:
-    ROM rom;
+    ROM_t rom;
 
 };
 

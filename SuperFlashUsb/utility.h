@@ -10,12 +10,16 @@ extern QString RomRamSizeByteLUT[];
 int AllASCII(unsigned char *b, int size);
 
 int ScoreHiROM(unsigned char *data);
-
 int ScoreLoROM(unsigned char *data);
+
+int ScoreRomHeader(unsigned char *data);
+
+
 
 bool is_headered(QFile &file);
 
 bool isHirom(uchar *data);
+bool isHirom2(uchar *loromdata, uchar *hiromdata);
 
 int OpenFiles();
 int OpenForReadBin(const char *filename);
@@ -25,10 +29,10 @@ int OpenForWriteBin(const char *filename);
 
 
 
-class ROM
+class ROM_t
 {
 public:
-    ROM()
+    ROM_t()
     {
         offset=0;
         hirom = false;
@@ -45,7 +49,7 @@ public:
         num=1;
     }
 
-    ~ROM()
+    ~ROM_t()
     {
         if (file)
         {
@@ -56,15 +60,15 @@ public:
 
     int open()
     {
-        if (rom.file)
+        if (file)
         {
-            rom.file->close();
-            delete rom.file;
+            file->close();
+            delete file;
         }
 
-        rom.file = new QFile(rom.filename);
+        file = new QFile(filename);
 
-        if (!rom.file->open(QIODevice::ReadWrite))
+        if (!file->open(QIODevice::ReadWrite))
         {
             QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Could not open file"));
             return -1;
@@ -147,6 +151,11 @@ public:
         return 0;
     }
 
+    void setString()
+    {
+        finalString = QString("<b>")+QString("%1").arg(num)+QString(") </b>")+QString(RomTitle)+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[RomSizeByte])+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>SRAM</b>: ")+QString(RomRamSizeByteLUT[SramSizeByte]);
+    }
+
     bool hirom;
     uchar *data;
     ushort offset;
@@ -164,7 +173,7 @@ public:
 
 
 
-int dothedo(ROM &rom);
+int dothedo(ROM_t &rom);
 
 class SRAM
 {

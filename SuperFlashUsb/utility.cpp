@@ -21,7 +21,7 @@ QString RomRamSizeByteLUT[] =
     "64 Mb"     // 14
 };
 
-int dothedo(ROM &rom)
+int dothedo(ROM_t &rom)
 {
     if (!rom.filename.isEmpty())
     {
@@ -110,6 +110,43 @@ int ScoreHiROM(unsigned char *data)
     return (score);
 }
 
+int ScoreRomHeader(unsigned char *data)
+{
+    int score = 0;
+
+    if ((data[0x2c] + data[0x2d]*256 + data[0x2e] + data[0x2f]*256) == 0xFFFF)
+    {
+        score += 2;
+    }
+
+    if (data[0x2A] == 0x33)
+    {
+        score += 2;
+    }
+    if ((data[0x25] & 0xf) < 4)
+    {
+        score += 2;
+    }
+    if (!(data[0x4d] & 0x80))
+    {
+        score -= 4;
+    }
+    if ((1 << (data[0x27] - 7)) > 48)
+    {
+        score -= 1;
+    }
+    if (!AllASCII(&data[0x0], 6))
+    {
+        score -= 1;
+    }
+    if (!AllASCII(&data[0x10], 20))
+    {
+        score -= 1;
+    }
+
+    return (score);
+}
+
 int ScoreLoROM(unsigned char *data)
 {
     int score = 0;
@@ -146,6 +183,8 @@ int ScoreLoROM(unsigned char *data)
     return (score);
 }
 
+
+
 bool is_headered(QFile &file)
 {
     if (file.size() % 1024 == 512)
@@ -174,79 +213,23 @@ bool isHirom(uchar *data)
     return hirom;
 }
 
-int OpenForWriteBin(const char *filename)
+
+bool isHirom2(uchar *loromdata, uchar *hiromdata)
 {
-    fh = fopen(filename, "wb");
-    if(fh == NULL)
+    bool hirom;
+    int hiscore, loscore;
+
+    hiscore = ScoreRomHeader(hiromdata);
+    loscore = ScoreRomHeader(loromdata);
+    if (hiscore>loscore)
     {
-        //printf("Cant open source file\n");
-        return 1;
-    }
-
-    return 0;
-}
-
-int OpenForReadBin(const char *filename)
-{
-    fh = fopen(filename, "rb");
-    if(fh == NULL)
-    {
-        //printf("Cant open source file\n");
-        return 1;
-    }
-
-    return 0;
-}
-
-int OpenFiles()
-{
-
-    if ( argc > 1)
-    {
-        if (MajorCommand == READ || MajorCommand == READ_SRAM )
-        {
-            //printf ("Opening File %s for writing to\n", filename);
-            fh = fopen(filename, "wb");
-            if(fh == NULL) {
-                //printf("Cant open source file\n");
-                return 1;
-            }
-            //printf ("File Opened\n");
-        }
-        else if ( MajorCommand == WRITE || MajorCommand == WRITE_SRAM )
-        {
-            //printf ("Opening File %s for reading from\n", filename);
-            fh = fopen(filename, "rb");
-            if(fh == NULL) {
-                //printf("Cant open source file\n");
-                return 1;
-            }
-            //printf ("File Opened\n");
-        }
+        hirom = true;
     }
     else
     {
-        // Input a filename
-
-
-        if (MajorCommand == WRITE)
-        {
-            //printf ("File to ");
-            //printf ("write from: ");
-            //scanf ("%s",filename);
-            //OpenForReadBin(filename);
-        }
-        else if (MajorCommand == READ)
-        {
-            //printf ("File to ");
-            //printf ("read to: ");
-            //scanf ("%s",filename);
-
-            //OpenForWriteBin(filename);
-        }
+        hirom = false;
     }
-
-
-
-    return 0;
+    return hirom;
 }
+
+

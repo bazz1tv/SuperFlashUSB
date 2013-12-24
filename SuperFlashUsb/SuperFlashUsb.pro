@@ -26,14 +26,29 @@ SOURCES += main.cpp\
     readcartdialog.cpp \
     romentry.cpp \
     sramentry.cpp \
-    usb.cpp
+    pc/sflash/erase.cpp \
+    pc/sflash/id.cpp \
+    pc/sflash/read.cpp \
+    pc/sflash/unlock_blocks.cpp \
+    pc/sflash/util.cpp \
+    pc/sflash/write.cpp \
+    pc/USB.cpp \
+    pc/derp.cpp
 
 HEADERS  += mainwindow.h \
     utility.h \
     readcartdialog.h \
     romentry.h \
     sramentry.h \
-    usb.h
+    pc/sflash.h \
+    pc/sflash/erase.h \
+    pc/sflash/id.h \
+    pc/sflash/read.h \
+    pc/sflash/unlock_blocks.h \
+    pc/sflash/util.h \
+    pc/sflash/write.h \
+    pc/main.h \
+    pc/USB.h
 
 FORMS    += mainwindow.ui \
     readcartdialog.ui

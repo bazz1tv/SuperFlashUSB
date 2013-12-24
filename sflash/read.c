@@ -65,7 +65,7 @@ void ReadCart(void)
                 LatchStatus(2);
             }*/
             //while (!(Endpoint_IsINReady()) && !(Endpoint_IsReadWriteAllowed()));       
-            Endpoint_Write_Control_Stream_LE(endpoint_buffer, numreadbytes);
+            Endpoint_Write_Control_Stream_LE(endpoint_buffer, USB_ControlRequest.wLength);
            
             //Endpoint_ClearStatusStage();    
         }
