@@ -37,7 +37,7 @@ private slots:
     void on_pushButton_Cart_Read_clicked();
 
 private:
-    ROM_t rom[4];
+
     Ui::MainWindow *ui;
     QStatusBar *statusBar;
     QTimer *timer;

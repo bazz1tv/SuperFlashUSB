@@ -4,6 +4,8 @@
 #include <QtWidgets>
 
 extern QString RomRamSizeByteLUT[];
+extern QMap<int,QString> CartTypeMap;
+
 
 /* Snes9x Hi/LoROM autodetect code */
 
@@ -114,6 +116,8 @@ public:
         //RomTitle[21] = 0;
         // ROM Title All set
 
+        CartTypeByte = data[0x7fd6+offset];
+
         // Get ROM Size
         RomSizeByte = data[0x7fd7+offset];
 
@@ -153,7 +157,16 @@ public:
 
     void setString()
     {
-        finalString = QString("<b>")+QString("%1").arg(num)+QString(") </b>")+QString(RomTitle)+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[RomSizeByte])+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>SRAM</b>: ")+QString(RomRamSizeByteLUT[SramSizeByte]);
+        finalString = QString("<b>")+QString("%1").arg(num)+QString(") </b>")+QString(RomTitle)+
+                QString("<p>Cart Type: ")+QString(CartTypeMap[CartTypeByte])+
+                QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[RomSizeByte])+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>SRAM</b>: ")+QString(RomRamSizeByteLUT[SramSizeByte]);
+    }
+
+    bool isValid()
+    {
+        if (!(RomSizeByte > 14 || SramSizeByte > 14 || RomSizeByte == 0))
+            return true;
+        else return false;
     }
 
     bool hirom;
@@ -163,6 +176,7 @@ public:
     char RomTitle[21+1];
     u_int8_t RomSizeByte;
     u_int8_t SramSizeByte;
+    u_int8_t CartTypeByte;
     QFile *file;
     QString filename;
 

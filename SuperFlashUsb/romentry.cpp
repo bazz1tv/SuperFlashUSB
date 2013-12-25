@@ -49,30 +49,42 @@ void RomEntry::dropEvent(QDropEvent * event)
                                                 // QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
 
     // File won't open with "file://" or "0x0d0a" at End of filename
-    rom.filename = event->mimeData()->text().remove("file://").remove("\x0d\x0a");
+    QUrl derp(event->mimeData()->text());//.remove("file://").remove("\x0d\x0a");
 
-    /*QFile derp("/home/bazz/derp.txt");
-    derp.open(QIODevice::WriteOnly);
-    derp.write(rom.filename.toUtf8().constData());*/
+
+
+    if (derp.isLocalFile())
+    {
+        rom.filename = derp.toLocalFile().remove("\x0d\x0a");
+
+        QFile merp("/home/bazz/derp.txt");
+        merp.open(QIODevice::WriteOnly);
+        merp.write(rom.filename.toUtf8().constData());
+        merp.close();
+
+
+        if (dothedo(rom) < 0)
+        {
+            rom.finalString = "<b>"+QString("%1").arg(rom.num)+") </b>&lt;EMPTY&gt;";
+        }
+        else rom.setString();
+        setHtml(rom.finalString);
+
+        setStyleSheet("background-color: #fff");
+        //event->acceptProposedAction();
+        event->acceptProposedAction();
+
+        // This because otherwise the window holding the files that we dropped maintains focus.
+
+    }
 
     //rom.filename = QFileDialog::getOpenFileName(this, QObject::tr("Open File"), QString(),
                                                  //QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
     //QMessageBox::critical(this, QObject::tr("Error"), rom.filename);
     //QMessageBox::critical(this, QObject::tr("Error"), rom.filename);
 
-
-    if (dothedo(rom) < 0)
-    {
-        rom.finalString = "<b>"+QString("%1").arg(rom.num)+") </b>&lt;EMPTY&gt;";
-    }
-    setHtml(rom.finalString);
-
-    setStyleSheet("background-color: #fff");
-    //event->acceptProposedAction();
-    event->acceptProposedAction();
-
-    // This because otherwise the window holding the files that we dropped maintains focus.
     this->activateWindow();
+
 }
 
 void RomEntry::dragLeaveEvent(QDragLeaveEvent * event)
@@ -111,6 +123,7 @@ void RomEntry::contextMenuEvent(QContextMenuEvent * event)
                                                      QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);; Any (*.*)"));
         //QMessageBox::critical(this, QObject::tr("Error"), rom.filename);
         dothedo(rom);
+        rom.setString();
         setHtml(rom.finalString);
     }
     else

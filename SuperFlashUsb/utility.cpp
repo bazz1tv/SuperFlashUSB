@@ -1,6 +1,41 @@
 #include "utility.h"
 
+QMap<int,QString> CartTypeMap;
 
+QString CartTypeLUT[] =
+{
+    //ROM type
+    //This determines what the ROM has, such as SRAM, RAM, and enhancement chips. For ROMs without an enhancement chip, these are the possible values: $00, $01, $02 Which is: ROM Only, ROM + RAM, ROM + RAM + SRAM
+    "ROM Only", // 0
+    "ROM + RAM", // 1
+    "ROM + SRAM" // 2
+    "ROM + Enhancement Chip",
+    "ROM + Enhancement Chip + RAM",
+    "ROM + Enhancement Chip + RAM + SRAM",
+    "ROM + Enhancement Chip + SRAM"
+};
+
+QString EnhancementLUT[] =
+{
+    "DSP",
+    "SuperFX",
+    "OBC1",
+    "SA-1",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "other",
+    "custom chip"
+    //For ROMs with an enhancement chip: $0*, $1*, $2*, $3*, $E*, $F* Which is:
+    //And we have $*3, $*4, $*5, $*6 Which is: . Combining the two numbers will give you different ROM types. If you want SuperFX with only ROM + chip, you need to input value $13
+};
 
 QString RomRamSizeByteLUT[] =
 {
