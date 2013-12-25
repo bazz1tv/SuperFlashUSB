@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>733</width>
-    <height>536</height>
+    <width>795</width>
+    <height>777</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -267,13 +267,14 @@ p, li { white-space: pre-wrap; }
     </item>
    </layout>
    <zorder></zorder>
+   <zorder></zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>733</width>
+     <width>795</width>
      <height>20</height>
     </rect>
    </property>

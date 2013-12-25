@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     CartTypeMap[0x03] =      QString("ROM+DSP");
     CartTypeMap[0x04] =      QString("ROM+DSP+RAM");         //  (no such produced)
     CartTypeMap[0x05] =      QString("ROM+DSP+RAM+Battery");
-    CartTypeMap[0x13] =      QString("ROM+MarioChip1/ExpansionRAM (and hacked version of OBC1)");
+    CartTypeMap[0x13] =      QString("ROM+MarioChip1/ExpansionRAM (or hacked version of OBC1)");
 
     CartTypeMap[0x14] =      QString("ROM+GSU+RAM");         // ROM size up to 1MByte -> GSU1
     CartTypeMap[0x15] =      QString("ROM+GSU+RAM+Battery"); //            ;/ROM size above 1MByte -> GSU2
@@ -43,18 +43,20 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
     statusBar = QMainWindow::statusBar();
-    //ui->statusBar;
 
-    //statusBar->showMessage("Used Space: 0Mb | Available Space: 64Mb");
 
     //ui->progressBar->reset();
     ui->progressBar->setValue(100);
     ui->progressBar->setFormat("Progress Bar");
 
     ui->textEdit1->rom.num = 1;
+     ui->textEdit1->rom.startaddr = 0;
     ui->textEdit2->rom.num = 2;
+     ui->textEdit2->rom.startaddr = 0x200000;
     ui->textEdit3->rom.num = 3;
+     ui->textEdit3->rom.startaddr = 0x400000;
     ui->textEdit4->rom.num = 4;
+     ui->textEdit4->rom.startaddr = 0x600000;
 
     ui->textEdit1->rom.finalString = "<b>1) </b> &lt;DRAG ROM-FILE HERE&gt;";
     ui->textEdit2->rom.finalString = "<b>2) </b> &lt;DRAG ROM-FILE HERE&gt;";
@@ -103,228 +105,22 @@ void MainWindow::connect_USB()
         timer->stop();
 
         // Update the ROM Info's
-        startaddr = 0x7fb0;
-        aal = startaddr&0xff;
-        aah = (startaddr&0xff00)>>8;
-        aab = (startaddr&0xff0000)>>16;
 
-        numbytes = 0x50;
+        // main function
+        QueryUSBRomHeaders();
 
-        QByteArray loromheader,hiromheader, *selectedheader;
-        Read(progressBar, NULL, false, &loromheader);
-
-        startaddr = 0xffb0;
-        aal = startaddr&0xff;
-        aah = (startaddr&0xff00)>>8;
-        aab = (startaddr&0xff0000)>>16;
-
-        numbytes = 0x50;
-        Read(progressBar, NULL, false, &hiromheader);
-
-        bool hirom= isHirom2((uchar*)loromheader.data(), (uchar*)hiromheader.data());
-        //int offset;
-        if (hirom)
-        {
-            //offset = 1;
-            selectedheader = &hiromheader;
-            //QMessageBox::critical(this, "Derp", "HiRom");
-        }
-        else
-        {
-            selectedheader = &loromheader;
-            //QMessageBox::critical(this, "Derp", "LoRom");
-        }
-
-
-
-        for (uchar i=0; i < 21; i++)
-        {
-            ui->textEdit1->rom.RomTitle[i] = selectedheader->at(0x10+i);
-        }
-        //RomTitle[21] = 0;
-        // ROM Title All set
-        ui->textEdit1->rom.CartTypeByte = selectedheader->at(0x16+0x10);
-
-        // Get ROM Size
-        ui->textEdit1->rom.RomSizeByte = selectedheader->at(0x17+0x10);
-
-
-        // Get SRAM Size
-        ui->textEdit1->rom.SramSizeByte = selectedheader->at(0x18+0x10);
-
-        if (ui->textEdit1->rom.isValid())
-        {
-            ui->textEdit1->rom.setString();
-            ui->textEdit1->setHtml(ui->textEdit1->rom.finalString);
-        }
-
-
-
-        ///////////
-        // Update the ROM Info's
-        startaddr = 0x207fb0;
-        aal = startaddr&0xff;
-        aah = (startaddr&0xff00)>>8;
-        aab = (startaddr&0xff0000)>>16;
-
-        numbytes = 0x50;
-
-        //QByteArray loromheader,hiromheader, *selectedheader;
-        Read(progressBar, NULL, false, &loromheader);
-
-        startaddr = 0x20ffb0;
-        aal = startaddr&0xff;
-        aah = (startaddr&0xff00)>>8;
-        aab = (startaddr&0xff0000)>>16;
-
-        numbytes = 0x50;
-        Read(progressBar, NULL, false, &hiromheader);
-
-        hirom= isHirom2((uchar*)loromheader.data(), (uchar*)hiromheader.data());
-        //int offset;
-        if (hirom)
-        {
-            //offset = 1;
-            selectedheader = &hiromheader;
-            //QMessageBox::critical(this, "Derp", "HiRom");
-        }
-        else
-        {
-            selectedheader = &loromheader;
-            //QMessageBox::critical(this, "Derp", "LoRom");
-        }
-
-        for (uchar i=0; i < 21; i++)
-        {
-            ui->textEdit2->rom.RomTitle[i] = selectedheader->at(0x10+i);
-        }
-        //RomTitle[21] = 0;
-        // ROM Title All set
-        ui->textEdit2->rom.CartTypeByte = selectedheader->at(0x16+0x10);
-
-        // Get ROM Size
-        ui->textEdit2->rom.RomSizeByte = selectedheader->at(0x17+0x10);
-
-
-        // Get SRAM Size
-        ui->textEdit2->rom.SramSizeByte = selectedheader->at(0x18+0x10);
-
-        if (ui->textEdit2->rom.isValid())
-        {
-            ui->textEdit2->rom.setString();
-            ui->textEdit2->setHtml(ui->textEdit2->rom.finalString);
-        }
-        ///////////////////////
-        // Update the ROM Info's
-        startaddr = 0x407fb0;
-        aal = startaddr&0xff;
-        aah = (startaddr&0xff00)>>8;
-        aab = (startaddr&0xff0000)>>16;
-
-        numbytes = 0x50;
-
-        //QByteArray loromheader,hiromheader, *selectedheader;
-        Read(progressBar, NULL, false, &loromheader);
-
-        startaddr = 0x40ffb0;
-        aal = startaddr&0xff;
-        aah = (startaddr&0xff00)>>8;
-        aab = (startaddr&0xff0000)>>16;
-
-        numbytes = 0x50;
-        Read(progressBar, NULL, false, &hiromheader);
-
-        hirom= isHirom2((uchar*)loromheader.data(), (uchar*)hiromheader.data());
-        //int offset;
-        if (hirom)
-        {
-            //offset = 1;
-            selectedheader = &hiromheader;
-            //QMessageBox::critical(this, "Derp", "HiRom");
-        }
-        else
-        {
-            selectedheader = &loromheader;
-            //QMessageBox::critical(this, "Derp", "LoRom");
-        }
-
-        for (uchar i=0; i < 21; i++)
-        {
-            ui->textEdit3->rom.RomTitle[i] = selectedheader->at(0x10+i);
-        }
-        //RomTitle[21] = 0;
-        // ROM Title All set
-        ui->textEdit3->rom.CartTypeByte = selectedheader->at(0x16+0x10);
-
-        // Get ROM Size
-        ui->textEdit3->rom.RomSizeByte = selectedheader->at(0x17+0x10);
-
-
-        // Get SRAM Size
-        ui->textEdit3->rom.SramSizeByte = selectedheader->at(0x18+0x10);
-
-        if (ui->textEdit3->rom.isValid())
-        {
-            ui->textEdit3->rom.setString();
-            ui->textEdit3->setHtml(ui->textEdit3->rom.finalString);
-        }
-        ////////////////////////////////////////
-        // Update the ROM Info's
-        startaddr = 0x607fb0;
-        aal = startaddr&0xff;
-        aah = (startaddr&0xff00)>>8;
-        aab = (startaddr&0xff0000)>>16;
-
-        numbytes = 0x50;
-
-        //QByteArray loromheader,hiromheader, *selectedheader;
-        Read(progressBar, NULL, false, &loromheader);
-
-        startaddr = 0x60ffb0;
-        aal = startaddr&0xff;
-        aah = (startaddr&0xff00)>>8;
-        aab = (startaddr&0xff0000)>>16;
-
-        numbytes = 0x50;
-        Read(progressBar, NULL, false, &hiromheader);
-
-        hirom= isHirom2((uchar*)loromheader.data(), (uchar*)hiromheader.data());
-        //int offset;
-        if (hirom)
-        {
-            //offset = 1;
-            selectedheader = &hiromheader;
-            //QMessageBox::critical(this, "Derp", "HiRom");
-        }
-        else
-        {
-            selectedheader = &loromheader;
-            //QMessageBox::critical(this, "Derp", "LoRom");
-        }
-
-        for (uchar i=0; i < 21; i++)
-        {
-            ui->textEdit4->rom.RomTitle[i] = selectedheader->at(0x10+i);
-        }
-        //RomTitle[21] = 0;
-        // ROM Title All set
-        ui->textEdit4->rom.CartTypeByte = selectedheader->at(0x16+0x10);
-
-        // Get ROM Size
-        ui->textEdit4->rom.RomSizeByte = selectedheader->at(0x17+0x10);
-
-
-        // Get SRAM Size
-        ui->textEdit4->rom.SramSizeByte = selectedheader->at(0x18+0x10);
-
-        if (ui->textEdit4->rom.isValid())
-        {
-            ui->textEdit4->rom.setString();
-            ui->textEdit4->setHtml(ui->textEdit4->rom.finalString);
-        }
+        //statusBar->showMessage("Used Space: 0Mb | Available Space: 64Mb");
 
     }
 
+}
+
+void MainWindow::QueryUSBRomHeaders()
+{
+    ui->textEdit1->QueryUSBRomHeader();
+    ui->textEdit2->QueryUSBRomHeader();
+    ui->textEdit3->QueryUSBRomHeader();
+    ui->textEdit4->QueryUSBRomHeader();
 }
 
 void MainWindow::on_actionQuit_triggered()
@@ -377,8 +173,7 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
     {
         // Nothing
     }
-    //sleep(1000);
-    //delete d;
+
 }
 
 

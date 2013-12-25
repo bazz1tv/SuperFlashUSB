@@ -37,6 +37,7 @@ private slots:
     void on_pushButton_Cart_Read_clicked();
 
 private:
+    void QueryUSBRomHeaders();
 
     Ui::MainWindow *ui;
     QStatusBar *statusBar;

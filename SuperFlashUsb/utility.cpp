@@ -56,45 +56,6 @@ QString RomRamSizeByteLUT[] =
     "64 Mb"     // 14
 };
 
-int dothedo(ROM_t &rom)
-{
-    if (!rom.filename.isEmpty())
-    {
-        if (rom.file)
-        {
-            rom.file->close();
-            delete rom.file;
-        }
-        rom.file = new QFile(rom.filename);
-        if (!rom.file->open(QIODevice::ReadOnly))
-        {
-            QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Could not open file"));
-            return -1;
-        }
-
-
-        if (rom.file->size() < 0x8000)
-        {
-            QMessageBox::warning(NULL, QObject::tr("Error"), rom.file->fileName() + QObject::tr(" is not large enough a file"));
-            return -1;
-        }
-        // something was chosen, do stuff
-        if (rom.setup() < 0)
-        {
-            return -1;
-        }
-
-        rom.finalString = QString("<b>")+QString("%1").arg(rom.num)+QString(") </b>")+QString(rom.RomTitle)+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[rom.RomSizeByte])+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>SRAM</b>: ")+QString(RomRamSizeByteLUT[rom.SramSizeByte]);
-        if (rom.isHeadered())
-        {
-            rom.finalString += QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMU-Header Present");
-        }
-
-    }
-
-    return 0;
-}
-
 int AllASCII(unsigned char *b, int size)
 {
         int i;

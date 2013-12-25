@@ -2,6 +2,8 @@
 #define UTILITY_H
 
 #include <QtWidgets>
+#include "pc/main.h"
+#include "pc/sflash.h"
 
 extern QString RomRamSizeByteLUT[];
 extern QMap<int,QString> CartTypeMap;
@@ -160,6 +162,11 @@ public:
         finalString = QString("<b>")+QString("%1").arg(num)+QString(") </b>")+QString(RomTitle)+
                 QString("<p>Cart Type: ")+QString(CartTypeMap[CartTypeByte])+
                 QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[RomSizeByte])+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>SRAM</b>: ")+QString(RomRamSizeByteLUT[SramSizeByte]);
+
+        if (isHeadered())
+        {
+            finalString += QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMU-Header Present");
+        }
     }
 
     bool isValid()
@@ -167,6 +174,110 @@ public:
         if (!(RomSizeByte > 14 || SramSizeByte > 14 || RomSizeByte == 0))
             return true;
         else return false;
+    }
+
+    bool isTypical()
+    {
+        if (CartTypeMap.contains(CartTypeByte))
+            return true;
+        else return false;
+    }
+
+    void QueryUSBRomHeader()
+    {
+        int header_startaddr = 0x7fb0+startaddr;    // startaddr local to ROM_t
+
+        // This refers to those pesky global variables I have floating around from PC-commandline-version
+        aal = header_startaddr&0xff;
+        aah = (header_startaddr&0xff00)>>8;
+        aab = (header_startaddr&0xff0000)>>16;
+
+        numbytes = 0x50;    // Header Size from 0x7fb0-0x7fff
+
+        QByteArray loromheader,hiromheader, *selectedheader;
+        ReadHeader(&loromheader);
+
+        header_startaddr = 0xffb0+startaddr;
+        aal = header_startaddr&0xff;
+        aah = (header_startaddr&0xff00)>>8;
+        aab = (header_startaddr&0xff0000)>>16;
+
+        numbytes = 0x50;
+        ReadHeader(&hiromheader);
+
+        bool hirom= isHirom2((uchar*)loromheader.data(), (uchar*)hiromheader.data());
+        //int offset;
+        if (hirom)
+        {
+            //offset = 1;
+            selectedheader = &hiromheader;
+            //QMessageBox::critical(this, "Derp", "HiRom");
+        }
+        else
+        {
+            selectedheader = &loromheader;
+            //QMessageBox::critical(this, "Derp", "LoRom");
+        }
+
+
+
+        for (uchar i=0; i < 21; i++)
+        {
+            RomTitle[i] = selectedheader->at(0x10+i);
+        }
+        //RomTitle[21] = 0;
+        // ROM Title All set
+        CartTypeByte = selectedheader->at(0x16+0x10);
+
+        // Get ROM Size
+        RomSizeByte = selectedheader->at(0x17+0x10);
+
+
+        // Get SRAM Size
+        SramSizeByte = selectedheader->at(0x18+0x10);
+
+        if (isValid())
+        {
+            setString();
+            //ui->textEdit1->setHtml(ui->textEdit1->rom.finalString);
+        }
+    }
+
+    int DoTheDo()
+    {
+        if (!filename.isEmpty())
+        {
+            if (file)
+            {
+                file->close();
+                delete file;
+            }
+            file = new QFile(filename);
+            if (!file->open(QIODevice::ReadOnly))
+            {
+                QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Could not open file"));
+                return -1;
+            }
+
+
+            if (file->size() < 0x8000)
+            {
+                QMessageBox::warning(NULL, QObject::tr("Error"), file->fileName() + QObject::tr(" is not large enough a file"));
+                return -1;
+            }
+            // something was chosen, do stuff
+            if (setup() < 0)
+            {
+                return -1;
+            }
+
+            finalString = QString("<b>")+QString("%1").arg(num)+QString(") </b>")+QString(RomTitle)+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[RomSizeByte])+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>SRAM</b>: ")+QString(RomRamSizeByteLUT[SramSizeByte]);
+            if (isHeadered())
+            {
+                finalString += QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMU-Header Present");
+            }
+
+        }
     }
 
     bool hirom;
@@ -179,6 +290,7 @@ public:
     u_int8_t CartTypeByte;
     QFile *file;
     QString filename;
+    int startaddr;
 
 public:
     quint8 num;
@@ -189,10 +301,10 @@ public:
 
 int dothedo(ROM_t &rom);
 
-class SRAM
+class SRAM_t
 {
 public:
-    SRAM()
+    SRAM_t()
     {
 
         file = NULL;
@@ -201,7 +313,7 @@ public:
 
     }
 
-    ~SRAM()
+    ~SRAM_t()
     {
         if (file)
         {

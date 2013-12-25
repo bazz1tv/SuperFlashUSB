@@ -26,6 +26,9 @@ protected:
 
 public:
     ROM_t rom;
+    void QueryUSBRomHeader();
+
+private:
 
 };
 

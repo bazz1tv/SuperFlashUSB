@@ -26,7 +26,7 @@ protected:
 
 
 public:
-    SRAM sram;
+    SRAM_t sram;
 
 };
 

@@ -9,61 +9,45 @@ RomEntry::RomEntry(QWidget *parent) :
     setHtml(" ");
 }
 
-/*bool RomEntry::canInsertFromMimeData(const QMimeData * source) const
+void RomEntry::QueryUSBRomHeader()
 {
-    //QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Derp4"));
-
-    return true;
+    rom.QueryUSBRomHeader();
+    setHtml(rom.finalString);
 }
 
-void RomEntry::insertFromMimeData(const QMimeData * source)
-{
-    QMessageBox::critical(this, QObject::tr("Error"), QObject::tr("Derp3"));
-}*/
+
 
 void RomEntry::dragEnterEvent(QDragEnterEvent * event)
 {
-    //QMessageBox::critical(this, QObject::tr("Error"), QObject::tr("Derp"));
     if (event->mimeData()->hasFormat("text/plain"))
     {
         setStyleSheet("background-color: #ccc");
         event->acceptProposedAction();
     }
 
-    //event->accept();
-    //event->acceptProposedAction();
-    //event->setDropAction(Qt::MoveAction);
-            //event->accept();
-    //event->setDropAction(Qt::CopyAction);
+
     activateWindow();
 }
 
 void RomEntry::dropEvent(QDropEvent * event)
 {
-
-    //QMessageBox::critical(this, QObject::tr("Error"), event->mimeData()->text());
-        //if (event->mimeData()->hasFormat("text/plain"))
-
-
-    //rom.filename = QFileDialog::getOpenFileName(this, QObject::tr("Open File"), QString(),
-                                                // QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
-
-    // File won't open with "file://" or "0x0d0a" at End of filename
-    QUrl derp(event->mimeData()->text());//.remove("file://").remove("\x0d\x0a");
+    // Little hack to remove the newline at the end + carriage return bullshit
+    QUrl derp(event->mimeData()->text().remove("\x0d\x0a"));
 
 
 
     if (derp.isLocalFile())
     {
-        rom.filename = derp.toLocalFile().remove("\x0d\x0a");
+        rom.filename = derp.toLocalFile();
 
-        QFile merp("/home/bazz/derp.txt");
+        // This is to get local filename into a file to see the HEX CONTENTS
+        /*QFile merp("/home/bazz/derp.txt");
         merp.open(QIODevice::WriteOnly);
         merp.write(rom.filename.toUtf8().constData());
-        merp.close();
+        merp.close();*/
 
 
-        if (dothedo(rom) < 0)
+        if (rom.DoTheDo() < 0)
         {
             rom.finalString = "<b>"+QString("%1").arg(rom.num)+") </b>&lt;EMPTY&gt;";
         }
@@ -122,7 +106,7 @@ void RomEntry::contextMenuEvent(QContextMenuEvent * event)
         rom.filename = QFileDialog::getOpenFileName(this, QObject::tr("Open File"), QString(),
                                                      QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);; Any (*.*)"));
         //QMessageBox::critical(this, QObject::tr("Error"), rom.filename);
-        dothedo(rom);
+        rom.DoTheDo();
         rom.setString();
         setHtml(rom.finalString);
     }
