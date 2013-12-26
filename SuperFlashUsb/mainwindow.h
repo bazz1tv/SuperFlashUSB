@@ -5,6 +5,7 @@
 
 #include "utility.h"
 //#include "readcartdialog.h"
+#include "usbthread.h"
 
 
 namespace Ui {
@@ -36,12 +37,22 @@ private slots:
 
     void on_pushButton_Cart_Read_clicked();
 
+    //void on_pushButton_4_clicked();
+
+    void on_pushButton_USBConnect_clicked();
+
+
+
 private:
     void QueryUSBRomHeaders();
 
     Ui::MainWindow *ui;
     QStatusBar *statusBar;
     QTimer *timer;
+    USBThread *usbthread;
+
+signals:
+    void cancelUSBThread(void);
 };
 
 

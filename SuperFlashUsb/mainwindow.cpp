@@ -49,42 +49,52 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->progressBar->setValue(100);
     ui->progressBar->setFormat("Progress Bar");
 
-    ui->textEdit1->rom.num = 1;
-     ui->textEdit1->rom.startaddr = 0;
-    ui->textEdit2->rom.num = 2;
-     ui->textEdit2->rom.startaddr = 0x200000;
-    ui->textEdit3->rom.num = 3;
-     ui->textEdit3->rom.startaddr = 0x400000;
-    ui->textEdit4->rom.num = 4;
-     ui->textEdit4->rom.startaddr = 0x600000;
+    ui->romEdit1->rom.num = 1;
+     ui->romEdit1->rom.startaddr = 0;
+    ui->romEdit2->rom.num = 2;
+     ui->romEdit2->rom.startaddr = 0x200000;
+    ui->romEdit3->rom.num = 3;
+     ui->romEdit3->rom.startaddr = 0x400000;
+    ui->romEdit4->rom.num = 4;
+     ui->romEdit4->rom.startaddr = 0x600000;
 
-    ui->textEdit1->rom.finalString = "<b>1) </b> &lt;DRAG ROM-FILE HERE&gt;";
-    ui->textEdit2->rom.finalString = "<b>2) </b> &lt;DRAG ROM-FILE HERE&gt;";
-    ui->textEdit3->rom.finalString = "<b>3) </b> &lt;DRAG ROM-FILE HERE&gt;";
-    ui->textEdit4->rom.finalString = "<b>4) </b> &lt;DRAG ROM-FILE HERE&gt;";
+    ui->romEdit1->rom.finalString = "<b>1) </b> &lt;DRAG ROM-FILE HERE&gt;";
+    ui->romEdit2->rom.finalString = "<b>2) </b> &lt;DRAG ROM-FILE HERE&gt;";
+    ui->romEdit3->rom.finalString = "<b>3) </b> &lt;DRAG ROM-FILE HERE&gt;";
+    ui->romEdit4->rom.finalString = "<b>4) </b> &lt;DRAG ROM-FILE HERE&gt;";
 
-    ui->textEdit->sram.finalString = "&lt;DRAG SAVE-FILE HERE&gt;";
+    ui->sramEdit->sram.finalString = "&lt;DRAG SAVE-FILE HERE&gt;";
 
-    ui->textEdit->setHtml(ui->textEdit->sram.finalString);
-    ui->textEdit1->setHtml(ui->textEdit1->rom.finalString);
-    ui->textEdit2->setHtml(ui->textEdit2->rom.finalString);
-    ui->textEdit3->setHtml(ui->textEdit3->rom.finalString);
-    ui->textEdit4->setHtml(ui->textEdit4->rom.finalString);
+    ui->sramEdit->setHtml(ui->sramEdit->sram.finalString);
+    ui->romEdit1->setHtml(ui->romEdit1->rom.finalString);
+    ui->romEdit2->setHtml(ui->romEdit2->rom.finalString);
+    ui->romEdit3->setHtml(ui->romEdit3->rom.finalString);
+    ui->romEdit4->setHtml(ui->romEdit4->rom.finalString);
 
 
 
 
     // init libUSB
     InitUSB();
+    usbthread = new USBThread;
+    usbthread->start();
+    //OpenUSBDevice();
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(connect_USB()));
-    timer->start(1000);
+    connect (this, SIGNAL (cancelUSBThread (void)), usbthread, SLOT (canceled (void)));
+    //timer->start(1000);
 }
 
 MainWindow::~MainWindow()
 {
+    emit cancelUSBThread();
     CloseUSBDevice();
+
+
+
+    //usbthread->wait();
     EndUSB();
+    delete usbthread;
     delete ui;
     delete timer;
 }
@@ -95,7 +105,7 @@ MainWindow::~MainWindow()
 void MainWindow::connect_USB()
 {
     //InitUSB();
-    if (OpenUSBDevice() < 0)
+    /*if (OpenUSBDevice() < 0)
     {
         statusBar->showMessage("USB Device Not Connected or Not Found");
     }
@@ -111,23 +121,32 @@ void MainWindow::connect_USB()
 
         //statusBar->showMessage("Used Space: 0Mb | Available Space: 64Mb");
 
-    }
+    }*/
+
+    //libusb_handle_events(NULL);
+
+    timeval tv;
+    tv.tv_sec=0;
+    tv.tv_usec=0;
+    //libusb_handle_events(ctx);
+    r =libusb_handle_events_timeout(ctx,&tv);
+    if (r < 0)
+       fprintf(stderr, "libusb_handle_events() failed: %s\n", libusb_error_name(r));
 
 }
 
 void MainWindow::QueryUSBRomHeaders()
 {
-    ui->textEdit1->QueryUSBRomHeader();
-    ui->textEdit2->QueryUSBRomHeader();
-    ui->textEdit3->QueryUSBRomHeader();
-    ui->textEdit4->QueryUSBRomHeader();
+    ui->romEdit1->QueryUSBRomHeader();
+    ui->romEdit2->QueryUSBRomHeader();
+    ui->romEdit3->QueryUSBRomHeader();
+    ui->romEdit4->QueryUSBRomHeader();
 }
 
 void MainWindow::on_actionQuit_triggered()
 {
     qApp->quit();
 }
-
 
 
 void MainWindow::on_pushButton_Cart_Read_clicked()
@@ -177,3 +196,17 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
 }
 
 
+
+
+
+void MainWindow::on_pushButton_USBConnect_clicked()
+{
+    if (dev_handle == NULL)
+    {
+        //timer->start();
+    }
+    else
+    {
+        QMessageBox::information(this, "USB","Already Connected");
+    }
+}

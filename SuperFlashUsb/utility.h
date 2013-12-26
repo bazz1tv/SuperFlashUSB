@@ -350,7 +350,7 @@ public:
 
 
             // This might only work for Linux/Unix based OS
-            finalString = filename.mid(filename.lastIndexOf('/')+1);
+            finalString = filename;//filename.mid(filename.lastIndexOf('/')+1);
 
             data = file->map(0, file->size());
         }

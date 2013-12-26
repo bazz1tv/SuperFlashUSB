@@ -36,7 +36,10 @@ void SramEntry::dropEvent(QDropEvent * event)
                                                 // QObject::tr("sram Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
 
     // File won't open with "file://" or "0x0d0a" at End of filename
-    sram.filename = event->mimeData()->text().remove("file://").remove("\x0d\x0a");
+    QUrl derp(event->mimeData()->text().remove("\x0d\x0a"));
+
+    if (derp.isLocalFile())
+        sram.filename = derp.toLocalFile();
 
     /*QFile derp("/home/bazz/derp.txt");
     derp.open(QIODevice::WriteOnly);
