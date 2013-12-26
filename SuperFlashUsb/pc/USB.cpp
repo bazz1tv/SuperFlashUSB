@@ -1,8 +1,11 @@
 #include "USB.h"
 #include <stdlib.h>
+#include "mainwindow.h"a
 
 #define VENDOR_ID 0x03EB
 #define DEVICE_ID 0x204F
+
+extern MainWindow *w;
 
 libusb_device **devs;               //pointer to pointer of device, used to retrieve a list of devices
 libusb_device_handle *dev_handle;   //a device handle
@@ -11,20 +14,9 @@ libusb_hotplug_callback_handle hp[2];
 
 static int LIBUSB_CALL hotplug_callback(libusb_context *ctx, libusb_device *dev, libusb_hotplug_event event, void *user_data)
 {
-    struct libusb_device_descriptor desc;
-    int rc;
-
-    //rc = libusb_get_device_descriptor(dev, &desc);
-    //if (LIBUSB_SUCCESS != rc) {
-        //fprintf (stderr, "Error getting device descriptor\n");
-    //}
-
-    //fprintf (stderr, "Device attached: %04x:%04x\n", desc.idVendor, desc.idProduct);
-
+    w->statusBar->showMessage("USB Programmer Connected");
+    fprintf(stderr, "Device Connected USB\n");
     OpenUSBDevice();
-    //libusb_open (dev, &dev_handle);
-
-    //done++;
 
     return 0;
 }
@@ -32,15 +24,13 @@ static int LIBUSB_CALL hotplug_callback(libusb_context *ctx, libusb_device *dev,
 static int LIBUSB_CALL hotplug_callback_detach(libusb_context *ctx, libusb_device *dev, libusb_hotplug_event event, void *user_data)
 {
     fprintf (stderr, "Device detached\n");
-
+    w->statusBar->showMessage("USB Programmer Disconnected");
     if (dev_handle)
     {
-        //libusb_close (dev_handle);
+
         CloseUSBDevice();
         //dev_handle = NULL;
     }
-
-    //done++;
     return 0;
 }
 
@@ -201,8 +191,8 @@ int CloseUSBDevice()
 
 void EndUSB()
 {
-    //libusb_hotplug_deregister_callback(&callback);
-    //libusb_hotplug_deregister_callback(NULL,hp[0]);
-    //libusb_hotplug_deregister_callback(NULL,hp[1]);
+
+    libusb_hotplug_deregister_callback(NULL,hp[0]);
+    libusb_hotplug_deregister_callback(NULL,hp[1]);
     libusb_exit(NULL); //needs to be called to end the
 }

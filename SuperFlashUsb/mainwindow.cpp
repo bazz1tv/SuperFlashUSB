@@ -92,7 +92,7 @@ MainWindow::~MainWindow()
 
 
 
-    //usbthread->wait();
+
     EndUSB();
     delete usbthread;
     delete ui;

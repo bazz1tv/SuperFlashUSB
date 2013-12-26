@@ -21,6 +21,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    QStatusBar *statusBar;
+
 
 
 private slots:
@@ -47,7 +49,7 @@ private:
     void QueryUSBRomHeaders();
 
     Ui::MainWindow *ui;
-    QStatusBar *statusBar;
+
     QTimer *timer;
     USBThread *usbthread;
 

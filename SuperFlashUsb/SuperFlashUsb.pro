@@ -50,7 +50,11 @@ HEADERS  += mainwindow.h \
     pc/sflash/write.h \
     pc/main.h \
     pc/USB.h \
-    usbthread.h
+    usbthread.h \
+    main.h
 
 FORMS    += mainwindow.ui \
     readcartdialog.ui
+
+OTHER_FILES += \
+    Todo.txt
