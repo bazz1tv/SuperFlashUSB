@@ -11,13 +11,15 @@ libusb_device **devs;               //pointer to pointer of device, used to retr
 libusb_device_handle *dev_handle;   //a device handle
 libusb_context *ctx = NULL;         //a libusb session
 libusb_hotplug_callback_handle hp[2];
+bool isHotPluggable;
+bool USBconnected;
 
 static int LIBUSB_CALL hotplug_callback(libusb_context *ctx, libusb_device *dev, libusb_hotplug_event event, void *user_data)
 {
     w->statusBar->showMessage("USB Programmer Connected");
     fprintf(stderr, "Device Connected USB\n");
     OpenUSBDevice();
-
+    USBconnected = true;
     return 0;
 }
 
@@ -31,6 +33,8 @@ static int LIBUSB_CALL hotplug_callback_detach(libusb_context *ctx, libusb_devic
         CloseUSBDevice();
         //dev_handle = NULL;
     }
+    USBconnected = false;
+    w->timeToUpdateRomHeaders = true;
     return 0;
 }
 
@@ -79,6 +83,7 @@ int InitUSB()
 //     libusb_has_capability() with parameter LIBUSB_CAP_HAS_HOTPLUG to confirm that hotplug support is available.
     if (libusb_has_capability(LIBUSB_CAP_HAS_HOTPLUG))
     {
+        isHotPluggable = true;
         printf("HAS HOTPLUG FUNCTIONALITY!!\n");
         r = libusb_hotplug_register_callback (NULL, LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED, (libusb_hotplug_flag)0, VENDOR_ID,
                 DEVICE_ID,0xff, hotplug_callback, NULL, &hp[0]);
@@ -95,6 +100,10 @@ int InitUSB()
                 libusb_exit (NULL);
                 return EXIT_FAILURE;
             }
+    }
+    else
+    {
+        isHotPluggable = false;
     }
     // SetUSBDebugMessages
 	//libusb_set_debug(ctx, 3); //set verbosity level to 3, as suggested in the documentation

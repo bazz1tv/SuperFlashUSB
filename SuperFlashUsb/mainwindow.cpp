@@ -13,7 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-
+    timeToUpdateRomHeaders = true;
+    USBconnected = false;
     CartTypeMap[0x00] =      QString("ROM");                 // if gamecode="042J" --> ROM+SGB2
     CartTypeMap[0x01] =      QString("ROM+RAM");             // (if any such produced?)
     CartTypeMap[0x02] =      QString("ROM+RAM+Battery");     // ;if gamecode="XBND" --> ROM+RAM+Batt+XBandModem
@@ -76,13 +77,21 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // init libUSB
     InitUSB();
-    usbthread = new USBThread;
-    usbthread->start();
-    //OpenUSBDevice();
+
+    if (OpenUSBDevice() >= 0)
+        USBconnected = true;
+
+    if (isHotPluggable)
+    {
+        usbthread = new USBThread;
+        connect (this, SIGNAL (cancelUSBThread (void)), usbthread, SLOT (canceled (void)));
+        usbthread->start();
+    }
+
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(connect_USB()));
-    connect (this, SIGNAL (cancelUSBThread (void)), usbthread, SLOT (canceled (void)));
-    //timer->start(1000);
+
+    timer->start(1000);
 }
 
 MainWindow::~MainWindow()
@@ -104,34 +113,32 @@ MainWindow::~MainWindow()
 //
 void MainWindow::connect_USB()
 {
-    //InitUSB();
-    /*if (OpenUSBDevice() < 0)
+    if (!isHotPluggable && !USBconnected)
     {
-        statusBar->showMessage("USB Device Not Connected or Not Found");
+        if (OpenUSBDevice() < 0)
+        {
+            statusBar->showMessage("USB Device Not Connected or Not Found");
+        }
+        else
+        {
+            statusBar->showMessage("USB Device Connected");
+            //timer->stop();
+            USBconnected = true;
+            // Update the ROM Info's
+
+            // main function
+
+
+            //statusBar->showMessage("Used Space: 0Mb | Available Space: 64Mb");
+
+        }
     }
-    else
+
+    if (timeToUpdateRomHeaders && USBconnected)
     {
-        statusBar->showMessage("USB Device Connected");
-        timer->stop();
-
-        // Update the ROM Info's
-
-        // main function
+        timeToUpdateRomHeaders = false;
         QueryUSBRomHeaders();
-
-        //statusBar->showMessage("Used Space: 0Mb | Available Space: 64Mb");
-
-    }*/
-
-    //libusb_handle_events(NULL);
-
-    timeval tv;
-    tv.tv_sec=0;
-    tv.tv_usec=0;
-    //libusb_handle_events(ctx);
-    r =libusb_handle_events_timeout(ctx,&tv);
-    if (r < 0)
-       fprintf(stderr, "libusb_handle_events() failed: %s\n", libusb_error_name(r));
+    }
 
 }
 

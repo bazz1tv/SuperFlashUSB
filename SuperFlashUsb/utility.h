@@ -157,15 +157,42 @@ public:
         return 0;
     }
 
-    void setString()
+#define NOTHING 0
+#define PREPEND 1
+#define APPEND 2
+    QString romHeaderToString()
     {
-        finalString = QString("<b>")+QString("%1").arg(num)+QString(") </b>")+QString(RomTitle)+
-                QString("<p>Cart Type: ")+QString(CartTypeMap[CartTypeByte])+
-                QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[RomSizeByte])+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>SRAM</b>: ")+QString(RomRamSizeByteLUT[SramSizeByte]);
+
+        QString str = QString("<b>")+QString("%1").arg(num)+QString(") </b>")+QString(RomTitle)+
+                QString("<p>Cart Type: ")+CartTypeStr+
+                QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[RomSizeByte])+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>RAM</b>: ")+QString(RomRamSizeByteLUT[SramSizeByte]);
 
         if (isHeadered())
         {
-            finalString += QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMU-Header Present");
+            str += QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMU-Header Present");
+        }
+
+        return str;
+    }
+
+    void setString(QString str="ABCD", uchar mod=NOTHING)
+    {
+        if (str == "ABCD")
+        {
+            finalString = romHeaderToString();
+        }
+        else
+        {
+            if (!mod)
+                finalString = QString("<b>%1)</b> ").arg(num)+str;
+            else if (mod == PREPEND)
+            {
+                finalString = str+QString("<p>")+romHeaderToString();
+            }
+            else if (mod == APPEND)
+            {
+                finalString = romHeaderToString() + QString("<p>")+str;
+            }
         }
     }
 
@@ -228,6 +255,10 @@ public:
         //RomTitle[21] = 0;
         // ROM Title All set
         CartTypeByte = selectedheader->at(0x16+0x10);
+        // CartTypeByteToStr
+        if (CartTypeMap.contains(CartTypeByte))
+            CartTypeStr = QString(CartTypeMap[CartTypeByte]);
+        else CartTypeStr = QString("Unknown Cart Type");
 
         // Get ROM Size
         RomSizeByte = selectedheader->at(0x17+0x10);
@@ -236,10 +267,14 @@ public:
         // Get SRAM Size
         SramSizeByte = selectedheader->at(0x18+0x10);
 
-        if (isValid())
+        if (isValid() && isTypical())
         {
             setString();
             //ui->textEdit1->setHtml(ui->textEdit1->rom.finalString);
+        }
+        else
+        {
+            setString("Game may be Empty/Corrupt. Or it may have a very unique ROM header. I'll display the ROM info anyways:", PREPEND);
         }
     }
 
@@ -290,6 +325,7 @@ public:
     u_int8_t RomSizeByte;
     u_int8_t SramSizeByte;
     u_int8_t CartTypeByte;
+    QString CartTypeStr;
     QFile *file;
     QString filename;
     int startaddr;

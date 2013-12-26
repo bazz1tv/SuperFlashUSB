@@ -45,13 +45,16 @@ private slots:
 
 
 
-private:
+public:
     void QueryUSBRomHeaders();
 
     Ui::MainWindow *ui;
 
     QTimer *timer;
     USBThread *usbthread;
+    bool timeToUpdateRomHeaders;
+
+
 
 signals:
     void cancelUSBThread(void);
