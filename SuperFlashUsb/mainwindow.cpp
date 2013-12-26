@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     CartTypeMap[0xF9] =      QString("ROM+Custom+RAM+Battery+RTC (SPC7110+RTC)");
     CartTypeMap[0xF6] =      QString("ROM+Custom+Battery         (ST010/ST011)");
     CartTypeMap[0xF5] =      QString("ROM+Custom+RAM+Battery     (ST018)");
-    CartTypeMap[0xF3] =      QString("ROM+Custom                 (CX4)");
+    CartTypeMap[0xF3] =      QString("ROM+Custom                 (CX4)");   // :D
 
     ui->setupUi(this);
     statusBar = QMainWindow::statusBar();
@@ -221,12 +221,19 @@ void MainWindow::on_pushButton_USBConnect_clicked()
 
 void MainWindow::on_writeSramButton_clicked()
 {
+    if (!USBconnected)
+    {
+        QMessageBox::warning(this, "SRAM Write", "USB Programmer not connected!");
+        return;
+    }
+
     if (ui->sramEdit->sram.filename == "")
     {
         QMessageBox::warning(this, "SRAM Write", "Cannot write! No File Specified!");
         return;
     }
 
+    // 0xfe0000 :)
     aal = aah = 0;
     aab = 0xfe;
 
