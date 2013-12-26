@@ -162,15 +162,19 @@ public:
 #define APPEND 2
     QString romHeaderToString()
     {
-
-        QString str = QString("<b>")+QString("%1").arg(num)+QString(") </b>")+QString(RomTitle)+
-                QString("<p>Cart Type: ")+CartTypeStr+
-                QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[RomSizeByte])+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>RAM</b>: ")+QString(RomRamSizeByteLUT[SramSizeByte]);
-
-        if (isHeadered())
+        QString str("");
+        if (isValid())
         {
-            str += QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMU-Header Present");
+             str = QString("<b>")+QString("%1").arg(num)+QString(") </b>")+QString(RomTitle)+
+                    QString("<p>Cart Type: ")+CartTypeStr+
+                    QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[RomSizeByte])+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>RAM</b>: ")+QString(RomRamSizeByteLUT[SramSizeByte]);
+
+            if (isHeadered())
+            {
+                str += QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMU-Header Present");
+            }
         }
+        //else str="";
 
         return str;
     }

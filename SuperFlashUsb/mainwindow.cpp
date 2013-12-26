@@ -194,6 +194,7 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
 
 
         // we are finished
+        QMessageBox::information(this, "SRAM Write Complete", "Transfer Complete!");
     }
     else
     {
@@ -246,5 +247,7 @@ void MainWindow::on_writeSramButton_clicked()
     rom_or_sram = SRAM;
 
     Write(ui->progressBar, ui->sramEdit->sram.file);
+
+    QMessageBox::information(this, "SRAM Write Complete", "Transfer Complete!");
     //numbytes = 0x2000;
 }
