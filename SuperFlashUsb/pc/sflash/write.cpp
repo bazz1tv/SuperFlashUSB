@@ -1,10 +1,11 @@
 #include "write.h"
 
 
-void Write()
+void Write(QProgressBar *pb, QFile *f)
 {
     // YUMMY
-    
+    file = f;
+    progressBar = pb;
     InitWrite();
     
     
@@ -58,15 +59,16 @@ void InitWrite()
     }
 }
 
+
 void WriteDataFromFile()
 {
-    //int i=0,storechunks=chunks;
+    int i=0; //storechunks=chunks;
     if (chunks != 0)
     {
         for (; chunks > 0; chunks--)
         {  
             // Get a 32K section from USB
-            fread(&data[0], 1, DERP_SIZE, fh);
+            file->read((char*)&data[0], DERP_SIZE);
             redo:
             r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,WRITE, DATA, (uint16_t) DERP_SIZE, &data[0], DERP_SIZE, 50);
             if(r == DERP_SIZE ) //we wrote the 4 bytes successfully
@@ -75,6 +77,7 @@ void WriteDataFromFile()
                 //cout << "Erase Cmd Sent, Verifying: \n";
         
                 while (VerifyWrite() != 0);
+                progressBar->setValue(++i*DERP_SIZE);
               //cout<<"Read in 64 Bytes"<<endl;
                 //loadBar(i++*DERP_SIZE, (DERP_SIZE*storechunks)+leftover_bytes, ((DERP_SIZE*storechunks)+leftover_bytes)/2, 50);
             }

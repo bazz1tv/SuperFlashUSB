@@ -45,6 +45,8 @@ private slots:
 
 
 
+    void on_writeSramButton_clicked();
+
 public:
     void QueryUSBRomHeaders();
 

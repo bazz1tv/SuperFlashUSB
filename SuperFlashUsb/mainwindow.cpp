@@ -217,3 +217,34 @@ void MainWindow::on_pushButton_USBConnect_clicked()
         QMessageBox::information(this, "USB","Already Connected");
     }
 }
+
+void MainWindow::on_writeSramButton_clicked()
+{
+    if (ui->sramEdit->sram.filename == "")
+    {
+        QMessageBox::warning(this, "SRAM Write", "Cannot write! No File Specified!");
+        return;
+    }
+
+    aal = aah = 0;
+    aab = 0xfe;
+
+    if (ui->sramEdit->sram.file->size() <= 0x2000)
+    {
+        numbytes = ui->sramEdit->sram.file->size();
+    }
+    else
+    {
+        QMessageBox::critical(this, "SRAM Write", "File too Big!");
+        return;
+    }
+
+    ui->progressBar->setMaximum(numbytes);
+    ui->progressBar->setMinimum(0);
+    ui->progressBar->resetFormat();
+
+    rom_or_sram = SRAM;
+
+    Write(ui->progressBar, ui->sramEdit->sram.file);
+    //numbytes = 0x2000;
+}
