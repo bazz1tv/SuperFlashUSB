@@ -60,7 +60,7 @@ void InitWrite()
 
 void WriteDataFromFile()
 {
-    int i=0,storechunks=chunks;
+    //int i=0,storechunks=chunks;
     if (chunks != 0)
     {
         for (; chunks > 0; chunks--)
@@ -99,7 +99,7 @@ void WriteDataFromFile()
         fread(&data[0], 1, leftover_bytes, fh);
         redo2:
         r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, leftover_bytes, 0x0000, &data[0], leftover_bytes, 50);
-        if(r == leftover_bytes ) //we wrote the 4 bytes successfully
+        if(r == (int)leftover_bytes ) //we wrote the 4 bytes successfully
         {
             while (VerifyWrite() != 0);
             

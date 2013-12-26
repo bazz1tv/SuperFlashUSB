@@ -1,6 +1,6 @@
 #include "USB.h"
 #include <stdlib.h>
-#include "mainwindow.h"a
+#include "mainwindow.h"
 
 #define VENDOR_ID 0x03EB
 #define DEVICE_ID 0x204F

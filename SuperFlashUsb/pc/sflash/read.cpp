@@ -80,7 +80,7 @@ void ReadDataToBuffer(QByteArray *data2)
     //data.resize(numbytes);
     data2->clear();
 
-    int i=0,storechunks=chunks;
+    //int i=0,storechunks=chunks;
     if (chunks != 0)
     {
         for (; chunks > 0; chunks--)
@@ -156,7 +156,7 @@ void ReadDataToBuffer(QByteArray *data2)
 
 void ReadDataToFile()
 {
-    int i=0,storechunks=chunks;
+    int i=0;//storechunks=chunks;
     if (chunks != 0)
     {
         for (; chunks > 0; chunks--)
@@ -260,7 +260,7 @@ void ReadDataToFile()
         //SendPacketNoRepeat(OUT, READ, NUMBYTESTOREAD, (uint16_t)leftover_bytes,NULL,0, 50);
         FUCKFACE:
         r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, DATA , leftover_bytes, &data[0], leftover_bytes, 50);
-        if(r == leftover_bytes ) //we wrote the 4 bytes successfully
+        if(r == (int)leftover_bytes ) //we wrote the 4 bytes successfully
         {
           fwrite(&data[0], 1, leftover_bytes, fh);
             //loadBar(i++*DERP, (DERP*storechunks)+leftover_bytes, ((DERP*storechunks)+leftover_bytes)/2, 50);

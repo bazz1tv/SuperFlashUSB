@@ -61,7 +61,7 @@ void SetLED()
     unsigned int B;
     printf ("Enter 0-FF: ");
     scanf("%x", &B);
-    redo:
+    //redo:
     cout << "Setting LED to ";
     printf ("%x\n", B);
     SetLedControlTransfer(B);
