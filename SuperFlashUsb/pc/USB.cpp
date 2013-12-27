@@ -80,7 +80,7 @@ int InitUSB()
 		exit(1);
 	}
 
-//     libusb_has_capability() with parameter LIBUSB_CAP_HAS_HOTPLUG to confirm that hotplug support is available.
+    //     libusb_has_capability() with parameter LIBUSB_CAP_HAS_HOTPLUG to confirm that hotplug support is available.
     if (libusb_has_capability(LIBUSB_CAP_HAS_HOTPLUG))
     {
         isHotPluggable = true;

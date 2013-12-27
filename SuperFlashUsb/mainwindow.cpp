@@ -194,7 +194,7 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
 
 
         // we are finished
-        QMessageBox::information(this, "SRAM Write Complete", "Transfer Complete!");
+        QMessageBox::information(this, "ROM Read Complete", "Transfer Complete!");
     }
     else
     {
@@ -212,6 +212,7 @@ void MainWindow::on_pushButton_USBConnect_clicked()
     if (dev_handle == NULL)
     {
         //timer->start();
+        OpenUSBDevice();
     }
     else
     {
