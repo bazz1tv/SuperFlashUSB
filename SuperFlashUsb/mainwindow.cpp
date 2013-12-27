@@ -158,6 +158,12 @@ void MainWindow::on_actionQuit_triggered()
 
 void MainWindow::on_pushButton_Cart_Read_clicked()
 {
+    if (!USBconnected)
+    {
+        QMessageBox::warning(this, "ROM Read", "USB Programmer not connected!");
+        return;
+    }
+
     int accepted=0;
     ROM_t rom;
     // Create a Popup that selects the Start Address, how many bytes to Read From the Cartridge
@@ -212,7 +218,14 @@ void MainWindow::on_pushButton_USBConnect_clicked()
     if (dev_handle == NULL)
     {
         //timer->start();
-        OpenUSBDevice();
+        if (OpenUSBDevice() < 0)
+        {
+            statusBar->showMessage("USB Device Disconnected");
+        }
+        else
+        {
+            statusBar->showMessage("USB Device Connected");
+        }
     }
     else
     {
