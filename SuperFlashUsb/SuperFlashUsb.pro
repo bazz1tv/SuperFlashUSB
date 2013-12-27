@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     pc/sflash/write.cpp \
     pc/USB.cpp \
     pc/derp.cpp \
-    usbthread.cpp
+    usbthread.cpp \
+    readromthread.cpp
 
 HEADERS  += mainwindow.h \
     utility.h \
@@ -51,7 +52,8 @@ HEADERS  += mainwindow.h \
     pc/main.h \
     pc/USB.h \
     usbthread.h \
-    main.h
+    main.h \
+    readromthread.h
 
 FORMS    += mainwindow.ui \
     readcartdialog.ui

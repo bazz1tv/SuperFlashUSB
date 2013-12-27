@@ -86,10 +86,13 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         usbthread = new USBThread;
         connect (this, SIGNAL (cancelUSBThread (void)), usbthread, SLOT (canceled (void)));
+        connect (this, SIGNAL (cancelAll (void)), usbthread, SLOT (canceled (void)));
         usbthread->start();
     }
 
-    //connect(NULL, SIGNAL(clearAll()), this, SLOT(clearAll()));
+    readRomThread = new ReadRomThread;
+    connect (this, SIGNAL(cancelReadRomThread(void)), readRomThread, SLOT(canceled()));
+    connect (this, SIGNAL(cancelAll(void)), readRomThread, SLOT(canceled()));
 
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(connect_USB()));
@@ -99,7 +102,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    emit cancelUSBThread();
+    emit cancelAll();
+
+    //emit cancelUSBThread();
     CloseUSBDevice();
 
 
@@ -107,6 +112,7 @@ MainWindow::~MainWindow()
 
     EndUSB();
     delete usbthread;
+    delete readRomThread;
     delete ui;
     delete timer;
 }
@@ -173,23 +179,24 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
     }
 
     int accepted=0;
-    ROM_t rom;
+    //ROM_t rom;
     // Create a Popup that selects the Start Address, how many bytes to Read From the Cartridge
     //QDialog dialog(this);
     ReadCartDialog d;// = new ReadCartDialog;
     accepted = d.exec();
+    QString filename;
 
     if (accepted == QDialog::Accepted)
     {
 
         // Query a Filename to Save to
-        rom.filename = QFileDialog::getSaveFileName(this, QObject::tr("Save File"), QString("derp.bin"),
+        filename = QFileDialog::getSaveFileName(this, QObject::tr("Save File"), QString("derp.bin"),
                                                            QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
-        if (rom.open() < 0)
+        /*if (rom.open() < 0)
         {
             QMessageBox::critical(this, "File Error", "Could not Open File");
             return;
-        }
+        }*/
         startaddr = d.getStartAddress();
         numbytes = d.getNumBytes();
 
@@ -204,11 +211,13 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
 
         // Now Call our PC Command line functions to Read the Cart
 
-        Read(ui->progressBar, rom.file, true, NULL);
+        // Call Read Thread HERE
+        readRomThread->specialStart(ui->progressBar, filename);
+        //Read(ui->progressBar, rom.file, true, NULL);
 
 
         // we are finished
-        QMessageBox::information(this, "ROM Read Complete", "Transfer Complete!");
+        //QMessageBox::information(this, "ROM Read Complete", "Transfer Complete!");
     }
     else
     {

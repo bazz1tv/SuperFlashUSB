@@ -6,6 +6,7 @@
 #include "utility.h"
 //#include "readcartdialog.h"
 #include "usbthread.h"
+#include "readromthread.h"
 
 
 namespace Ui {
@@ -56,6 +57,7 @@ public:
 
     QTimer *timer;
     USBThread *usbthread;
+    ReadRomThread *readRomThread;
     bool timeToUpdateRomHeaders;
     bool timeToClearAll;
 
@@ -63,6 +65,8 @@ public:
 
 signals:
     void cancelUSBThread(void);
+    void cancelReadRomThread(void);
+    void cancelAll(void);
 };
 
 
