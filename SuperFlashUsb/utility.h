@@ -165,7 +165,7 @@ public:
         QString str("");
         if (isValid())
         {
-             str = QString("<b>")+QString("%1").arg(num)+QString(") </b>")+QString(RomTitle)+
+             str = QString(RomTitle)+
                     QString("<p>Cart Type: ")+CartTypeStr+
                     QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[RomSizeByte])+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>RAM</b>: ")+QString(RomRamSizeByteLUT[SramSizeByte]);
 
@@ -183,7 +183,7 @@ public:
     {
         if (str == "ABCD")
         {
-            finalString = romHeaderToString();
+            finalString = QString("<b>%1)</b> ").arg(num)+romHeaderToString();
         }
         else
         {
@@ -191,11 +191,11 @@ public:
                 finalString = QString("<b>%1)</b> ").arg(num)+str;
             else if (mod == PREPEND)
             {
-                finalString = str+QString("<p>")+romHeaderToString();
+                finalString = QString("<b>%1)</b> ").arg(num)+str+QString("<p>")+romHeaderToString();
             }
             else if (mod == APPEND)
             {
-                finalString = romHeaderToString() + QString("<p>")+str;
+                finalString = QString("<b>%1)</b> ").arg(num)+romHeaderToString() + QString("<p>")+str;
             }
         }
     }

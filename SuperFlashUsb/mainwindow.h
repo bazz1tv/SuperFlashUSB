@@ -20,16 +20,18 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+    void clearAll();
     QStatusBar *statusBar;
 
-
+public slots:
+    //void clearAll();
 
 private slots:
     //void derp(QDragEnterEvent *);
     //void derp2(QDropEvent *event);
     void on_actionQuit_triggered();
     void connect_USB();
+
     /*void ShowContextMenu1(const QPoint& pos);
     void ShowContextMenu2(const QPoint& pos);
     void ShowContextMenu3(const QPoint& pos);
@@ -55,6 +57,7 @@ public:
     QTimer *timer;
     USBThread *usbthread;
     bool timeToUpdateRomHeaders;
+    bool timeToClearAll;
 
 
 

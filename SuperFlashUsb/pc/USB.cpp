@@ -14,14 +14,24 @@ libusb_hotplug_callback_handle hp[2];
 bool isHotPluggable;
 bool USBconnected;
 
-static int LIBUSB_CALL hotplug_callback(libusb_context *ctx, libusb_device *dev, libusb_hotplug_event event, void *user_data)
+static int LIBUSB_CALL hotplug_callback_attach(libusb_context *ctx, libusb_device *dev, libusb_hotplug_event event, void *user_data)
 {
     w->statusBar->showMessage("USB Programmer Connected");
     fprintf(stderr, "Device Connected USB\n");
-    OpenUSBDevice();
-    USBconnected = true;
+    if (OpenUSBDevice() < 0)
+    {
+        USBconnected = false;
+        QMessageBox::warning(w, "USB", "Could not Connect Device!");
+    }
+    else
+    {
+        USBconnected = true;
+    }
+
     return 0;
 }
+
+
 
 static int LIBUSB_CALL hotplug_callback_detach(libusb_context *ctx, libusb_device *dev, libusb_hotplug_event event, void *user_data)
 {
@@ -33,8 +43,10 @@ static int LIBUSB_CALL hotplug_callback_detach(libusb_context *ctx, libusb_devic
         CloseUSBDevice();
         //dev_handle = NULL;
     }
+
     USBconnected = false;
     w->timeToUpdateRomHeaders = true;
+    w->timeToClearAll = true;
     return 0;
 }
 
@@ -86,7 +98,7 @@ int InitUSB()
         isHotPluggable = true;
         printf("HAS HOTPLUG FUNCTIONALITY!!\n");
         r = libusb_hotplug_register_callback (NULL, LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED, (libusb_hotplug_flag)0, VENDOR_ID,
-                DEVICE_ID,0xff, hotplug_callback, NULL, &hp[0]);
+                DEVICE_ID,0xff, hotplug_callback_attach, NULL, &hp[0]);
             if (LIBUSB_SUCCESS != r) {
                 fprintf (stderr, "Error registering callback 0\n");
                 libusb_exit (NULL);

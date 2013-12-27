@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    timeToClearAll = false;
     timeToUpdateRomHeaders = true;
     USBconnected = false;
     CartTypeMap[0x00] =      QString("ROM");                 // if gamecode="042J" --> ROM+SGB2
@@ -88,6 +89,8 @@ MainWindow::MainWindow(QWidget *parent) :
         usbthread->start();
     }
 
+    //connect(NULL, SIGNAL(clearAll()), this, SLOT(clearAll()));
+
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(connect_USB()));
 
@@ -108,11 +111,24 @@ MainWindow::~MainWindow()
     delete timer;
 }
 
+void MainWindow::clearAll()
+{
+    ui->romEdit1->setHtml("<b>1)</b> ");
+    ui->romEdit2->setHtml("<b>2)</b> ");
+    ui->romEdit3->setHtml("<b>3)</b> ");
+    ui->romEdit4->setHtml("<b>4)</b> ");
+    ui->sramEdit->clear();
+}
 
 // don't worry about it
 //
 void MainWindow::connect_USB()
 {
+    if (timeToClearAll)
+    {
+        clearAll();
+        timeToClearAll = false;
+    }
     if (!isHotPluggable && !USBconnected)
     {
         if (OpenUSBDevice() < 0)
@@ -122,15 +138,7 @@ void MainWindow::connect_USB()
         else
         {
             statusBar->showMessage("USB Device Connected");
-            //timer->stop();
             USBconnected = true;
-            // Update the ROM Info's
-
-            // main function
-
-
-            //statusBar->showMessage("Used Space: 0Mb | Available Space: 64Mb");
-
         }
     }
 
