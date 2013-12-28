@@ -7,6 +7,7 @@
 //#include "readcartdialog.h"
 #include "usbthread.h"
 #include "readromthread.h"
+#include "writesramthread.h"
 
 
 namespace Ui {
@@ -26,6 +27,9 @@ public:
 
 public slots:
     //void clearAll();
+    void setProgress(int x);
+    void message(int msgtype, QString title, QString msg);
+
 
 private slots:
     //void derp(QDragEnterEvent *);
@@ -50,14 +54,19 @@ private slots:
 
     void on_writeSramButton_clicked();
 
+
+
+    void on_readSramButton_clicked();
+
 public:
     void QueryUSBRomHeaders();
 
     Ui::MainWindow *ui;
 
-    QTimer *timer;
+    QTimer *eventTimer;
     USBThread *usbthread;
     ReadRomThread *readRomThread;
+    WriteSramThread *writeSramThread;
     bool timeToUpdateRomHeaders;
     bool timeToClearAll;
 
@@ -66,6 +75,7 @@ public:
 signals:
     void cancelUSBThread(void);
     void cancelReadRomThread(void);
+    void cancelWriteSramThread(void);
     void cancelAll(void);
 };
 

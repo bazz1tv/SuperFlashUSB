@@ -62,6 +62,8 @@ typedef unsigned char byte;
 #define WRITE 4
 #define READ_SRAM 5
 #define WRITE_SRAM 6
+//
+#define CANCEL 7
 #define IDLE 100
 
 #define ADDR 0

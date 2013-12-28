@@ -3,3 +3,6 @@ Not all Platforms support Hotplug Support,
 Devise a system that Checks for Hotplug Support, and then uses either
 A) Hotplug Support,
 b) Timer Support
+
+
+Test The Ucon64 --multi argument for what happens when DSP1 game is used in the menu.

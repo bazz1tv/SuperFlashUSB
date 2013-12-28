@@ -135,7 +135,7 @@ void SetupHardware(void)
 
 	/* Hardware Initialization */
 	LEDs_Init();
-	USB_Init(USB_DEVICE_OPT_FULLSPEED | USB_OPT_REG_ENABLED | USB_OPT_AUTO_PLL);
+    USB_Init(USB_DEVICE_OPT_FULLSPEED /*| USB_OPT_REG_ENABLED*/ | USB_OPT_AUTO_PLL);
 }
 
 /** Event handler for the library USB Connection event. */
@@ -241,6 +241,12 @@ void EVENT_USB_Device_ControlRequest(void)
             Endpoint_ClearStatusStage();
             break;
         }
+    case CANCEL:
+    {
+        // I don't think we even need this command!
+        Endpoint_ClearSETUP();
+        Endpoint_ClearStatusStage();
+    }
                 
         default:
         break;

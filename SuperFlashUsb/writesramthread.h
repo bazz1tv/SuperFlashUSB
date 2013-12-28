@@ -1,34 +1,39 @@
-#ifndef READROMTHREAD_H
-#define READROMTHREAD_H
+#ifndef WRITESRAMTHREAD_H
+#define WRITESRAMTHREAD_H
 
-#include <QProgressBar>
 #include <QFile>
 #include <QThread>
 #include "pc/main.h"
 #include "utility.h"
 
-class ReadRomThread : public QThread
+class WriteSramThread : public QThread
 {
     Q_OBJECT
 public:
-    ReadRomThread()
+    WriteSramThread()
     {
     }
-    ~ReadRomThread()
+    ~WriteSramThread()
     {
 
     }
+
+    int VerifyWrite();
+    void InitWrite();
+    void Write();
+    void LoadWriteBuffer();
+    void WriteDataFromFile();
 
     virtual void run();
-    void specialStart(QString filename);
-    void LoadReadBuffer();
-    void Read();
-    void InitRead();
-    void ReadDataToFile();
+    void specialStart(QFile *file);
+
+
+
+
 
     bool end;
     //QProgressBar *progressBar;
-    QFile file;
+    QFile *file;
 
 public slots:
     void canceled(void);
@@ -39,4 +44,5 @@ signals:
     //void infoMessage(QString title, QString msg);
 };
 
-#endif // READROMTHREAD_H
+
+#endif // WRITESRAMTHREAD_H

@@ -7,7 +7,10 @@
 
 #include <QtWidgets>
 
-
+void MainWindow::setProgress(int x)
+{
+    ui->progressBar->setValue(x);
+}
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -93,12 +96,48 @@ MainWindow::MainWindow(QWidget *parent) :
     readRomThread = new ReadRomThread;
     connect (this, SIGNAL(cancelReadRomThread(void)), readRomThread, SLOT(canceled()));
     connect (this, SIGNAL(cancelAll(void)), readRomThread, SLOT(canceled()));
+    connect (readRomThread, SIGNAL(setProgress(int)), this, SLOT(setProgress(int)));
+    connect (readRomThread, SIGNAL(message(int,QString,QString)), this, SLOT(message(int,QString,QString)));
 
-    timer = new QTimer(this);
-    connect(timer,SIGNAL(timeout()),this,SLOT(connect_USB()));
+    writeSramThread = new WriteSramThread;
+        connect (this, SIGNAL(cancelWriteSramThread(void)), writeSramThread, SLOT(canceled()));
+        connect (this, SIGNAL(cancelAll(void)), writeSramThread, SLOT(canceled()));
+        connect (writeSramThread, SIGNAL(setProgress(int)), this, SLOT(setProgress(int)));
+        connect (writeSramThread, SIGNAL(message(int,QString,QString)), this, SLOT(message(int,QString,QString)));
 
-    timer->start(1000);
+    connect (ui->cancelButton, SIGNAL (clicked ()), readRomThread, SLOT (canceled ()));
+    connect (ui->cancelButton, SIGNAL(clicked()), writeSramThread, SLOT(canceled()));
+
+    eventTimer = new QTimer(this);
+    connect(eventTimer,SIGNAL(timeout()),this,SLOT(connect_USB()));
+
+    eventTimer->start(1000);
 }
+
+void MainWindow::message(int msgtype, QString title, QString msg)
+{
+    switch (msgtype)
+    {
+        case QMessageBox::Warning:
+        QMessageBox::warning(this, title,msg);
+        break;
+
+    case QMessageBox::Information:
+        QMessageBox::information(this, title,msg);
+       break;
+    case QMessageBox::Question:
+        QMessageBox::question(this, title,msg);
+        break;
+      case QMessageBox::Critical:
+        QMessageBox::critical(this, title, msg);
+        break;
+    }
+}
+
+/*void MainWindow::infoMessage(QString title, QString msg)
+{
+
+}*/
 
 MainWindow::~MainWindow()
 {
@@ -113,8 +152,9 @@ MainWindow::~MainWindow()
     EndUSB();
     delete usbthread;
     delete readRomThread;
+    delete writeSramThread;
     delete ui;
-    delete timer;
+    delete eventTimer;
 }
 
 void MainWindow::clearAll()
@@ -188,7 +228,7 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
 
     if (accepted == QDialog::Accepted)
     {
-
+        rom_or_sram = ROM;
         // Query a Filename to Save to
         filename = QFileDialog::getSaveFileName(this, QObject::tr("Save File"), QString("derp.bin"),
                                                            QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
@@ -212,7 +252,7 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
         // Now Call our PC Command line functions to Read the Cart
 
         // Call Read Thread HERE
-        readRomThread->specialStart(ui->progressBar, filename);
+        readRomThread->specialStart(filename);
         //Read(ui->progressBar, rom.file, true, NULL);
 
 
@@ -234,7 +274,7 @@ void MainWindow::on_pushButton_USBConnect_clicked()
 {
     if (dev_handle == NULL)
     {
-        //timer->start();
+        //eventTimer->start();
         if (OpenUSBDevice() < 0)
         {
             statusBar->showMessage("USB Device Disconnected");
@@ -252,7 +292,7 @@ void MainWindow::on_pushButton_USBConnect_clicked()
 
 void MainWindow::on_writeSramButton_clicked()
 {
-    if (!USBconnected)
+    if (!USBconnected)  // USBconnected GLobal variable from USB.cpp/h
     {
         QMessageBox::warning(this, "SRAM Write", "USB Programmer not connected!");
         return;
@@ -284,8 +324,45 @@ void MainWindow::on_writeSramButton_clicked()
 
     rom_or_sram = SRAM;
 
-    Write(ui->progressBar, ui->sramEdit->sram.file);
+    writeSramThread->specialStart(ui->sramEdit->sram.file);
+    //Write(ui->sramEdit->sram.file);
 
-    QMessageBox::information(this, "SRAM Write Complete", "Transfer Complete!");
+    //QMessageBox::information(this, "SRAM Write Complete", "Transfer Complete!");
     //numbytes = 0x2000;
+}
+
+
+
+void MainWindow::on_readSramButton_clicked()
+{
+    if (!USBconnected)  // USBconnected GLobal variable from USB.cpp/h
+    {
+        QMessageBox::warning(this, "SRAM Read", "USB Programmer not connected!");
+        return;
+    }
+
+    QString filename = QFileDialog::getSaveFileName(this, QObject::tr("Save File"), QString("derp.srm"),
+                                                       QObject::tr("SRAM Files (*.sav *.srm);; Any (*.*)"));
+    /*if (rom.open() < 0)
+    {
+        QMessageBox::critical(this, "File Error", "Could not Open File");
+        return;
+    }*/
+    startaddr = 0xfe0000;
+    numbytes = 0x2000;
+
+    // setup progress bar
+    ui->progressBar->setMaximum(numbytes);
+    ui->progressBar->setMinimum(0);
+    ui->progressBar->resetFormat();
+
+    aal = startaddr&0xff;
+    aah = (startaddr&0xff00)>>8;
+    aab = (startaddr&0xff0000)>>16;
+
+    // Now Call our PC Command line functions to Read the Cart
+
+    // Call Read Thread HERE
+    readRomThread->specialStart(filename);
+
 }
