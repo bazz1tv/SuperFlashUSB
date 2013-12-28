@@ -58,6 +58,8 @@ private slots:
 
     void on_readSramButton_clicked();
 
+    void on_programRomButton_clicked();
+
 public:
     void QueryUSBRomHeaders();
 

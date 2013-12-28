@@ -366,3 +366,8 @@ void MainWindow::on_readSramButton_clicked()
     readRomThread->specialStart(filename);
 
 }
+
+void MainWindow::on_programRomButton_clicked()
+{
+
+}

@@ -55,7 +55,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="programRomButton">
           <property name="text">
            <string>Program</string>
           </property>
