@@ -60,8 +60,6 @@ void SramEntry::contextMenuEvent(QContextMenuEvent * event)
 {
     // for most widgets
     QPoint globalPos = event->globalPos();
-    // for QAbstractScrollArea and derived classes you would use:
-    // QPoint globalPos = myWidget->viewport()->mapToGlobal(pos);
 
     QMenu myMenu;
     //int offset=0;

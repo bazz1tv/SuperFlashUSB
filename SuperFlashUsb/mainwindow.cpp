@@ -279,10 +279,12 @@ void MainWindow::on_pushButton_USBConnect_clicked()
         if (OpenUSBDevice() < 0)
         {
             statusBar->showMessage("USB Device Disconnected");
+            QMessageBox::warning(this, "USB","Device not found!");
         }
         else
         {
             statusBar->showMessage("USB Device Connected");
+            QMessageBox::information(this, "USB","Connected! :D");
         }
     }
     else
@@ -370,5 +372,9 @@ void MainWindow::on_readSramButton_clicked()
 
 void MainWindow::on_programRomButton_clicked()
 {
-
+    if (!USBconnected)  // USBconnected GLobal variable from USB.cpp/h
+    {
+        QMessageBox::warning(this, "ROM Program", "USB Programmer not connected!");
+        return;
+    }
 }
