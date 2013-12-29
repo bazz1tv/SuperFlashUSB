@@ -27,7 +27,6 @@ public:
     void ReadDataToFile();
 
     bool end;
-    //QProgressBar *progressBar;
     QFile file;
 
 public slots:
@@ -36,7 +35,6 @@ public slots:
 signals:
     void setProgress(int x);
     void message(int msgtype, QString title, QString msg);
-    //void infoMessage(QString title, QString msg);
 };
 
 #endif // READROMTHREAD_H

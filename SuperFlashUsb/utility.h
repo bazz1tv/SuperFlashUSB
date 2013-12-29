@@ -29,10 +29,6 @@ int OpenFiles();
 int OpenForReadBin(const char *filename);
 int OpenForWriteBin(const char *filename);
 
-//extern uchar MajorCommand,MinorCommand;
-
-
-
 class ROM_t
 {
 public:
@@ -51,6 +47,7 @@ public:
         filename = "";
         finalString="";
         num=1;
+        isAlreadyOnCart = false;
     }
 
     ~ROM_t()
@@ -92,12 +89,9 @@ public:
         // How to find which item was selected?
 
         // Autodetect the HiROM/LoROM state
-        //return;
 
         if ((headered = is_headered(*file)))
         {
-            //QMessageBox::warning(this, tr("Error"), file->fileName() + tr(" is headered"));
-            //file.unmap(data);
             offset = 0x200;
         }
 
@@ -115,7 +109,7 @@ public:
         {
             RomTitle[i] = data[0x7fc0+offset+i];
         }
-        //RomTitle[21] = 0;
+
         // ROM Title All set
 
         CartTypeByte = data[0x7fd6+offset];
@@ -131,7 +125,6 @@ public:
         if (RomSizeByte > 14 || SramSizeByte > 14 || RomSizeByte == 0)
         {
             QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Something's Wrong. Did you load the correct file?"));
-            //qApp->quit();
             return -1;
         }
 
@@ -143,14 +136,10 @@ public:
             romfilesize -= 0x200;
         if (targetbytesize != romfilesize)
         {
-            //QMessageBox::question()zzzz
             if (QMessageBox::question(NULL, QObject::tr("Hm..."), QObject::tr("This file is not the same size as the ROM header says it should be\n\nLoad it anyways?")) == QMessageBox::No)
             {
                 return -1;
             }
-            //QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("The file is not the same size as the ROM header says it should be"));
-            //qApp->quit();
-
         }
 
 
@@ -160,6 +149,7 @@ public:
 #define NOTHING 0
 #define PREPEND 1
 #define APPEND 2
+
     QString romHeaderToString()
     {
         QString str("");
@@ -174,7 +164,6 @@ public:
                 str += QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMU-Header Present");
             }
         }
-        //else str="";
 
         return str;
     }
@@ -237,17 +226,14 @@ public:
         ReadHeader(&hiromheader);
 
         bool hirom= isHirom2((uchar*)loromheader.data(), (uchar*)hiromheader.data());
-        //int offset;
+
         if (hirom)
         {
-            //offset = 1;
             selectedheader = &hiromheader;
-            //QMessageBox::critical(this, "Derp", "HiRom");
         }
         else
         {
             selectedheader = &loromheader;
-            //QMessageBox::critical(this, "Derp", "LoRom");
         }
 
 
@@ -256,7 +242,7 @@ public:
         {
             RomTitle[i] = selectedheader->at(0x10+i);
         }
-        //RomTitle[21] = 0;
+
         // ROM Title All set
         CartTypeByte = selectedheader->at(0x16+0x10);
         // CartTypeByteToStr
@@ -274,12 +260,13 @@ public:
         if (isValid() && isTypical())
         {
             setString();
-            //ui->textEdit1->setHtml(ui->textEdit1->rom.finalString);
         }
         else
         {
             setString("Game may be Empty/Corrupt. Or it may have a very unique ROM header. I'll display the ROM info anyways:", PREPEND);
         }
+
+        isAlreadyOnCart = true;
     }
 
     int DoTheDo()
@@ -321,6 +308,7 @@ public:
         return 0;
     }
 
+    bool isAlreadyOnCart;
     bool hirom;
     uchar *data;
     ushort offset;

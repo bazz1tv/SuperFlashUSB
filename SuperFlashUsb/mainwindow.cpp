@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     timeToClearAll = false;
     timeToUpdateRomHeaders = true;
     USBconnected = false;
+    //
     CartTypeMap[0x00] =      QString("ROM");                 // if gamecode="042J" --> ROM+SGB2
     CartTypeMap[0x01] =      QString("ROM+RAM");             // (if any such produced?)
     CartTypeMap[0x02] =      QString("ROM+RAM+Battery");     // ;if gamecode="XBND" --> ROM+RAM+Batt+XBandModem

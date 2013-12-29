@@ -9,7 +9,6 @@ void ReadRomThread::specialStart(QString filename)
     if (!file.open(QIODevice::ReadWrite))
     {
         emit message(QMessageBox::Warning,QObject::tr("Error"), QObject::tr("Could not open file"));
-        //QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Could not open file"));
         return;
     }
 
@@ -19,9 +18,6 @@ void ReadRomThread::specialStart(QString filename)
     start(QThread::TimeCriticalPriority);
 }
 
-//#include "mainwindow.h"
-//extern MainWindow *w;
-
 void ReadRomThread::run ()
 {
   end = false;
@@ -29,9 +25,6 @@ void ReadRomThread::run ()
   this->Read();
 
   file.close();
-
-
-  //QMessageBox::information(NULL, "ROM Read Complete", "Transfer Complete!");
 }
 
 void
@@ -84,28 +77,17 @@ void ReadRomThread::ReadDataToFile()
 
             if (end)
             {
-                //derp:
-                // Send a cancel command to USB Device
-                //r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,CANCEL,CANCEL,CANCEL,NULL,0,500);
-                //if (r == 0)
-                //emit setProgress(0);
                 file.close();
                 SetLEDWithByte(0);
                 emit message(QMessageBox::Critical, "Read", "Canceled!!");
                     return;
-                //else
-                //{
-                //    cout << "Cancel Failed\n";
-                //    goto derp;
-                //}
             }
             // Get a 32K section from USB
-            //SendPacket(OUT, READ, FETCH, (uint16_t)DERP,NULL,0, 50);
             restart:
             r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,READ, FETCH, (uint16_t) DERP, &data[0], 1, 500);
             if (r ==1)
             {
-                //cout << "Fetch OUT success\n";
+                // could print success here :)
             }
             else
             {
@@ -116,7 +98,6 @@ void ReadRomThread::ReadDataToFile()
 
             for (;;)
             {
-                //usleep(1000);
                 r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, FETCH, (uint16_t) DERP, &data[0], 1, 500);
                 if (r == 1)
                 {
@@ -128,35 +109,23 @@ void ReadRomThread::ReadDataToFile()
                 else
                 {
                     cout << "Fetch IN fail : " << r <<endl;
-                    //cout << "Restart\n";
-                    //goto dero;
                 }
-                //r = SendPacket(IN, READ, FETCH, (uint16_t)DERP,&data[0],1, 50);
             }
             redo:
-            //libusb_clear_halt(dev_handle,0);
-            //usleep(10000);
             r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, DATA, (uint16_t) DERP, &data[0], (uint16_t)DERP, 500);
-            //usleep(10000);
             if(r == DERP ) //we wrote the 4 bytes successfully
             {
-             // Write it to file
+                // Write it to file
                 this->file.write((const char*)&data[0], DERP);
-                //progressBar->setValue(++i*DERP);
-                // emit
                 emit setProgress(++i*DERP);
-
+                // THIS IS HOW WE DO IT
             }
             else
             {
-                //CLEAR_FEATURE(ENDPOINT_STALL);
                 cout << "Read: Error: " << r << endl;
                 printf( "%d\n", errno );
-                //ResetAddress();
                 goto redo;
             }
-
-            //usleep(1000000);
         }
     }
 
@@ -177,31 +146,27 @@ void ReadRomThread::ReadDataToFile()
 
         for (;;)
         {
-            //usleep(1000);
             r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, FETCH, (uint16_t) DERP, &data[0], 1, 50);
             if (r == 1)
             {
-                //cout << "Fetch IN success\n";
                 if (data[0] == 0)
                     break;
                 else cout << "herp!\n";
+
+
+                // What's happening here? IDUNNO IFAG
             }
             else
             {
                 cout << " hahaFetch IN fail : " << r <<endl;
-                //cout << "Restart\n";
-                //goto dero;
             }
             //r = SendPacket(IN, READ, FETCH, (uint16_t)DERP,&data[0],1, 50);
         }
-        //SendPacketNoRepeat(OUT, READ, NUMBYTESTOREAD, (uint16_t)leftover_bytes,NULL,0, 50);
         FUCKFACE:
         r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, DATA , leftover_bytes, &data[0], leftover_bytes, 50);
         if(r == (int)leftover_bytes ) //we wrote the 4 bytes successfully
         {
           fwrite(&data[0], 1, leftover_bytes, fh);
-            //loadBar(i++*DERP, (DERP*storechunks)+leftover_bytes, ((DERP*storechunks)+leftover_bytes)/2, 50);
-          //cout<<"Read in " << leftover_bytes <<" Bytes"<<endl;
         }
         else
         {
@@ -219,8 +184,6 @@ void ReadRomThread::Read()
     // YUMMY
     this->InitRead();
     this->ReadDataToFile();
-
-
 }
 
 
