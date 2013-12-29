@@ -291,7 +291,7 @@ void MainWindow::on_writeSramButton_clicked()
         return;
     }
 
-    // 0xfe0000 :)
+    // 0xfe0000 :)  Tototek SRAM Location $2000 bytes
     aal = aah = 0;
     aab = 0xfe;
 
@@ -350,4 +350,43 @@ void MainWindow::on_programRomButton_clicked()
         QMessageBox::warning(this, "ROM Program", "USB Programmer not connected!");
         return;
     }
+
+    // First, we must see what Games are not alreadyonCart
+    // We'll do this 4 times, for each ROM
+    if (ui->romEdit1->rom.isAlreadyOnCart == false)
+    {
+        // Then Erase this Section of ROM
+        // Check size of ROM, erase that many Blocks
+        int romsizein128KBlocks; // 128 KB = 0x02:0000 bytes
+
+        romsizein128KBlocks = (int)(ui->romEdit1->rom.romsizeinbytes / 0x20000);
+        if (ui->romEdit1->rom.romsizeinbytes % 0x20000 > 0)
+            romsizein128KBlocks += 1;    //
+
+        // Now that we know the number of blocks, we need to add the base Block number
+
+        int baseblock = (int)(ui->romEdit1->rom.startaddr / 0x20000);
+
+
+
+        // When doing erase, let's show a undefined value, loading progress bar:
+
+        /* if minimum and maximum both are set to 0, the bar shows a busy indicator instead of a percentage of steps.
+         * */
+        ui->progressBar->setMinimum(0);
+        ui->progressBar->setMaximum(0);
+
+        int numblocktoerase = (romsizein128KBlocks == 0) ? 0:romsizein128KBlocks-1;
+
+#ifdef DEBUG
+        fprintf (stderr,"baseblock = %d\n", baseblock);
+        fprintf (stderr,"romsizein128K = %d\n", romsizein128KBlocks);
+        fprintf (stderr,"numblocktoerase = %d\n", numblocktoerase);
+#endif
+
+
+
+    }
+
+
 }

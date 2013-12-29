@@ -25,10 +25,6 @@ bool is_headered(QFile &file);
 bool isHirom(uchar *data);
 bool isHirom2(uchar *loromdata, uchar *hiromdata);
 
-int OpenFiles();
-int OpenForReadBin(const char *filename);
-int OpenForWriteBin(const char *filename);
-
 class ROM_t
 {
 public:
@@ -47,7 +43,7 @@ public:
         filename = "";
         finalString="";
         num=1;
-        isAlreadyOnCart = false;
+        isAlreadyOnCart = true;
     }
 
     ~ROM_t()
@@ -130,17 +126,19 @@ public:
 
         // Check for Correlation between RomSizeByte and actual RomFileSize
         // map RomSizeByte to actual number of bytes
-        qint64 targetbytesize = 2048<<(RomSizeByte-1);
+        romsizeinbytes = 2048<<(RomSizeByte-1);
         qint64 romfilesize = file->size();
         if (headered)
             romfilesize -= 0x200;
-        if (targetbytesize != romfilesize)
+        if (romsizeinbytes != romfilesize)
         {
             if (QMessageBox::question(NULL, QObject::tr("Hm..."), QObject::tr("This file is not the same size as the ROM header says it should be\n\nLoad it anyways?")) == QMessageBox::No)
             {
                 return -1;
             }
         }
+
+        isAlreadyOnCart = false;
 
 
         return 0;
@@ -308,6 +306,7 @@ public:
         return 0;
     }
 
+    qint64 romsizeinbytes;
     bool isAlreadyOnCart;
     bool hirom;
     uchar *data;

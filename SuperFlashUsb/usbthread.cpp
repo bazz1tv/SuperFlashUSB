@@ -8,7 +8,6 @@ USBThread::run ()
 
   while (!end)
   {
-
       int r = libusb_handle_events(NULL);
       if (r < 0)
          fprintf(stderr, "libusb_handle_events() failed: %s\n", libusb_error_name(r));

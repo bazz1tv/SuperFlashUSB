@@ -36,7 +36,8 @@ SOURCES += main.cpp\
     pc/derp.cpp \
     usbthread.cpp \
     readromthread.cpp \
-    writesramthread.cpp
+    writesramthread.cpp \
+    erasethread.cpp
 
 HEADERS  += mainwindow.h \
     utility.h \
@@ -55,7 +56,8 @@ HEADERS  += mainwindow.h \
     usbthread.h \
     main.h \
     readromthread.h \
-    writesramthread.h
+    writesramthread.h \
+    erasethread.h
 
 FORMS    += mainwindow.ui \
     readcartdialog.ui

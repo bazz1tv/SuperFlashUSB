@@ -3,14 +3,7 @@
 // FOR PC
 void Erase()
 {
-    /*if (MinorCommand == ERASE_BLOCK_USING_ADDRESS)
-    {
-        EraseBlockUsingAddress(block_address);
-    }*/
-    //else if (MinorCommand == ERASE_BLOCK_USING_BLOCKNUM)
-    //{
-        EraseBlocks(blocknum_start,blocknum_end);
-    //}
+    EraseBlocks(blocknum_start,blocknum_end);
 }
 
 void EraseBlocks(int blocknum_start, int blocknum_end)
