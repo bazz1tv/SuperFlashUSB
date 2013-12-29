@@ -71,7 +71,6 @@ void SramEntry::contextMenuEvent(QContextMenuEvent * event)
     {
         sram.filename = QFileDialog::getOpenFileName(this, QObject::tr("Open File"), QString(),
                                                      QObject::tr("SRAM Files (*.sav *.srm);; Any (*.*)"));
-        //QMessageBox::critical(this, QObject::tr("Error"), sram.filename);
         sram.setup();
         setHtml(sram.finalString);
     }

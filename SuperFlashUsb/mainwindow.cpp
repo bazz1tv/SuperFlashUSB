@@ -135,11 +135,6 @@ void MainWindow::message(int msgtype, QString title, QString msg)
     }
 }
 
-/*void MainWindow::infoMessage(QString title, QString msg)
-{
-
-}*/
-
 MainWindow::~MainWindow()
 {
     emit cancelAll();
@@ -220,9 +215,8 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
     }
 
     int accepted=0;
-    //ROM_t rom;
+
     // Create a Popup that selects the Start Address, how many bytes to Read From the Cartridge
-    //QDialog dialog(this);
     ReadCartDialog d;// = new ReadCartDialog;
     accepted = d.exec();
     QString filename;
@@ -233,11 +227,6 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
         // Query a Filename to Save to
         filename = QFileDialog::getSaveFileName(this, QObject::tr("Save File"), QString("derp.bin"),
                                                            QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);;SRAM Files (*.sav *.srm);; Any (*.*)"));
-        /*if (rom.open() < 0)
-        {
-            QMessageBox::critical(this, "File Error", "Could not Open File");
-            return;
-        }*/
         startaddr = d.getStartAddress();
         numbytes = d.getNumBytes();
 
@@ -254,11 +243,6 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
 
         // Call Read Thread HERE
         readRomThread->specialStart(filename);
-        //Read(ui->progressBar, rom.file, true, NULL);
-
-
-        // we are finished
-        //QMessageBox::information(this, "ROM Read Complete", "Transfer Complete!");
     }
     else
     {
@@ -328,10 +312,6 @@ void MainWindow::on_writeSramButton_clicked()
     rom_or_sram = SRAM;
 
     writeSramThread->specialStart(ui->sramEdit->sram.file);
-    //Write(ui->sramEdit->sram.file);
-
-    //QMessageBox::information(this, "SRAM Write Complete", "Transfer Complete!");
-    //numbytes = 0x2000;
 }
 
 
@@ -346,11 +326,6 @@ void MainWindow::on_readSramButton_clicked()
 
     QString filename = QFileDialog::getSaveFileName(this, QObject::tr("Save File"), QString("derp.srm"),
                                                        QObject::tr("SRAM Files (*.sav *.srm);; Any (*.*)"));
-    /*if (rom.open() < 0)
-    {
-        QMessageBox::critical(this, "File Error", "Could not Open File");
-        return;
-    }*/
     startaddr = 0xfe0000;
     numbytes = 0x2000;
 
@@ -362,8 +337,6 @@ void MainWindow::on_readSramButton_clicked()
     aal = startaddr&0xff;
     aah = (startaddr&0xff00)>>8;
     aab = (startaddr&0xff0000)>>16;
-
-    // Now Call our PC Command line functions to Read the Cart
 
     // Call Read Thread HERE
     readRomThread->specialStart(filename);
