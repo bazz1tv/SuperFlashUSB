@@ -7,6 +7,7 @@
 #include "usbthread.h"
 #include "readromthread.h"
 #include "writesramthread.h"
+#include "programcartthread.h"
 
 extern QString bootloader;
 
@@ -48,6 +49,7 @@ public:
     USBThread *usbthread;
     ReadRomThread *readRomThread;
     WriteSramThread *writeSramThread;
+    ProgramCartThread *programCartThread;
     bool timeToUpdateRomHeaders;
     bool timeToClearAll;
 
