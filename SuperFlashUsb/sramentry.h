@@ -1,6 +1,7 @@
 #ifndef SRAMENTRY_H
 #define SRAMENTRY_H
 
+#include "sram_t.h"
 #include "utility.h"
 #include <QtWidgets>
 #include <QTextEdit>

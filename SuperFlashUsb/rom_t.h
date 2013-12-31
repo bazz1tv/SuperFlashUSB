@@ -188,7 +188,8 @@ public:
         }
         else
         {
-           str = filename;
+            // PROBABLY UNIX-ONLY functional
+           str = filename.mid(filename.lastIndexOf('/')+1);
         }
 
         return str;
