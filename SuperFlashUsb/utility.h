@@ -9,6 +9,8 @@ extern QString RomRamSizeByteLUT[];
 extern QMap<int,QString> CartTypeMap;
 
 
+
+
 /* Snes9x Hi/LoROM autodetect code */
 
 int AllASCII(unsigned char *b, int size);
@@ -33,6 +35,7 @@ public:
         offset=0;
         hirom = false;
         headered=false;
+        RomTitle.resize(22);
         for (uchar i=0; i < 22; i++)
         {
             RomTitle[i]=0;
@@ -45,6 +48,7 @@ public:
         num=1;
         isAlreadyOnCart = true;
         deformed_header = false;
+        sramsizeinbytes = 0;
     }
 
     ~ROM_t()
@@ -139,6 +143,7 @@ public:
             /*qint64 romfilesize = file->size();
             if (headered)
                 romfilesize -= 0x200;*/
+            romsizeinbytes = file->size()-offset;
         }
         else
         {
@@ -152,7 +157,15 @@ public:
                 {
                     return -1;
                 }
+                else
+                {
+                    romsizeinbytes = romfilesize;
+                    // NOT SURE IF I SHOULD DO THIS :D
+                }
             }
+
+            sramsizeinbytes = SramSizeByte ? 1 << (SramSizeByte + 10) : 0;
+
 
         }
 
@@ -179,6 +192,10 @@ public:
             {
                 str += QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMU-Header Present");
             }
+        }
+        else
+        {
+           str = filename;
         }
 
         return str;
@@ -257,7 +274,11 @@ public:
         for (uchar i=0; i < 21; i++)
         {
             RomTitle[i] = selectedheader->at(0x10+i);
+            if (!RomTitle[i].isPrint())
+                RomTitle[i] = '.';
         }
+
+        RomTitle.toUpper();
 
         // ROM Title All set
         CartTypeByte = selectedheader->at(0x16+0x10);
@@ -326,12 +347,13 @@ public:
 
     bool deformed_header;
     qint64 romsizeinbytes;
+    qint64 sramsizeinbytes;
     bool isAlreadyOnCart;
     bool hirom;
     uchar *data;
     ushort offset;
     bool headered;
-    char RomTitle[21+1];
+    QString RomTitle;
     u_int8_t RomSizeByte;
     u_int8_t SramSizeByte;
     u_int8_t CartTypeByte;
@@ -346,7 +368,7 @@ public:
 };
 
 
-
+void WriteMultiRomEntry(ROM_t *rom, QString &myBootLoader);
 int dothedo(ROM_t &rom);
 
 class SRAM_t

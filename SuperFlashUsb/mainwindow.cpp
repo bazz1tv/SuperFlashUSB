@@ -12,6 +12,13 @@ void MainWindow::setProgress(int x)
     ui->progressBar->setValue(x);
 }
 
+void MainWindow::setProgress(int min, int max, int val)
+{
+    ui->progressBar->setMinimum(min);
+    ui->progressBar->setMaximum(max);
+    ui->progressBar->setValue(val);
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -186,6 +193,7 @@ void MainWindow::connect_USB()
 
     if (timeToUpdateRomHeaders && USBconnected)
     {
+
         timeToUpdateRomHeaders = false;
         QueryUSBRomHeaders();
     }
@@ -396,9 +404,20 @@ void MainWindow::on_programRomButton_clicked()
 #endif
         //
 
-        // Let's start the SHITZ~
+        // Let's start the RULES
 
+        //eraseThread->specialStart(baseblock, romsizein128KBlocks+baseblock);
 
+        ui->progressBar->setMaximum(numbytes);
+        ui->progressBar->setMinimum(0);
+        ui->progressBar->resetFormat();
+
+        startaddr = ui->romEdit1->rom.startaddr;
+        numbytes = ui->romEdit1->rom.romsizeinbytes;
+        rom_or_sram = ROM;
+
+        // SRAM Thread is done on purpose (can be used for ROM too)
+        writeSramThread->specialStart(ui->romEdit1->rom.file);
     }
 
     if (ui->romEdit2->rom.isAlreadyOnCart == false)
@@ -512,5 +531,21 @@ void MainWindow::on_programRomButton_clicked()
 
     }
 
+    // Now it is time to write a modified version of the BootLoader Thingy
+    QString myBootLoader(bootloader);
+    //myBootLoader.resize(0x8000);
+    startaddr = 0x7f8000;
+    numbytes = 0x8000;
+
+    /*for (int i=0; i < 0x8000; i++)
+    {
+        //if (i == 0x)
+        myBootLoader[i] = bootloader[i];
+    }*/
+
+
+
+
 
 }
+

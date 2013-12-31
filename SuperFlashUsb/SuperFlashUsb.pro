@@ -37,7 +37,10 @@ SOURCES += main.cpp\
     usbthread.cpp \
     readromthread.cpp \
     writesramthread.cpp \
-    erasethread.cpp
+    erasethread.cpp \
+    idthread.cpp \
+    bootloader.cpp \
+    programcartthread.cpp
 
 HEADERS  += mainwindow.h \
     utility.h \
@@ -57,7 +60,9 @@ HEADERS  += mainwindow.h \
     main.h \
     readromthread.h \
     writesramthread.h \
-    erasethread.h
+    erasethread.h \
+    idthread.h \
+    programcartthread.h
 
 FORMS    += mainwindow.ui \
     readcartdialog.ui

@@ -1,11 +1,16 @@
 #include "erasethread.h"
 #include "pc/sflash.h"
 
+//#include <QMes
+
+
 void EraseThread::specialStart(int blocknum_start, int blocknum_end)
 {
 
     this->blocknum_start = blocknum_start;
     this->blocknum_end = blocknum_end;
+
+    start(QThread::TimeCriticalPriority);
 
 
 }
@@ -15,18 +20,28 @@ void EraseThread::run ()
   end = false;
 
   this->Erase();
+
+
 }
 
 void EraseThread::Erase()
 {
     //emit setProgress()
+    UnlockAllBlocks(); // Unlock All Blocks 8)
     this->EraseBlocks(blocknum_start,blocknum_end);
 }
 
 void EraseThread::EraseBlocks(int blocknum_start, int blocknum_end)
 {
-    for (; blocknum_start <= blocknum_end; blocknum_start++)
+
+
+    for (int i=blocknum_start; i <= blocknum_end; i++)
     {
+        if (end)
+        {
+            emit message(QMessageBox::Information, "Erase Canceled", QString("Only erased blocks %1 to %2").arg(blocknum_start).arg(i));
+            return;
+        }
         this->EraseBlock(blocknum_start);
     }
 }
@@ -34,6 +49,7 @@ void EraseThread::EraseBlocks(int blocknum_start, int blocknum_end)
 
 void EraseThread::EraseBlock(int blocknum)
 {
+    SetLEDWithByte(0);
     redo:
     r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,ERASE, ERASE_BLOCK_USING_BLOCKNUM, (uint16_t) blocknum, NULL, 0, 500);
     if(r == 0 )

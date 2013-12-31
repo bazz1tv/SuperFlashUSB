@@ -8,6 +8,7 @@
 #include "readromthread.h"
 #include "writesramthread.h"
 
+extern QString bootloader;
 
 namespace Ui {
 class MainWindow;
@@ -25,6 +26,7 @@ public:
 
 public slots:
     void setProgress(int x);
+    void setProgress(int min, int max, int val);
     void message(int msgtype, QString title, QString msg);
 
 
