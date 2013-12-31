@@ -113,8 +113,16 @@ MainWindow::MainWindow(QWidget *parent) :
         connect (writeSramThread, SIGNAL(setProgress(int)), this, SLOT(setProgress(int)));
         connect (writeSramThread, SIGNAL(message(int,QString,QString)), this, SLOT(message(int,QString,QString)));
 
+    programCartThread = new ProgramCartThread;
+        connect (this, SIGNAL(cancelProgramCartThread(void)), programCartThread, SLOT(canceled()));
+        connect (this, SIGNAL(cancelAll()), programCartThread, SLOT(canceled()));
+        connect (programCartThread, SIGNAL(setProgress(int,int,int)), this, SLOT(setProgress(int,int,int)));
+        connect (programCartThread, SIGNAL(setProgress(int)), this, SLOT(setProgress(int)));
+        connect (programCartThread, SIGNAL(message(int,QString,QString)), this, SLOT(message(int,QString,QString)));
+
     connect (ui->cancelButton, SIGNAL (clicked ()), readRomThread, SLOT (canceled ()));
     connect (ui->cancelButton, SIGNAL(clicked()), writeSramThread, SLOT(canceled()));
+    connect (ui->cancelButton, SIGNAL(clicked()), programCartThread, SLOT(canceled()));
 
     eventTimer = new QTimer(this);
     connect(eventTimer,SIGNAL(timeout()),this,SLOT(connect_USB()));
@@ -156,6 +164,7 @@ MainWindow::~MainWindow()
     delete usbthread;
     delete readRomThread;
     delete writeSramThread;
+    delete programCartThread;
     delete ui;
     delete eventTimer;
 }
