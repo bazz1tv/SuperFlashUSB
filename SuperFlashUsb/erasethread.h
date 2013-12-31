@@ -33,6 +33,7 @@ public:
 
 
     bool end;
+    int blocknum_start, blocknum_end;
     //QFile *file;
 
 public slots:

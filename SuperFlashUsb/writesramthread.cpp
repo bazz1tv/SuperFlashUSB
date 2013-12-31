@@ -61,6 +61,8 @@ void WriteSramThread::InitWrite()
 void WriteSramThread::WriteDataFromFile()
 {
     int i=0; //storechunks=chunks;
+    //this->file->seek(offset);
+
     if (chunks != 0)
     {
         for (; chunks > 0; chunks--)

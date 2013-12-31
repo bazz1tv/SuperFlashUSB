@@ -311,6 +311,8 @@ void MainWindow::on_writeSramButton_clicked()
 
     rom_or_sram = SRAM;
 
+    //ui->sramEdit->sram.file->seek(ui->sramEdit->sram.off)
+
     writeSramThread->specialStart(ui->sramEdit->sram.file);
 }
 
@@ -351,6 +353,15 @@ void MainWindow::on_programRomButton_clicked()
         return;
     }
 
+    if (ui->romEdit1->rom.isAlreadyOnCart && ui->romEdit2->rom.isAlreadyOnCart && ui->romEdit3->rom.isAlreadyOnCart && ui->romEdit4->rom.isAlreadyOnCart)
+    {
+        QMessageBox::information(this, "No ROMS", "You have not specified any ROMS to upload");
+        return;
+    }
+
+    // First, we Unlock All Blocks!! "Let's Just Do it! ALL THE TIME <3
+
+
     // First, we must see what Games are not alreadyonCart
     // We'll do this 4 times, for each ROM
     if (ui->romEdit1->rom.isAlreadyOnCart == false)
@@ -359,13 +370,50 @@ void MainWindow::on_programRomButton_clicked()
         // Check size of ROM, erase that many Blocks
         int romsizein128KBlocks; // 128 KB = 0x02:0000 bytes
 
-        romsizein128KBlocks = (int)(ui->romEdit1->rom.romsizeinbytes / 0x20000);
-        if (ui->romEdit1->rom.romsizeinbytes % 0x20000 > 0)
-            romsizein128KBlocks += 1;    //
+        romsizein128KBlocks = (int)( (ui->romEdit1->rom.romsizeinbytes-1) / 0x20000);
+        //if ( (ui->romEdit1->rom.romsizeinbytes % 0x20000 > 0) && romsizein128KBlocks > 0)
+          //  romsizein128KBlocks += 1;    //
 
         // Now that we know the number of blocks, we need to add the base Block number
 
         int baseblock = (int)(ui->romEdit1->rom.startaddr / 0x20000);
+        //int derp = romsizein128KBlocks+baseblock;
+
+        // When doing erase, let's show a undefined value, loading progress bar:
+
+        /* if minimum and maximum both are set to 0, the bar shows a busy indicator instead of a percentage of steps.
+         * */
+        ui->progressBar->setMinimum(0);
+        ui->progressBar->setMaximum(0);
+
+        //int numblocktoerase = (romsizein128KBlocks == 0) ? 0:romsizein128KBlocks-1;
+
+#ifdef DEBUG
+        fprintf (stderr,"ROM1\n---------");
+        fprintf (stderr,"Erase blocks %d -> %d\n", baseblock, romsizein128KBlocks+baseblock);
+        //fprintf (stderr,"romsizein128K = %d\n", romsizein128KBlocks);
+        //fprintf (stderr,"numblocktoerase = %d\n", numblocktoerase);
+#endif
+        //
+
+        // Let's start the SHITZ~
+
+
+    }
+
+    if (ui->romEdit2->rom.isAlreadyOnCart == false)
+    {
+        // Then Erase this Section of ROM
+        // Check size of ROM, erase that many Blocks
+        int romsizein128KBlocks; // 128 KB = 0x02:0000 bytes
+
+        romsizein128KBlocks = (int)( (ui->romEdit2->rom.romsizeinbytes-1) / 0x20000);
+        //if ( (ui->romEdit1->rom.romsizeinbytes % 0x20000 > 0) && romsizein128KBlocks > 0)
+          //  romsizein128KBlocks += 1;    //
+
+        // Now that we know the number of blocks, we need to add the base Block number
+
+        int baseblock = (int)(ui->romEdit2->rom.startaddr / 0x20000);
 
 
 
@@ -376,12 +424,88 @@ void MainWindow::on_programRomButton_clicked()
         ui->progressBar->setMinimum(0);
         ui->progressBar->setMaximum(0);
 
-        int numblocktoerase = (romsizein128KBlocks == 0) ? 0:romsizein128KBlocks-1;
+        //int numblocktoerase = (romsizein128KBlocks == 0) ? 0:romsizein128KBlocks-1;
 
 #ifdef DEBUG
-        fprintf (stderr,"baseblock = %d\n", baseblock);
-        fprintf (stderr,"romsizein128K = %d\n", romsizein128KBlocks);
-        fprintf (stderr,"numblocktoerase = %d\n", numblocktoerase);
+        fprintf (stderr,"ROM2\n---------");
+        //fprintf (stderr,"baseblock = %d\n", baseblock);
+        //fprintf (stderr,"romsizein128K = %d\n", romsizein128KBlocks);
+        fprintf (stderr,"Erase blocks %d -> %d\n", baseblock, romsizein128KBlocks+baseblock);
+        //fprintf (stderr,"numblocktoerase = %d\n", numblocktoerase);
+#endif
+
+
+
+    }
+
+    if (ui->romEdit3->rom.isAlreadyOnCart == false)
+    {
+        // Then Erase this Section of ROM
+        // Check size of ROM, erase that many Blocks
+        int romsizein128KBlocks; // 128 KB = 0x02:0000 bytes
+
+        romsizein128KBlocks = (int)( (ui->romEdit3->rom.romsizeinbytes-1) / 0x20000);
+        //if ( (ui->romEdit1->rom.romsizeinbytes % 0x20000 > 0) && romsizein128KBlocks > 0)
+          //  romsizein128KBlocks += 1;    //
+
+        // Now that we know the number of blocks, we need to add the base Block number
+
+        int baseblock = (int)(ui->romEdit3->rom.startaddr / 0x20000);
+
+
+
+        // When doing erase, let's show a undefined value, loading progress bar:
+
+        /* if minimum and maximum both are set to 0, the bar shows a busy indicator instead of a percentage of steps.
+         * */
+        ui->progressBar->setMinimum(0);
+        ui->progressBar->setMaximum(0);
+
+        //int numblocktoerase = (romsizein128KBlocks == 0) ? 0:romsizein128KBlocks-1;
+
+#ifdef DEBUG
+        fprintf (stderr,"ROM3\n---------");
+       // fprintf (stderr,"baseblock = %d\n", baseblock);
+        //fprintf (stderr,"romsizein128K = %d\n", romsizein128KBlocks);
+        fprintf (stderr,"Erase blocks %d -> %d\n", baseblock, romsizein128KBlocks+baseblock);
+        //fprintf (stderr,"numblocktoerase = %d\n", numblocktoerase);
+#endif
+
+
+
+    }
+
+    if (ui->romEdit4->rom.isAlreadyOnCart == false)
+    {
+        // Then Erase this Section of ROM
+        // Check size of ROM, erase that many Blocks
+        int romsizein128KBlocks; // 128 KB = 0x02:0000 bytes
+
+        romsizein128KBlocks = (int)( (ui->romEdit4->rom.romsizeinbytes-1) / 0x20000);
+        //if ( (ui->romEdit1->rom.romsizeinbytes % 0x20000 > 0) && romsizein128KBlocks > 0)
+          //  romsizein128KBlocks += 1;    //
+
+        // Now that we know the number of blocks, we need to add the base Block number
+
+        int baseblock = (int)(ui->romEdit4->rom.startaddr / 0x20000);
+
+
+
+        // When doing erase, let's show a undefined value, loading progress bar:
+
+        /* if minimum and maximum both are set to 0, the bar shows a busy indicator instead of a percentage of steps.
+         * */
+        ui->progressBar->setMinimum(0);
+        ui->progressBar->setMaximum(0);
+
+        //int numblocktoerase = (romsizein128KBlocks == 0) ? 0:romsizein128KBlocks-1;
+
+#ifdef DEBUG
+        fprintf (stderr,"ROM4\n---------");
+        fprintf (stderr,"Erase blocks %d -> %d\n", baseblock, romsizein128KBlocks+baseblock);
+        //fprintf (stderr,"baseblock = %d\n", baseblock);
+        //fprintf (stderr,"romsizein128K = %d\n", romsizein128KBlocks);
+        //fprintf (stderr,"numblocktoerase = %d\n", numblocktoerase);
 #endif
 
 

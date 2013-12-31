@@ -44,6 +44,7 @@ public:
         finalString="";
         num=1;
         isAlreadyOnCart = true;
+        deformed_header = false;
     }
 
     ~ROM_t()
@@ -94,48 +95,65 @@ public:
         data = file->map(offset, file->size()-offset);
         hirom = isHirom(data);
         // stored in hirom
+        int romoffset=0;
         if (hirom)
-            offset = 0x8000;
+            romoffset = 0x8000;
         else
-            offset = 0;
+            romoffset = 0;
 
 
 
         for (uchar i=0; i < 21; i++)
         {
-            RomTitle[i] = data[0x7fc0+offset+i];
+            RomTitle[i] = data[0x7fc0+romoffset+i];
         }
 
         // ROM Title All set
 
-        CartTypeByte = data[0x7fd6+offset];
+        CartTypeByte = data[0x7fd6+romoffset];
 
         // Get ROM Size
-        RomSizeByte = data[0x7fd7+offset];
+        RomSizeByte = data[0x7fd7+romoffset];
 
 
         // Get SRAM Size
-        SramSizeByte = data[0x7fd8+offset];
+        SramSizeByte = data[0x7fd8+romoffset];
         // Headered
 
         if (RomSizeByte > 14 || SramSizeByte > 14 || RomSizeByte == 0)
         {
-            QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Something's Wrong. Did you load the correct file?"));
-            return -1;
+            //QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Something's Wrong. Did you load the correct file?"));
+            if (QMessageBox::warning(NULL, QObject::tr("Error"), QObject::tr("ROM Header is deformed. Load anyways?"), QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes )
+            {
+                deformed_header = true;
+            }
+
+            else return -1;
         }
 
         // Check for Correlation between RomSizeByte and actual RomFileSize
         // map RomSizeByte to actual number of bytes
-        romsizeinbytes = 2048<<(RomSizeByte-1);
-        qint64 romfilesize = file->size();
-        if (headered)
-            romfilesize -= 0x200;
-        if (romsizeinbytes != romfilesize)
+
+        if (deformed_header)
         {
-            if (QMessageBox::question(NULL, QObject::tr("Hm..."), QObject::tr("This file is not the same size as the ROM header says it should be\n\nLoad it anyways?")) == QMessageBox::No)
+            /*qint64 romfilesize = file->size();
+            if (headered)
+                romfilesize -= 0x200;*/
+        }
+        else
+        {
+            romsizeinbytes = 2048<<(RomSizeByte-1);
+            qint64 romfilesize = file->size();
+            if (headered)
+                romfilesize -= 0x200;
+            if (romsizeinbytes != romfilesize)
             {
-                return -1;
+                if (QMessageBox::question(NULL, QObject::tr("Hm..."), QObject::tr("This file is not the same size as the ROM header says it should be\n\nLoad it anyways?")) == QMessageBox::No)
+                {
+                    return -1;
+                }
             }
+
         }
 
         isAlreadyOnCart = false;
@@ -306,6 +324,7 @@ public:
         return 0;
     }
 
+    bool deformed_header;
     qint64 romsizeinbytes;
     bool isAlreadyOnCart;
     bool hirom;

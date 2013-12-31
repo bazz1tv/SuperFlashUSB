@@ -4,7 +4,8 @@
 void EraseThread::specialStart(int blocknum_start, int blocknum_end)
 {
 
-
+    this->blocknum_start = blocknum_start;
+    this->blocknum_end = blocknum_end;
 
 
 }
