@@ -1,4 +1,7 @@
 #include "utility.h"
+#include "rom_t.h"
+
+qint64 totalRomSizeInBytes=0;
 
 QMap<int,QString> CartTypeMap;
 
@@ -23,72 +26,7 @@ QString RomRamSizeByteLUT[] =
     "64 Mb"     // 14
 };
 
-void WriteMultiRomEntry(ROM_t *rom, QString &myBootLoader)
-{
-    int n, uses_DSP;
-    unsigned char name[0x1c], flags1, flags2;
-    static int slot = 0;
 
-    // SKIP SDP STUFF FOR NOW DSP
-    /*uses_DSP = snes_header.rom_type == 3 || snes_header.rom_type == 5 ||
-               snes_header.rom_type == 0xf6;*/
-
-    /*fseek (destfile, 0x4000 + (file_no - 1) * 0x20, SEEK_SET);
-    fputc (0xff, destfile);                       // 0x0 = 0xff*/
-
-    //memcpy (name, rominfo->name, 0x1c);
-    int i=0x4000 + (rom->num-1) * 0x20;
-    int x=0;
-
-    myBootLoader[i++] = 0xff;
-    for (x=0; x < 21; x++)
-    {
-        myBootLoader[i++] = rom->RomTitle[x];
-    }
-    for (x; x <= 0x1c; x++)
-    {
-        myBootLoader[i++] = ' ';
-    }
-
-    //fwrite (name, 1, 0x1c, destfile);             // 0x1 - 0x1c = name
-
-    if (rom->sramsizeinbytes)
-      {
-        if (rom->sramsizeinbytes == 2 * 1024)
-          flags2 = 0x00;
-        else if (rom->sramsizeinbytes == 8 * 1024)
-          flags2 = 0x10;
-        else if (rom->sramsizeinbytes == 32 * 1024)
-          flags2 = 0x20;
-        else // if (snes_sramsize == 128 * 1024)  // Default to 1024 kbit SRAM
-          flags2 = 0x30;
-      }
-    else
-      flags2 = 0x40;
-
-    if (rom->romsizeinbytes > 0x400000)            // Enable Extended Map for >32 Mbit ROMs
-      flags2 |= 0x80;
-
-    flags1 = rom->hirom ? 0x10 : 0x00;
-
-    /*if (!rom->hirom && uses_DSP)                  // Set LoROM DSP flag if necessary
-      flags1 |= 0x01;*/
-
-    if (rom->startaddr == 0)
-      flags1 |= 0x00;
-    else if (rom->startaddr == 0x200000)
-      flags1 |= 0x40;
-    else if (rom->startaddr == 0x400000)
-      flags1 |= 0x20;
-    else if (rom->startaddr == 0x600000)
-      flags1 |= 0x60;
-
-    //slot += (size + 16 * MBIT - 1) & ~(16 * MBIT - 1);
-
-    //fputc (flags1, destfile);                     // 0x1d = mapping flags
-    //fputc (flags2, destfile);                     // 0x1e = SRAM flags
-    //fputc (size / 0x8000, destfile);              // 0x1f = ROM size (not used by loader)
-}
 
 
 int AllASCII(unsigned char *b, int size)

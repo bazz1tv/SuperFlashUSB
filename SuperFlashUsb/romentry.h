@@ -2,6 +2,7 @@
 #define ROMENTRY_H
 
 #include "utility.h"
+#include "rom_t.h"
 #include <QtWidgets>
 
 class RomEntry : public QTextEdit

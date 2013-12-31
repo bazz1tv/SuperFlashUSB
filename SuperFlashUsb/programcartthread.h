@@ -2,6 +2,7 @@
 #define PROGRAMCARTTHREAD_H
 
 #include "utility.h"
+#include "rom_t.h"
 
 #include <QThread>
 
@@ -35,6 +36,7 @@ public slots:
 
 signals:
     void setProgress(int x);
+    void setProgress(int min, int max,int val);
     void message(int msgtype, QString title, QString msg);
 };
 
