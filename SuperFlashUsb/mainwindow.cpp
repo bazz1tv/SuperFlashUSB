@@ -130,6 +130,7 @@ MainWindow::MainWindow(QWidget *parent) :
         connect (gpThread, SIGNAL(message(int,QString,QString)), this, SLOT(message(int,QString,QString)));
         connect (gpThread, SIGNAL(setEnabledButtons(bool)), this, SLOT(setEnabledButtons(bool)));
         connect (this, SIGNAL(message_complete()), gpThread, SLOT(message_complete()));
+        connect (gpThread, SIGNAL(queryRomHeaders()), this, SLOT(queryRomHeaders()));
 
          //connect()
 
@@ -221,15 +222,33 @@ void MainWindow::connect_USB()
     {
 
         timeToUpdateRomHeaders = false;
-        //QueryUSBRomHeaders();
+        //
         gpThread->specialStart(CONNECT);
+        //QueryUSBRomHeaders();
     }
 
 }
 
-void MainWindow::QueryUSBRomHeaders()
+void MainWindow::queryGameEntries()
 {
-    ui->romEdit1->QueryUSBRomHeader();
+
+}
+
+void MainWindow::queryRomHeaders()
+{
+    if (ui->romEdit1->QueryUSBRomHeader() == -2)
+    {
+        ui->romEdit2->rom.deformed_header = true;
+        ui->romEdit2->rom.isAlreadyOnCart = false;
+
+        ui->romEdit3->rom.deformed_header = true;
+        ui->romEdit3->rom.isAlreadyOnCart = false;
+
+        ui->romEdit4->rom.deformed_header = true;
+        ui->romEdit4->rom.isAlreadyOnCart = false;
+
+        return;
+    }
     ui->romEdit2->QueryUSBRomHeader();
     ui->romEdit3->QueryUSBRomHeader();
     ui->romEdit4->QueryUSBRomHeader();
@@ -241,6 +260,7 @@ void MainWindow::setEnabledButtons (bool state)
     ui->programRomButton->setEnabled(state);
     ui->pushButton_Cart_Read->setEnabled(state);
     ui->pushButton_USBConnect->setEnabled(state);
+    ui->pushButton_USBDisconnect->setEnabled(state);
     ui->writeSramButton->setEnabled(state);
 
     ui->cancelButton->setEnabled(!state);
@@ -260,7 +280,7 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
         return;
     }
 
-    setEnabled(false);
+    setEnabledButtons(false);
 
     int accepted=0;
 
@@ -310,7 +330,7 @@ void MainWindow::on_pushButton_USBConnect_clicked()
         //eventTimer->start();
         if (OpenUSBDevice() < 0)
         {
-            statusBar->showMessage("USB Device Disconnected");
+            statusBar->showMessage("USB Device Not Found");
             QMessageBox::warning(this, "USB","Device not found!");
         }
         else
@@ -322,6 +342,7 @@ void MainWindow::on_pushButton_USBConnect_clicked()
     else
     {
         QMessageBox::information(this, "USB","Already Connected");
+        statusBar->showMessage("USB Device Already Connected");
     }
 }
 
@@ -411,3 +432,18 @@ void MainWindow::on_programRomButton_clicked()
 
 }
 
+
+void MainWindow::on_pushButton_USBDisconnect_clicked()
+{
+    if (::USBconnected)
+    {
+        ::CloseUSBDevice();
+        QMessageBox::information(this,"USB Disconnect", "Device has been Disconnected");
+        statusBar->showMessage("USB Device Disconnected");
+    }
+    else
+    {
+        QMessageBox::information(this, "USB Disconnect", "Already Disconnected");
+        statusBar->showMessage("USB Device Already Disconnected");
+    }
+}

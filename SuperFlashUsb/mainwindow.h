@@ -31,7 +31,8 @@ public slots:
     void setProgress(int min, int max, int val);
     void message(int msgtype, QString title, QString msg);
     void setEnabledButtons (bool state);
-
+    void queryRomHeaders();
+    void queryGameEntries();
 
 private slots:
     void on_actionQuit_triggered();
@@ -42,8 +43,12 @@ private slots:
     void on_readSramButton_clicked();
     void on_programRomButton_clicked();
 
+    //void on_pushButton_clicked();
+
+    void on_pushButton_USBDisconnect_clicked();
+
 public:
-    void QueryUSBRomHeaders();
+
 
     Ui::MainWindow *ui;
 

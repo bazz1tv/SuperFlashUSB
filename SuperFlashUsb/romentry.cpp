@@ -9,10 +9,14 @@ RomEntry::RomEntry(QWidget *parent) :
     setHtml(" ");
 }
 
-void RomEntry::QueryUSBRomHeader()
+int RomEntry::QueryUSBRomHeader()
 {
-    rom.QueryUSBRomHeader();
+    int r;
+    if ( (r=rom.QueryUSBRomHeader()) < 0)
+        return r;
     setHtml(rom.finalString);
+
+    return 0;
 }
 
 
@@ -74,15 +78,30 @@ void RomEntry::dragMoveEvent(QDragMoveEvent *event)
 void RomEntry::contextMenuEvent(QContextMenuEvent * event)
 {
     QPoint globalPos = event->globalPos();
-
+    QString text;
     QMenu myMenu;
-    myMenu.addAction("Load Game");
+
+    if (rom.isAlreadyOnCart)
+    {
+        text = "Overwrite Game";
+
+    }
+    else
+    {
+        text = "Load Game";
+    }
+    myMenu.addAction(text);
 
     QAction* selectedItem = myMenu.exec(globalPos);
     if (selectedItem)
     {
         rom.filename = QFileDialog::getOpenFileName(this, QObject::tr("Open File"), QString(),
                                                      QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);; Any (*.*)"));
+        if (rom.filename == "")
+        {
+            return;
+        }
+
         rom.DoTheDo();
         rom.setString();
         setHtml(rom.finalString);

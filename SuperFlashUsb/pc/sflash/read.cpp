@@ -148,6 +148,73 @@ void ReadDataToBuffer(QByteArray *data2)
         }
     }
 
+    /*for (; leftover_bytes > 0; leftover_bytes--)
+    {
+
+    }*/
+
+    if (leftover_bytes > 0)
+    {
+        // Get a 32K section from USB
+        //SendPacket(OUT, READ, FETCH, (uint16_t)DERP,NULL,0, 50);
+        restart2:
+        r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,READ, FETCH, (uint16_t) DERP, &data[0], 1, 500);
+        if (r ==1)
+        {
+            //cout << "Fetch OUT success\n";
+        }
+        else
+        {
+            cout << "Fetch OUT fail\n";
+            cout << "Restart\n";
+            goto restart2;
+        }
+
+        for (;;)
+        {
+            //usleep(1000);
+            r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, FETCH, (uint16_t) leftover_bytes, &data[0], 1, 500);
+            if (r == 1)
+            {
+                //cout << "Fetch IN success\n";
+                if (data[0] == 0)
+                    break;
+                else cout << "herp! : " << (int)data[0] << "\n";
+            }
+            else
+            {
+                cout << "Fetch IN fail : " << r <<endl;
+                //cout << "Restart\n";
+                //goto dero;
+            }
+            //r = SendPacket(IN, READ, FETCH, (uint16_t)DERP,&data[0],1, 50);
+        }
+        redo2:
+        //libusb_clear_halt(dev_handle,0);
+        //usleep(10000);
+        r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, DATA, (uint16_t) leftover_bytes, &data[0], (uint16_t)leftover_bytes, 500);
+        //usleep(10000);
+        if(r == leftover_bytes ) //we wrote the 4 bytes successfully
+        {
+         // Write it to file
+            //file->write((const char*)&data[0], DERP);
+            data2->append((const char *)data, leftover_bytes);
+            //progressBar->setValue(++i*DERP);
+         //fwrite(&data[0], 1, DERP, fh);
+          //cout<<"Read in 64 Bytes"<<endl;
+         //loadBar(i++*DERP, (DERP*storechunks)+leftover_bytes, ((DERP*storechunks)+leftover_bytes)/2, 50);
+         //usleep(1000000);
+        }
+        else
+        {
+            //CLEAR_FEATURE(ENDPOINT_STALL);
+            cout << "Read: Error: " << r << endl;
+            printf( "%d\n", errno );
+            //ResetAddress();
+            goto redo2;
+        }
+    }
+
 
 
     SetLEDWithByte(0);

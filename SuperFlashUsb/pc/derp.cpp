@@ -13,6 +13,7 @@ unsigned long block_address_start, block_address_end;
 byte rom_or_sram=ROM;
 
 unsigned char data[64*2];
+bool zero_found=false;
 FILE * fh;
 int input, MajorCommand,MinorCommand;
 unsigned char l,h,b, aal,aah,aab;

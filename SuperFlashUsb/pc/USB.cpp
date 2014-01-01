@@ -183,6 +183,8 @@ int OpenUSBDevice()
 #endif
 		exit(1);
 	}*/
+
+    USBconnected=true;
     return 0;
 }
 
@@ -207,6 +209,7 @@ int CloseUSBDevice()
     
 	libusb_close(dev_handle); //close the device we opened
     dev_handle=NULL;
+    ::USBconnected = false;
     return 0;
 }
 

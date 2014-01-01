@@ -22,6 +22,7 @@ extern int blocknum_start, blocknum_end;
 extern unsigned long block_address_start, block_address_end;
 extern unsigned char l,h,b, aal,aah,aab;
 extern int numbytes,startaddr;
+extern bool zero_found;
 extern unsigned long chunks, leftover_bytes;
 extern int argc;
 extern char **argv;

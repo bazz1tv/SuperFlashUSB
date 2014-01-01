@@ -39,7 +39,7 @@ public:
     bool isTypical();
 
 
-    void QueryUSBRomHeader();
+    int QueryUSBRomHeader();
 
 
     int DoTheDo();

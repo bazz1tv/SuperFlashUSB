@@ -125,7 +125,12 @@ void GeneralPurposeThread::run ()
         if (!success)
         {
              sendmessage(QMessageBox::Critical, "OG NO!", "You have encountered one or more critical errors. Is the Cartridge plugged in??\n\n");
+             qApp->quit();
         }
+
+
+        // OH... WE MADE IT THIS FAR!!!??? OHH SNAPPP
+        emit queryRomHeaders();
     }
 }
 

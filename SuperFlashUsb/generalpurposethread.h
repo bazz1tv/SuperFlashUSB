@@ -4,6 +4,7 @@
 #include <QThread>
 //#include "mainwindow.h"
 #include <QtWidgets>
+//#include "romentry.h"
 
 
 //class MainWindow;
@@ -23,6 +24,8 @@ public:
     void specialStart(int operation);
     virtual void run();
 
+    //RomEntry *re1,*re2,*re3,*re4;
+    //ROM_t *rom1,*rom2,*rom3,*rom4;
     int operation;
     bool end;
     bool msg_complete;
@@ -35,6 +38,7 @@ public slots:
     void message_complete(void);
 
 signals:
+    void queryRomHeaders();
     void setProgress(int x);
     void setProgress(int min, int max, int val);
     void message(int msgtype, QString title, QString msg);

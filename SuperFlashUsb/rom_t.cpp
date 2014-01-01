@@ -173,7 +173,13 @@ QString ROM_t::romHeaderToString()
     {
         str = QString(RomTitle)+
                 QString("<p>Cart Type: ")+CartTypeStr+
-                QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[RomSizeByte])+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>RAM</b>: ")+QString(RomRamSizeByteLUT[SramSizeByte]);
+                QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+
+                QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[RomSizeByte])+
+                QString(" ($%1 bytes)").arg(1 << (RomSizeByte + 10),0,16)+
+                QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+
+                QString("<b>RAM</b>: ")+
+                QString(RomRamSizeByteLUT[SramSizeByte])+
+                QString(" ($%1 bytes)").arg(1 << (SramSizeByte + 10),0,16);
 
         if (isHeadered())
         {
@@ -224,19 +230,24 @@ bool ROM_t::isTypical()
     else return false;
 }
 
-void ROM_t::QueryUSBRomHeader()
+int ROM_t::QueryUSBRomHeader()
 {
     // GET THE ROM HEADER INFO
 
-    int sflash_rom_entry_startaddr = (0x7f8000+0x4000+(0x20*(num-1))) + 0x1d;
-    int flags1;
+    int sflash_rom_entry_startaddr = (0x7f8000+0x4000+(0x20*(num-1)));
+    //uchar *flags1;
+
+    fprintf (stderr, "%lx\n", sflash_rom_entry_startaddr);
 
     // WE SHOULD FIRST VALIDATE THE SECTION AT THE 0x7f8000-0x7fffff
 
     // FOR SAKE OF SPEED - LET'S CHECK SOLELY THE MENU SECTION
     // 0x8a0, 0x3e0 bytes
 
+
+
     // THUS, READ 0X7F8000+0X8A0, 0X3E0 BYTES
+
 
     // COMPARE TO BOOTLOADER[0X8A0+]
 
@@ -244,8 +255,47 @@ void ROM_t::QueryUSBRomHeader()
     // BEFORE WE BEGIN COMPARING VALUES AND SUCH
 
     ::startaddr = sflash_rom_entry_startaddr;
-    numbytes = 0x1;
+    aal = ::startaddr&0xff;
+    aah = (::startaddr&0xff00)>>8;
+    aab = (::startaddr&0xff0000)>>16;
+    numbytes = 0x20;
+    QByteArray entry;
 
+    ::InitRead();
+    ::ReadDataToBuffer(&entry);
+
+    uchar *derp = (uchar*)entry.data();
+
+    uchar flags1 = derp[0x1d];
+
+    for (int i=0; i < 0x20; i++)
+    {
+        fprintf (stderr, "\\x%2x",derp[i]);
+    }
+
+
+    if (num == 1 && derp[0] != 0xff)
+    {
+        QMessageBox::warning(NULL, "UH OH", "Super Flash Bootloader Game Entry Table appears invalid. \nLet's Start from Scratch!");
+        deformed_header = true;
+        isAlreadyOnCart = false;
+        return -2;
+    }
+
+    if (derp[0] == 0x0 || derp[0] != 0xFF || (derp[0] == 0xFF && ::zero_found) )
+    {
+
+        deformed_header = true;
+        isAlreadyOnCart = false;
+
+        if (derp[0] == 0x0)
+            ::zero_found = true;
+        return -1;
+    }
+
+
+
+    //if ()
     // GET THAT INFO INTO A VARIABLE
     // flags1 = blalalal
     // THEN MODIFY THE BELOW CODE
@@ -327,6 +377,8 @@ void ROM_t::QueryUSBRomHeader()
     }
 
     isAlreadyOnCart = true;
+
+    return 0;
 }
 
 int ROM_t::DoTheDo()
