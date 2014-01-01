@@ -2,6 +2,6 @@
 #include "../main.h"
 #include "util.h"
 
-void GetLockBits();
-void GetChipID();
-void ReadIDCodes();
+uchar *GetLockBits();
+uchar *GetChipID();
+uchar *ReadIDCodes();

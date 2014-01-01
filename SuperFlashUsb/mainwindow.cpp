@@ -122,9 +122,21 @@ MainWindow::MainWindow(QWidget *parent) :
         connect (programCartThread, SIGNAL(message(int,QString,QString)), this, SLOT(message(int,QString,QString)));
         connect (programCartThread, SIGNAL(setEnabledButtons(bool)), this, SLOT(setEnabledButtons(bool)));
 
+    gpThread = new GeneralPurposeThread;
+        connect (this, SIGNAL(cancelgpThread(void)), gpThread, SLOT(canceled()));
+        connect (this, SIGNAL(cancelAll()), gpThread, SLOT(canceled()));
+        connect (gpThread, SIGNAL(setProgress(int,int,int)), this, SLOT(setProgress(int,int,int)));
+        connect (gpThread, SIGNAL(setProgress(int)), this, SLOT(setProgress(int)));
+        connect (gpThread, SIGNAL(message(int,QString,QString)), this, SLOT(message(int,QString,QString)));
+        connect (gpThread, SIGNAL(setEnabledButtons(bool)), this, SLOT(setEnabledButtons(bool)));
+        connect (this, SIGNAL(message_complete()), gpThread, SLOT(message_complete()));
+
+         //connect()
+
     connect (ui->cancelButton, SIGNAL (clicked ()), readRomThread, SLOT (canceled ()));
     connect (ui->cancelButton, SIGNAL(clicked()), writeSramThread, SLOT(canceled()));
     connect (ui->cancelButton, SIGNAL(clicked()), programCartThread, SLOT(canceled()));
+    connect (ui->cancelButton, SIGNAL(clicked()), gpThread, SLOT(canceled()));
 
     eventTimer = new QTimer(this);
     connect(eventTimer,SIGNAL(timeout()),this,SLOT(connect_USB()));
@@ -151,6 +163,8 @@ void MainWindow::message(int msgtype, QString title, QString msg)
         QMessageBox::critical(this, title, msg);
         break;
     }
+
+    emit message_complete();
 }
 
 MainWindow::~MainWindow()
@@ -207,7 +221,8 @@ void MainWindow::connect_USB()
     {
 
         timeToUpdateRomHeaders = false;
-        QueryUSBRomHeaders();
+        //QueryUSBRomHeaders();
+        gpThread->specialStart(CONNECT);
     }
 
 }

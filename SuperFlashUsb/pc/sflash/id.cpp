@@ -1,19 +1,21 @@
 #include "id.h"
 
 
-void ReadIDCodes()
+uchar* ReadIDCodes()
 {
-    SetLEDWithByte(1);
-    GetLockBits();
+    //SetLEDWithByte(1);
+    //GetLockBits();
     //SetLEDWithByte(0);
     //SetLEDWithByte(1);
-    GetChipID();
-    SetLEDWithByte(0);
+    return GetChipID();
+
 }
 
 
-void GetLockBits()
+uchar *GetLockBits()
 {
+    SetLEDWithByte(1);
+
     redo:
 	r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,
 		 READ_IDENTIFIER_CODES, LOCK_BITS, LOCK_BITS, &data[0], 64, 1000);
@@ -22,14 +24,8 @@ void GetLockBits()
      {
         byte c;
  		cout<<"Writing control transfer Successful!"<<endl;
-             
-         for (c=0; c < 64; c++)
-         {
-             printf ("Block ");
-             if (c < 10)
-                 printf(" ");
-             printf ("%d: %s\n",c, ( (data[c] & 1) == 1) ? "Locked":"Unlocked");
-         }
+         SetLEDWithByte(0);
+         return &data[0];
          //GetLockBits();
      }
  	else
@@ -39,11 +35,12 @@ void GetLockBits()
         goto redo;
     }
     
-    cout << endl;
+    //cout << endl;
 }
 
-void GetChipID()
+uchar* GetChipID()
 {
+    SetLEDWithByte(1);
 	//unsigned char *data = new unsigned char[16]; //data to write
 	//unsigned char *receiveddata = new unsigned char[16];
 	//data[0]=0x80;data[1]=0x10;data[2]=0x00;data[3]=0x2;data[4]=0x0;data[5]=0x8;data[6]=0x0; //some dummy values
@@ -52,15 +49,17 @@ void GetChipID()
     redo:
 	r = libusb_control_transfer(dev_handle, 
             LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,
-		 READ_IDENTIFIER_CODES, ID, ID /*UNimportant*/, &data[0], 2, 500); 
+         READ_IDENTIFIER_CODES, ID, ID /*UNimportant*/, &data[0], 2, 500);
 	if(r == 2 ) //we wrote the 4 bytes successfully
     {
 		//cout<<"Writing control transfer Successful!"<<endl;
-        cout <<"Chip ID: ";
+        /*cout <<"Chip ID: ";
         printf("0x%x : ",data[0]);
         (data[0] == 0x89) ? printf("Correct\n") : printf("Incorrect\n");
         printf("Device Code: 0x%x : ",data[1]);
-        (data[1] == 0x17) ? printf("Correct\n") : printf("Incorrect\n");
+        (data[1] == 0x17) ? printf("Correct\n") : printf("Incorrect\n");*/
+        SetLEDWithByte(0);
+        return &data[0];
     }
 	else
     {
@@ -68,6 +67,7 @@ void GetChipID()
         goto redo;	
     }
     
-    cout << endl;
+    //cout << endl;
+    // NEVER GETS HERE
 }
 

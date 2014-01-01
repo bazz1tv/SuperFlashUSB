@@ -8,6 +8,7 @@
 #include "readromthread.h"
 #include "writesramthread.h"
 #include "programcartthread.h"
+#include "generalpurposethread.h"
 
 extern QString bootloader;
 
@@ -51,8 +52,10 @@ public:
     ReadRomThread *readRomThread;
     WriteSramThread *writeSramThread;
     ProgramCartThread *programCartThread;
+    GeneralPurposeThread *gpThread;
     bool timeToUpdateRomHeaders;
     bool timeToClearAll;
+    //QEventLoop ev;
 
 
 
@@ -61,6 +64,7 @@ signals:
     void cancelReadRomThread(void);
     void cancelWriteSramThread(void);
     void cancelAll(void);
+    void message_complete(void);
 };
 
 
