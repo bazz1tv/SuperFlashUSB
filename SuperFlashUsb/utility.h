@@ -9,7 +9,7 @@
 
 extern QString RomRamSizeByteLUT[];
 extern QMap<int,QString> CartTypeMap;
-extern qint64 totalRomSizeInBytes;
+
 
 
 

@@ -9,17 +9,15 @@ void WriteMultiRomEntry(ROM_t *rom, QString &myBootLoader)
     //static int slot = 0;
 
     // SKIP SDP STUFF FOR NOW DSP
-    /*uses_DSP = snes_header.rom_type == 3 || snes_header.rom_type == 5 ||
-               snes_header.rom_type == 0xf6;*/
+    uses_DSP = rom->CartTypeByte == 3 || rom->CartTypeByte == 5 || rom->CartTypeByte == 0xf6;
 
-    /*fseek (destfile, 0x4000 + (file_no - 1) * 0x20, SEEK_SET);
-    fputc (0xff, destfile);                       // 0x0 = 0xff*/
-
-    //memcpy (name, rominfo->name, 0x1c);
-    int i=0x4000 + (rom->num-1) * 0x20;
+    int i=0x4000 + ((rom->num-1) * 0x20);
     int x=0;
 
+    // MARK THE ROM AS 'THERE'
     myBootLoader[i++] = 0xff;
+
+    // ROM TITLE
     for (x=0; x < 21; x++)
     {
         myBootLoader[i++] = rom->RomTitle[x];
@@ -28,8 +26,6 @@ void WriteMultiRomEntry(ROM_t *rom, QString &myBootLoader)
     {
         myBootLoader[i++] = ' ';
     }
-
-    //fwrite (name, 1, 0x1c, destfile);             // 0x1 - 0x1c = name
 
     if (rom->sramsizeinbytes)
       {
@@ -50,8 +46,8 @@ void WriteMultiRomEntry(ROM_t *rom, QString &myBootLoader)
 
     flags1 = rom->hirom ? 0x10 : 0x00;
 
-    /*if (!rom->hirom && uses_DSP)                  // Set LoROM DSP flag if necessary
-      flags1 |= 0x01;*/
+    if (!rom->hirom && uses_DSP)                  // Set LoROM DSP flag if necessary
+      flags1 |= 0x01;
 
     if (rom->startaddr == 0)
       flags1 |= 0x00;
@@ -62,11 +58,8 @@ void WriteMultiRomEntry(ROM_t *rom, QString &myBootLoader)
     else if (rom->startaddr == 0x600000)
       flags1 |= 0x60;
 
-    //slot += (size + 16 * MBIT - 1) & ~(16 * MBIT - 1);
-
-    //fputc (flags1, destfile);                     // 0x1d = mapping flags
-    //fputc (flags2, destfile);                     // 0x1e = SRAM flags
-    //fputc (size / 0x8000, destfile);              // 0x1f = ROM size (not used by loader)
+    myBootLoader[i++] = flags1; // 0x1d
+    myBootLoader[i++] = flags2; // 0x1e
 }
 
 void ProgramCartThread::run()
@@ -256,6 +249,9 @@ void ProgramCartThread::run()
         //if (i == 0x)
         myBootLoader[i] = bootloader[i];
     }*/
+
+
+    emit setEnabledButtons(true);
 }
 
 void ProgramCartThread::specialStart(ROM_t *rom1, ROM_t *rom2, ROM_t *rom3, ROM_t *rom4)

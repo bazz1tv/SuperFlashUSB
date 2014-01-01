@@ -16,6 +16,8 @@ void WriteSramThread::run ()
   end = false;
 
   this->Write();
+
+  emit setEnabledButtons(true);
 }
 
 void WriteSramThread::Write()
@@ -72,6 +74,7 @@ void WriteSramThread::WriteDataFromFile()
             {
                 SetLEDWithByte(0);
                 emit message(QMessageBox::Critical, "SRAM Write Canceled", "Canceled!!");
+                emit setEnabledButtons(true);
                     return;
             }
             // Get a 32K section from USB

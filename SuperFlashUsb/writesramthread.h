@@ -38,6 +38,7 @@ public slots:
     void canceled(void);
 
 signals:
+    void setEnabledButtons(bool x);
     void setProgress(int x);
     void message(int msgtype, QString title, QString msg);
 };

@@ -35,6 +35,7 @@ public slots:
 signals:
     void setProgress(int x);
     void message(int msgtype, QString title, QString msg);
+    void setEnabledButtons(bool x);
 };
 
 #endif // READROMTHREAD_H

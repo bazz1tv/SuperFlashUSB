@@ -25,6 +25,8 @@ void ReadRomThread::run ()
   this->Read();
 
   file.close();
+
+  emit setEnabledButtons(true);
 }
 
 void
@@ -80,6 +82,7 @@ void ReadRomThread::ReadDataToFile()
                 file.close();
                 SetLEDWithByte(0);
                 emit message(QMessageBox::Critical, "Read", "Canceled!!");
+                emit setEnabledButtons(true);
                     return;
             }
             // Get a 32K section from USB

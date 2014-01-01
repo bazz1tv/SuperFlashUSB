@@ -35,6 +35,7 @@ public slots:
     }
 
 signals:
+    void setEnabledButtons(bool x);
     void setProgress(int x);
     void setProgress(int min, int max,int val);
     void message(int msgtype, QString title, QString msg);

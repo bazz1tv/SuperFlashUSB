@@ -65,11 +65,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->romEdit1->rom.num = 1;
      ui->romEdit1->rom.startaddr = 0;
     ui->romEdit2->rom.num = 2;
-     ui->romEdit2->rom.startaddr = 0x200000;
+     ui->romEdit2->rom.startaddr = 0; //0x200000;
     ui->romEdit3->rom.num = 3;
-     ui->romEdit3->rom.startaddr = 0x400000;
+     ui->romEdit3->rom.startaddr = 0; //0x400000;
     ui->romEdit4->rom.num = 4;
-     ui->romEdit4->rom.startaddr = 0x600000;
+     ui->romEdit4->rom.startaddr = 0; //0x600000;
 
     ui->romEdit1->rom.finalString = "<b>1) </b> &lt;DRAG ROM-FILE HERE&gt;";
     ui->romEdit2->rom.finalString = "<b>2) </b> &lt;DRAG ROM-FILE HERE&gt;";
@@ -106,12 +106,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (this, SIGNAL(cancelAll(void)), readRomThread, SLOT(canceled()));
     connect (readRomThread, SIGNAL(setProgress(int)), this, SLOT(setProgress(int)));
     connect (readRomThread, SIGNAL(message(int,QString,QString)), this, SLOT(message(int,QString,QString)));
-
+    connect (readRomThread, SIGNAL(setEnabledButtons(bool)), this, SLOT(setEnabledButtons(bool)));
     writeSramThread = new WriteSramThread;
         connect (this, SIGNAL(cancelWriteSramThread(void)), writeSramThread, SLOT(canceled()));
         connect (this, SIGNAL(cancelAll(void)), writeSramThread, SLOT(canceled()));
         connect (writeSramThread, SIGNAL(setProgress(int)), this, SLOT(setProgress(int)));
         connect (writeSramThread, SIGNAL(message(int,QString,QString)), this, SLOT(message(int,QString,QString)));
+        connect (writeSramThread, SIGNAL(setEnabledButtons(bool)), this, SLOT(setEnabledButtons(bool)));
 
     programCartThread = new ProgramCartThread;
         connect (this, SIGNAL(cancelProgramCartThread(void)), programCartThread, SLOT(canceled()));
@@ -119,6 +120,7 @@ MainWindow::MainWindow(QWidget *parent) :
         connect (programCartThread, SIGNAL(setProgress(int,int,int)), this, SLOT(setProgress(int,int,int)));
         connect (programCartThread, SIGNAL(setProgress(int)), this, SLOT(setProgress(int)));
         connect (programCartThread, SIGNAL(message(int,QString,QString)), this, SLOT(message(int,QString,QString)));
+        connect (programCartThread, SIGNAL(setEnabledButtons(bool)), this, SLOT(setEnabledButtons(bool)));
 
     connect (ui->cancelButton, SIGNAL (clicked ()), readRomThread, SLOT (canceled ()));
     connect (ui->cancelButton, SIGNAL(clicked()), writeSramThread, SLOT(canceled()));
@@ -128,6 +130,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(eventTimer,SIGNAL(timeout()),this,SLOT(connect_USB()));
 
     eventTimer->start(1000);
+    setEnabledButtons(true);
 }
 
 void MainWindow::message(int msgtype, QString title, QString msg)
@@ -217,6 +220,17 @@ void MainWindow::QueryUSBRomHeaders()
     ui->romEdit4->QueryUSBRomHeader();
 }
 
+void MainWindow::setEnabledButtons (bool state)
+{
+    ui->readSramButton->setEnabled(state);
+    ui->programRomButton->setEnabled(state);
+    ui->pushButton_Cart_Read->setEnabled(state);
+    ui->pushButton_USBConnect->setEnabled(state);
+    ui->writeSramButton->setEnabled(state);
+
+    ui->cancelButton->setEnabled(!state);
+}
+
 void MainWindow::on_actionQuit_triggered()
 {
     qApp->quit();
@@ -230,6 +244,8 @@ void MainWindow::on_pushButton_Cart_Read_clicked()
         QMessageBox::warning(this, "ROM Read", "USB Programmer not connected!");
         return;
     }
+
+    setEnabled(false);
 
     int accepted=0;
 

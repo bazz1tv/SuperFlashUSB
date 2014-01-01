@@ -1,7 +1,7 @@
 #include "utility.h"
 #include "rom_t.h"
 
-qint64 totalRomSizeInBytes=0;
+//qint64 totalRomSizeInBytes=0;
 
 QMap<int,QString> CartTypeMap;
 

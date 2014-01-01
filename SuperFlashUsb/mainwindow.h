@@ -29,6 +29,7 @@ public slots:
     void setProgress(int x);
     void setProgress(int min, int max, int val);
     void message(int msgtype, QString title, QString msg);
+    void setEnabledButtons (bool state);
 
 
 private slots:
