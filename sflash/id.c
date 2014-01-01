@@ -51,7 +51,7 @@ void GetChipID(void)
 		Endpoint_ClearOUT();
         
         // Exit that mode, return to read mode
-		WriteByte(0,0xff);
+		WriteByteNoAddr(0xff);
 	}
     
 }

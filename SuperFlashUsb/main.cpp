@@ -9,5 +9,9 @@ int main(int argc, char *argv[])
     w = new MainWindow;
     w->show();
 
-    return a.exec();
+    int r = a.exec();
+
+    delete w;
+
+    return r;
 }
