@@ -82,13 +82,14 @@ void WriteDataFromFile()
             {
                 cout << "\tWrite: PIPE/Other Error: " << r << endl;
                 printf( "%d\n", errno );
-                //ResetAddress();
+                ResetAddress();
                 goto redo;
             }
             else
             {
     	        cout<<"\tWrite Error: " << r <<endl;
                 printf( "%d\n", errno );
+                ResetAddress();
                 goto redo;
             }
         }

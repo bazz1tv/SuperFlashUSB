@@ -28,7 +28,7 @@ int OpenForReadBin(const char *filename)
 int OpenFiles()
 {
     
-	if ( argc > 1)
+	if ( ::argc > 1)
 	{
     	if (MajorCommand == READ || MajorCommand == READ_SRAM )
     	{
@@ -140,6 +140,8 @@ int GetSelection()
         if (input == 1)
         {
             // ERASE ROM CHIP PROCESSING
+            blocknum_start = 0;
+            blocknum_end = 63;
         }
         else if (input == 2)
         {
