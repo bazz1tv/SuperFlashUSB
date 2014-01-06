@@ -44,7 +44,8 @@ SOURCES += main.cpp\
     sram_t.cpp \
     generalpurposethread.cpp \
     bootloader_file.cpp \
-    bootloaderentry.cpp
+    bootloaderentry.cpp \
+    game.cpp
 
 HEADERS  += mainwindow.h \
     utility.h \
@@ -70,7 +71,8 @@ HEADERS  += mainwindow.h \
     rom_t.h \
     sram_t.h \
     generalpurposethread.h \
-    bootloaderentry.h
+    bootloaderentry.h \
+    game.h
 
 FORMS    += mainwindow.ui \
     readcartdialog.ui

@@ -8,6 +8,16 @@ SramEntry::SramEntry(QWidget *parent) :
     setHtml(" ");
 }
 
+void SramEntry::updateText()
+{
+    setHtml(finalString);
+}
+
+void SramEntry::setString()
+{
+    finalString = sram.filename;
+}
+
 void SramEntry::dragEnterEvent(QDragEnterEvent * event)
 {
     if (event->mimeData()->hasFormat("text/plain"))
@@ -29,9 +39,10 @@ void SramEntry::dropEvent(QDropEvent * event)
 
     if (sram.setup() < 0)
     {
-        sram.finalString = "&lt;EMPTY&gt;";
+        finalString = "&lt;EMPTY&gt;";
     }
-    setHtml(sram.finalString);
+    else setString();
+    setHtml(finalString);
 
     setStyleSheet("background-color: #fff");
     event->acceptProposedAction();
@@ -69,8 +80,12 @@ void SramEntry::contextMenuEvent(QContextMenuEvent * event)
     {
         sram.filename = QFileDialog::getOpenFileName(this, QObject::tr("Open File"), QString(),
                                                      QObject::tr("SRAM Files (*.sav *.srm);; Any (*.*)"));
-        sram.setup();
-        setHtml(sram.finalString);
+        if (sram.setup() < 0)
+        {
+            finalString = "&lt;EMPTY&gt;";
+        }
+        else setString();
+        setHtml(finalString);
     }
     else
     {

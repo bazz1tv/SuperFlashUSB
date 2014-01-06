@@ -12,6 +12,9 @@ class SramEntry : public QTextEdit
 public:
     explicit SramEntry(QWidget *parent = 0);
 
+    void updateText();
+    void setString();
+
 signals:
 
 public slots:
@@ -26,6 +29,7 @@ protected:
 
 public:
     SRAM_t sram;
+    QString finalString;
 
 };
 

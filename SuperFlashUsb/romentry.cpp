@@ -9,6 +9,22 @@ RomEntry::RomEntry(QWidget *parent) :
     setHtml(" ");
 }
 
+void RomEntry::setNum(int n)
+{
+    num = n;
+    game.setNum(n);
+}
+
+void RomEntry::updateText()
+{
+    setHtml(finalString);
+}
+
+void RomEntry::setString()
+{
+    finalString = game.rom.setString();
+}
+
 int RomEntry::QueryUSBRomHeader()
 {
     int r;
@@ -36,20 +52,21 @@ void RomEntry::dragEnterEvent(QDragEnterEvent * event)
 void RomEntry::dropEvent(QDropEvent * event)
 {
     // Little hack to remove the newline at the end + carriage return bullshit
-    QUrl derp(event->mimeData()->text().remove("\x0d\x0a"));
+    QUrl fileurl(event->mimeData()->text().remove("\x0d\x0a"));
 
 
 
-    if (derp.isLocalFile())
+    if (fileurl.isLocalFile())
     {
-        rom.filename = derp.toLocalFile();
 
-        if (rom.load() < 0)
+
+        if (game.load(fileurl.toLocalFile()) < 0)
         {
-            rom.finalString = "<b>"+QString("%1").arg(rom.num)+") </b>&lt;EMPTY&gt;";
+            // THIS SHOULD GET INTEGRATED AND HAPPEN IN LOWER LEVEL
+            finalString = "<b>"+QString("%1").arg(game.rom.num)+") </b>&lt;EMPTY&gt;";
         }
-        else rom.setString();
-        setHtml(rom.finalString);
+        else setString();
+        setHtml(finalString);
 
         setStyleSheet("background-color: #fff");
         event->acceptProposedAction();  // This because otherwise the window holding the files that we dropped maintains focus.
@@ -81,7 +98,7 @@ void RomEntry::contextMenuEvent(QContextMenuEvent * event)
     QString text;
     QMenu myMenu;
 
-    if (rom.isAlreadyOnCart)
+    if (game.rom.isAlreadyOnCart)
     {
         text = "Overwrite Game";
 
@@ -95,21 +112,21 @@ void RomEntry::contextMenuEvent(QContextMenuEvent * event)
     QAction* selectedItem = myMenu.exec(globalPos);
     if (selectedItem)
     {
-        rom.filename = QFileDialog::getOpenFileName(this, QObject::tr("Open File"), QString(),
+        QString filename = QFileDialog::getOpenFileName(this, QObject::tr("Open File"), QString(),
                                                      QObject::tr("ROM Files (*.smc *.sfc *.fig *.bin);; Any (*.*)"));
-        if (rom.filename == "")
+        if (filename == "")
         {
             return;
         }
 
         //rom.DoTheDo();
-        if (rom.load() < 0)
+        if (game.load(filename) < 0)
         {
-            rom.finalString = "<b>"+QString("%1").arg(rom.num)+") </b>&lt;EMPTY&gt;";
+            finalString = "<b>"+QString("%1").arg(num)+") </b>&lt;EMPTY&gt;";
         }
-        else rom.setString();
+        else setString();
 
-        setHtml(rom.finalString);
+        setHtml(finalString);
     }
     else
     {

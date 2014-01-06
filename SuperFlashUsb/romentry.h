@@ -2,7 +2,7 @@
 #define ROMENTRY_H
 
 #include "utility.h"
-#include "rom_t.h"
+#include "game.h"
 #include <QtWidgets>
 
 class RomEntry : public QTextEdit
@@ -10,6 +10,10 @@ class RomEntry : public QTextEdit
     Q_OBJECT
 public:
     explicit RomEntry(QWidget *parent = 0);
+
+    void updateText();
+    void setString();
+    void setNum(int n);
 
 signals:
 
@@ -24,7 +28,9 @@ protected:
 
 
 public:
-    ROM_t rom;
+    Game game;
+    QString finalString;
+    int num;
     int QueryUSBRomHeader();
 
 private:

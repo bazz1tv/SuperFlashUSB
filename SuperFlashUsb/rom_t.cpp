@@ -41,16 +41,8 @@ bool ROM_t::isHirom()
     return ::isHirom(data);
 }
 
-int ROM_t::openFile(QIODevice::OpenModeFlag flags, QString filename/*=this->filename*/)
+int ROM_t::openFile(QString filename, QIODevice::OpenModeFlag flags)
 {
-    if (filename == "")
-    {
-        filename = this->filename;
-    }
-    else
-    {
-        this->filename = filename;
-    }
 
     if (!filename.isEmpty())
     {
@@ -108,6 +100,7 @@ uchar* ROM_t::mapFile()
 
 void ROM_t::loadRomTitleFromMap()
 {
+    int romheaderoffset = isHirom() ? 0x8000 : 0x0;
     for (uchar i=0; i < 21; i++)
     {
         RomTitle[i] = data[0x7fc0+romheaderoffset+i];
@@ -222,7 +215,7 @@ QString ROM_t::romHeaderToString()
                 QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+
                 QString("<b>RAM</b>: ")+
                 QString(RomRamSizeByteLUT[SramSizeByte])+
-                QString(" ($%1 bytes)").arg(1 << (SramSizeByte + 10),0,16);
+                (SramSizeByte ? QString(" ($%1 bytes)").arg(1 << (SramSizeByte + 10),0,16) : "");
 
         if (isHeadered())
         {
@@ -239,7 +232,7 @@ QString ROM_t::romHeaderToString()
     return str;
 }
 
-void ROM_t::setString(QString str/*="ABCD"*/, uchar mod/*=NOTHING*/)
+QString ROM_t::setString(QString str/*="ABCD"*/, uchar mod/*=NOTHING*/)
 {
     if (str == "ABCD")
     {
@@ -258,6 +251,8 @@ void ROM_t::setString(QString str/*="ABCD"*/, uchar mod/*=NOTHING*/)
             finalString = QString("<b>%1)</b> ").arg(num)+romHeaderToString() + QString("<p>")+str;
         }
     }
+
+    return finalString;
 }
 
 bool ROM_t::isValid()
@@ -270,9 +265,11 @@ bool ROM_t::isValid()
 
 
 
-int ROM_t::load()
+int ROM_t::load(QString filename, QIODevice::OpenModeFlag flags)
 {
-    if (openFile(QIODevice::ReadOnly) < 0)
+    this->filename = filename;
+
+    if (openFile(filename, flags) < 0)
     {
        fprintf(stderr, "ROM%d: openFile() failed\n", num);
        return -1;

@@ -17,8 +17,8 @@ public:
     ROM_t();
     ~ROM_t();
 
-    uchar* ROM_t::mapFile();
-    int openFile(QIODevice::OpenModeFlag flags, QString filename="");
+    uchar* mapFile();
+    int openFile(QString filename, QIODevice::OpenModeFlag flags);
     bool isHeadered();
 
     int setup();
@@ -26,7 +26,7 @@ public:
 
     QString romHeaderToString();
 
-    void setString(QString str="ABCD", uchar mod=NOTHING);
+    QString setString(QString str="ABCD", uchar mod=NOTHING);
 
     void loadRomTitleFromMap();
 
@@ -36,7 +36,7 @@ public:
     //int QueryUSBRomHeader();
 
 
-    int load();
+    int load(QString filename, QIODevice::OpenModeFlag flags);
 
     bool deformedHeader();
 

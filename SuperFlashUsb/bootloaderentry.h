@@ -13,8 +13,8 @@
 class BootLoaderEntry
 {
 public:
-    //BootLoaderEntry();
-    BootLoaderEntry (int num);
+    BootLoaderEntry();
+    //BootLoaderEntry (int num);
 
     // IMPORTANT
     bool VerifyBootLoaderRomEntry();

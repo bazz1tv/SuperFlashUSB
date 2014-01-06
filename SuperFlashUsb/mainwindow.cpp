@@ -62,27 +62,23 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->progressBar->setValue(100);
     ui->progressBar->setFormat("Progress Bar");
 
-    ui->romEdit1->rom.num = 1;
-     ui->romEdit1->rom.startaddr = 0;
-    ui->romEdit2->rom.num = 2;
-     ui->romEdit2->rom.startaddr = 0; //0x200000;
-    ui->romEdit3->rom.num = 3;
-     ui->romEdit3->rom.startaddr = 0; //0x400000;
-    ui->romEdit4->rom.num = 4;
-     ui->romEdit4->rom.startaddr = 0; //0x600000;
+    ui->romEntry1->setNum(1);
+    ui->romEntry2->setNum(2);
+    ui->romEntry3->setNum(3);
+    ui->romEntry4->setNum(4);
 
-    ui->romEdit1->rom.finalString = "<b>1) </b> &lt;DRAG ROM-FILE HERE&gt;";
-    ui->romEdit2->rom.finalString = "<b>2) </b> &lt;DRAG ROM-FILE HERE&gt;";
-    ui->romEdit3->rom.finalString = "<b>3) </b> &lt;DRAG ROM-FILE HERE&gt;";
-    ui->romEdit4->rom.finalString = "<b>4) </b> &lt;DRAG ROM-FILE HERE&gt;";
+    ui->romEntry1->finalString = "<b>1) </b> &lt;DRAG ROM-FILE HERE&gt;";
+    ui->romEntry2->finalString = "<b>2) </b> &lt;DRAG ROM-FILE HERE&gt;";
+    ui->romEntry3->finalString = "<b>3) </b> &lt;DRAG ROM-FILE HERE&gt;";
+    ui->romEntry4->finalString = "<b>4) </b> &lt;DRAG ROM-FILE HERE&gt;";
 
-    ui->sramEdit->sram.finalString = "&lt;DRAG SAVE-FILE HERE&gt;";
+    ui->sramEdit->finalString = "&lt;DRAG SAVE-FILE HERE&gt;";
 
-    ui->sramEdit->setHtml(ui->sramEdit->sram.finalString);
-    ui->romEdit1->setHtml(ui->romEdit1->rom.finalString);
-    ui->romEdit2->setHtml(ui->romEdit2->rom.finalString);
-    ui->romEdit3->setHtml(ui->romEdit3->rom.finalString);
-    ui->romEdit4->setHtml(ui->romEdit4->rom.finalString);
+    ui->sramEdit->updateText();
+    ui->romEntry1->updateText();
+    ui->romEntry2->updateText();
+    ui->romEntry3->updateText();
+    ui->romEntry4->updateText();
 
 
 
@@ -189,10 +185,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::clearAll()
 {
-    ui->romEdit1->setHtml("<b>1)</b> ");
-    ui->romEdit2->setHtml("<b>2)</b> ");
-    ui->romEdit3->setHtml("<b>3)</b> ");
-    ui->romEdit4->setHtml("<b>4)</b> ");
+    ui->romEntry1->setHtml("<b>1)</b> ");
+    ui->romEntry2->setHtml("<b>2)</b> ");
+    ui->romEntry3->setHtml("<b>3)</b> ");
+    ui->romEntry4->setHtml("<b>4)</b> ");
     ui->sramEdit->clear();
 }
 
@@ -236,22 +232,22 @@ void MainWindow::queryGameEntries()
 
 void MainWindow::queryRomHeaders()
 {
-    if (ui->romEdit1->QueryUSBRomHeader() == -2)
+    if (ui->romEntry1->QueryUSBRomHeader() == -2)
     {
-        //ui->romEdit2->rom.deformed_header = true;
-        ui->romEdit2->rom.isAlreadyOnCart = false;
+        //ui->romEntry2->rom.deformed_header = true;
+        ui->romEntry2->game.rom.isAlreadyOnCart = false;
 
-        //ui->romEdit3->rom.deformed_header = true;
-        ui->romEdit3->rom.isAlreadyOnCart = false;
+        //ui->romEntry3->rom.deformed_header = true;
+        ui->romEntry3->game.rom.isAlreadyOnCart = false;
 
-        //ui->romEdit4->rom.deformed_header = true;
-        ui->romEdit4->rom.isAlreadyOnCart = false;
+        //ui->romEntry4->rom.deformed_header = true;
+        ui->romEntry4->game.rom.isAlreadyOnCart = false;
 
         return;
     }
-    ui->romEdit2->QueryUSBRomHeader();
-    ui->romEdit3->QueryUSBRomHeader();
-    ui->romEdit4->QueryUSBRomHeader();
+    ui->romEntry2->QueryUSBRomHeader();
+    ui->romEntry3->QueryUSBRomHeader();
+    ui->romEntry4->QueryUSBRomHeader();
 }
 
 void MainWindow::setEnabledButtons (bool state)
@@ -422,10 +418,7 @@ void MainWindow::on_programRomButton_clicked()
         return;
     }
 
-    programCartThread->specialStart(&ui->romEdit1->rom,&ui->romEdit2->rom,&ui->romEdit3->rom,&ui->romEdit4->rom);
-
-
-
+    programCartThread->specialStart(&ui->romEntry1->game.rom,&ui->romEntry2->game.rom,&ui->romEntry3->game.rom,&ui->romEntry4->game.rom);
 
 
 

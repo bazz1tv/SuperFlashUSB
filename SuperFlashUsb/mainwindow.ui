@@ -169,7 +169,7 @@
          <enum>QLayout::SetDefaultConstraint</enum>
         </property>
         <item>
-         <widget class="RomEntry" name="romEdit1">
+         <widget class="RomEntry" name="romEntry1">
           <property name="minimumSize">
            <size>
             <width>3</width>
@@ -195,7 +195,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item>
-         <widget class="RomEntry" name="romEdit2">
+         <widget class="RomEntry" name="romEntry2">
           <property name="maximumSize">
            <size>
             <width>512</width>
@@ -222,7 +222,7 @@ p, li { white-space: pre-wrap; }
          <enum>QLayout::SetDefaultConstraint</enum>
         </property>
         <item>
-         <widget class="RomEntry" name="romEdit3">
+         <widget class="RomEntry" name="romEntry3">
           <property name="maximumSize">
            <size>
             <width>512</width>
@@ -242,7 +242,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item>
-         <widget class="RomEntry" name="romEdit4">
+         <widget class="RomEntry" name="romEntry4">
           <property name="maximumSize">
            <size>
             <width>512</width>

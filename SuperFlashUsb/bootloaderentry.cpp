@@ -3,12 +3,7 @@
 BootLoaderEntry::BootLoaderEntry()
 {
     entry = NULL;
-}
-
-BootLoaderEntry::BootLoaderEntry(int num)
-{
-    entry = NULL;
-    this->num = num;
+    //this->num = num;
 }
 
 void BootLoaderEntry::DownloadBootLoaderRomEntry()
