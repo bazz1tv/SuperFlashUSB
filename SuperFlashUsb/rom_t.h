@@ -38,6 +38,8 @@ public:
 
     bool isTypical();
 
+    //bool VerifyBootLoaderRomEntry(uchar *entry);
+    uchar* DownloadBootLoaderRomEntry();
 
     int QueryUSBRomHeader();
 
@@ -63,7 +65,9 @@ public:
     int startaddr;
     quint8 num;
     QString finalString;
-    QString bootLoaderEntry;
+    QString bootLoaderEntryRomTitle;
+    bool exists;
+    QByteArray bootLoaderEntry;
 };
 
 #endif // ROM_T_H

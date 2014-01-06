@@ -6,7 +6,8 @@ qint64 totalRomSizeInBytes;
 
 ROM_t::ROM_t()
 {
-    bootLoaderEntry.resize(0x20);
+    exists=false;
+    bootLoaderEntryRomTitle.resize(0x20);
     offset=0;
     hirom = false;
     headered=false;
@@ -21,7 +22,7 @@ ROM_t::ROM_t()
     filename = "";
     finalString="";
     num=1;
-    isAlreadyOnCart = true;
+    isAlreadyOnCart = false;
     deformed_header = false;
     sramsizeinbytes = 0;
 }
@@ -85,7 +86,13 @@ int ROM_t::setup()
     for (uchar i=0; i < 21; i++)
     {
         RomTitle[i] = data[0x7fc0+romoffset+i];
+
+        if (!RomTitle[i].isPrint())
+            RomTitle[i] = '.';
     }
+
+    RomTitle = RomTitle.toUpper();
+
 
     // ROM Title All set
 
@@ -171,8 +178,15 @@ QString ROM_t::romHeaderToString()
     QString str("");
     if (isValid())
     {
-        str = QString(RomTitle)+
-                QString("<p>Cart Type: ")+CartTypeStr+
+        //this->startaddr = 0x200000;
+        str = QString(RomTitle);
+
+        if (isAlreadyOnCart)
+        {
+            str += QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ROM-ON-CART");
+        }
+        str += QString("<p>Start Address: $%1").arg(startaddr,6,16,QChar('0'));
+        str += QString("<p>Cart Type: ")+CartTypeStr+
                 QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+
                 QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[RomSizeByte])+
                 QString(" ($%1 bytes)").arg(1 << (RomSizeByte + 10),0,16)+
@@ -185,6 +199,7 @@ QString ROM_t::romHeaderToString()
         {
             str += QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMU-Header Present");
         }
+        //else
     }
     else
     {
@@ -230,75 +245,86 @@ bool ROM_t::isTypical()
     else return false;
 }
 
+uchar* ROM_t::DownloadBootLoaderRomEntry()
+{
+    int sflash_rom_entry_startaddr = (0x7f8000+0x4000+(0x20*(num-1)));
+
+    fprintf (stderr, "BootLoader Rom Entry @ %x\n", sflash_rom_entry_startaddr);
+
+    ::startaddr = sflash_rom_entry_startaddr;
+    ::aal = ::startaddr&0xff;
+    ::aah = (::startaddr&0xff00)>>8;
+    ::aab = (::startaddr&0xff0000)>>16;
+    ::numbytes = 0x20;
+
+    ::InitRead();
+    ::ReadDataToBuffer(&bootLoaderEntry);
+
+
+
+
+    return (uchar*)bootLoaderEntry.data();
+}
+
+
+
 int ROM_t::QueryUSBRomHeader()
 {
     // GET THE ROM HEADER INFO
 
-    int sflash_rom_entry_startaddr = (0x7f8000+0x4000+(0x20*(num-1)));
-    //uchar *flags1;
-
-    fprintf (stderr, "%lx\n", sflash_rom_entry_startaddr);
-
-    // WE SHOULD FIRST VALIDATE THE SECTION AT THE 0x7f8000-0x7fffff
-
-    // FOR SAKE OF SPEED - LET'S CHECK SOLELY THE MENU SECTION
-    // 0x8a0, 0x3e0 bytes
+    //STEPS
+    // 1. Get the ROM ENTRY
+    // 2. Verify the values
+    // 3. BRANCH
 
 
 
-    // THUS, READ 0X7F8000+0X8A0, 0X3E0 BYTES
+    uchar *bootLoaderGameEntry = DownloadBootLoaderRomEntry();
 
 
-    // COMPARE TO BOOTLOADER[0X8A0+]
+    if (!VerifyBootLoaderRomEntry(bootLoaderGameEntry))
+    {
+        fprintf(stderr, "WTF!! BootLoader Entry is invalid!!\n");
 
-    //
-    // BEFORE WE BEGIN COMPARING VALUES AND SUCH
+        QMessageBox::warning(NULL, "UH OH", "Super Flash Bootloader Game Entry Table appears invalid. \nLet's Start from Scratch!");
+        deformed_header = true;
+        isAlreadyOnCart = false;
+        exists = false;
+        return -3;
+    }
 
-    ::startaddr = sflash_rom_entry_startaddr;
-    aal = ::startaddr&0xff;
-    aah = (::startaddr&0xff00)>>8;
-    aab = (::startaddr&0xff0000)>>16;
-    numbytes = 0x20;
-    QByteArray entry;
-
-    ::InitRead();
-    ::ReadDataToBuffer(&entry);
-
-    uchar *derp = (uchar*)entry.data();
-
-    uchar flags1 = derp[0x1d];
+    uchar flags1 = bootLoaderGameEntry[0x1d];
 
     for (int i=0; i < 0x20; i++)
     {
-        fprintf (stderr, "\\x%2x",derp[i]);
+        fprintf (stderr, "\\x%2x",bootLoaderGameEntry[i]);
     }
 
 
-    if (num == 1 && derp[0] != 0xff)
+    if (num == 1 && bootLoaderGameEntry[0] != 0xff)
     {
         QMessageBox::warning(NULL, "UH OH", "Super Flash Bootloader Game Entry Table appears invalid. \nLet's Start from Scratch!");
         deformed_header = true;
         isAlreadyOnCart = false;
+        exists = false;
         return -2;
     }
 
-    if (derp[0] == 0x0 || derp[0] != 0xFF || (derp[0] == 0xFF && ::zero_found) )
+    if (bootLoaderGameEntry[0] == 0x0 || bootLoaderGameEntry[0] != 0xFF ||
+            (bootLoaderGameEntry[0] == 0xFF && ::zero_found) )
     {
-
+        exists = false;
         deformed_header = true;
         isAlreadyOnCart = false;
 
-        if (derp[0] == 0x0)
+        if (bootLoaderGameEntry[0] == 0x0)
             ::zero_found = true;
         return -1;
     }
 
 
 
-    //if ()
-    // GET THAT INFO INTO A VARIABLE
-    // flags1 = blalalal
-    // THEN MODIFY THE BELOW CODE
+
 
 
     if (flags1 & 0x40)
@@ -309,26 +335,26 @@ int ROM_t::QueryUSBRomHeader()
         startaddr = 0x600000;
     else startaddr = 0;
 
-    // we need to read the byte
+
 
     int header_startaddr = 0x7fb0+startaddr;    // startaddr local to ROM_t
 
     // This refers to those pesky global variables I have floating around from PC-commandline-version
-    aal = header_startaddr&0xff;
-    aah = (header_startaddr&0xff00)>>8;
-    aab = (header_startaddr&0xff0000)>>16;
+    ::aal = header_startaddr&0xff;
+    ::aah = (header_startaddr&0xff00)>>8;
+    ::aab = (header_startaddr&0xff0000)>>16;
 
-    numbytes = 0x50;    // Header Size from 0x7fb0-0x7fff
+    ::numbytes = 0x50;    // Header Size from 0x7fb0-0x7fff
 
     QByteArray loromheader,hiromheader, *selectedheader;
     ReadHeader(&loromheader);
 
     header_startaddr = 0xffb0+startaddr;
-    aal = header_startaddr&0xff;
-    aah = (header_startaddr&0xff00)>>8;
-    aab = (header_startaddr&0xff0000)>>16;
+    ::aal = header_startaddr&0xff;
+    ::aah = (header_startaddr&0xff00)>>8;
+    ::aab = (header_startaddr&0xff0000)>>16;
 
-    numbytes = 0x50;
+    ::numbytes = 0x50;
     ReadHeader(&hiromheader);
 
     bool hirom= isHirom2((uchar*)loromheader.data(), (uchar*)hiromheader.data());
@@ -351,7 +377,7 @@ int ROM_t::QueryUSBRomHeader()
             RomTitle[i] = '.';
     }
 
-    RomTitle.toUpper();
+    RomTitle = RomTitle.toUpper();
 
     // ROM Title All set
     CartTypeByte = selectedheader->at(0x16+0x10);
@@ -367,8 +393,12 @@ int ROM_t::QueryUSBRomHeader()
     // Get SRAM Size
     SramSizeByte = selectedheader->at(0x18+0x10);
 
+
+
     if (isValid() && isTypical())
     {
+        isAlreadyOnCart = true;
+        exists = true;
         setString();
     }
     else
@@ -376,7 +406,7 @@ int ROM_t::QueryUSBRomHeader()
         setString("Game may be Empty/Corrupt. Or it may have a very unique ROM header. I'll display the ROM info anyways:", PREPEND);
     }
 
-    isAlreadyOnCart = true;
+
 
     return 0;
 }
@@ -411,12 +441,7 @@ int ROM_t::DoTheDo()
 
         setString();
 
-        /*finalString = QString("<b>")+QString("%1").arg(num)+QString(") </b>")+QString(RomTitle)+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>ROM</b>: ")+QString(RomRamSizeByteLUT[RomSizeByte])+QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;")+QString("<b>SRAM</b>: ")+QString(RomRamSizeByteLUT[SramSizeByte]);
-            if (isHeadered())
-            {
-                finalString += QString("<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EMU-Header Present");
-            }*/
-
+        exists = true;
     }
 
     return 0;
