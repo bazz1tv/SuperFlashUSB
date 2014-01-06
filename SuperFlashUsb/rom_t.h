@@ -17,57 +17,54 @@ public:
     ROM_t();
     ~ROM_t();
 
-    int open();
+    uchar* ROM_t::mapFile();
+    int openFile(QIODevice::OpenModeFlag flags, QString filename="");
     bool isHeadered();
 
     int setup();
-
-
     void clear();
-
-
-
 
     QString romHeaderToString();
 
     void setString(QString str="ABCD", uchar mod=NOTHING);
 
+    void loadRomTitleFromMap();
 
+    bool isHirom();
     bool isValid();
 
-
-    bool isTypical();
-
-    //bool VerifyBootLoaderRomEntry(uchar *entry);
-    uchar* DownloadBootLoaderRomEntry();
-
-    int QueryUSBRomHeader();
+    //int QueryUSBRomHeader();
 
 
-    int DoTheDo();
+    int load();
 
+    bool deformedHeader();
 
-    bool deformed_header;
     qint64 romsizeinbytes;
     qint64 sramsizeinbytes;
     bool isAlreadyOnCart;
-    bool hirom;
+    //bool hirom;
     uchar *data;
-    ushort offset;
-    bool headered;
+    qint64 fileoffset;
+    //bool headered;
     QString RomTitle;
+
+    //
     u_int8_t RomSizeByte;
     u_int8_t SramSizeByte;
     u_int8_t CartTypeByte;
+    //
     QString CartTypeStr;
+    //
     QFile *file;
     QString filename;
+    //
     int startaddr;
     quint8 num;
+    //
     QString finalString;
-    QString bootLoaderEntryRomTitle;
-    bool exists;
-    QByteArray bootLoaderEntry;
+    bool initialized;
+
 };
 
 #endif // ROM_T_H

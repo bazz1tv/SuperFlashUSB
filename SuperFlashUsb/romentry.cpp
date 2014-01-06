@@ -12,9 +12,9 @@ RomEntry::RomEntry(QWidget *parent) :
 int RomEntry::QueryUSBRomHeader()
 {
     int r;
-    if ( (r=rom.QueryUSBRomHeader()) < 0)
+    /*if ( (r=rom.QueryUSBRomHeader()) < 0)
         return r;
-    setHtml(rom.finalString);
+    setHtml(rom.finalString);*/
 
     return 0;
 }
@@ -44,7 +44,7 @@ void RomEntry::dropEvent(QDropEvent * event)
     {
         rom.filename = derp.toLocalFile();
 
-        if (rom.DoTheDo() < 0)
+        if (rom.load() < 0)
         {
             rom.finalString = "<b>"+QString("%1").arg(rom.num)+") </b>&lt;EMPTY&gt;";
         }
@@ -102,8 +102,13 @@ void RomEntry::contextMenuEvent(QContextMenuEvent * event)
             return;
         }
 
-        rom.DoTheDo();
-        rom.setString();
+        //rom.DoTheDo();
+        if (rom.load() < 0)
+        {
+            rom.finalString = "<b>"+QString("%1").arg(rom.num)+") </b>&lt;EMPTY&gt;";
+        }
+        else rom.setString();
+
         setHtml(rom.finalString);
     }
     else

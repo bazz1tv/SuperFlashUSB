@@ -154,15 +154,7 @@ int ScoreLoROM(unsigned char *data)
 
 
 
-bool is_headered(QFile &file)
-{
-    if (file.size() % 1024 == 512)
-    {
-        return true;
-    }
 
-    return false;
-}
 
 bool isHirom(uchar *data)
 {

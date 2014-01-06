@@ -238,13 +238,13 @@ void MainWindow::queryRomHeaders()
 {
     if (ui->romEdit1->QueryUSBRomHeader() == -2)
     {
-        ui->romEdit2->rom.deformed_header = true;
+        //ui->romEdit2->rom.deformed_header = true;
         ui->romEdit2->rom.isAlreadyOnCart = false;
 
-        ui->romEdit3->rom.deformed_header = true;
+        //ui->romEdit3->rom.deformed_header = true;
         ui->romEdit3->rom.isAlreadyOnCart = false;
 
-        ui->romEdit4->rom.deformed_header = true;
+        //ui->romEdit4->rom.deformed_header = true;
         ui->romEdit4->rom.isAlreadyOnCart = false;
 
         return;

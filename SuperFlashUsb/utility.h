@@ -25,16 +25,10 @@ int ScoreRomHeader(unsigned char *data);
 
 
 
-bool is_headered(QFile &file);
+//bool is_headered(QFile &file);
 
 bool isHirom(uchar *data);
 bool isHirom2(uchar *loromdata, uchar *hiromdata);
-
-
-
-
-//void WriteMultiRomEntry(ROM_t *rom, QString &myBootLoader);
-//int dothedo(ROM_t &rom);
 
 
 

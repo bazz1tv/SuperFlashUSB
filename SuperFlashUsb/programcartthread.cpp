@@ -44,9 +44,9 @@ void WriteMultiRomEntry(ROM_t *rom, QString &myBootLoader)
     if (rom->romsizeinbytes > 0x400000)            // Enable Extended Map for >32 Mbit ROMs
       flags2 |= 0x80;
 
-    flags1 = rom->hirom ? 0x10 : 0x00;
+    flags1 = rom->isHirom() ? 0x10 : 0x00;
 
-    if (!rom->hirom && uses_DSP)                  // Set LoROM DSP flag if necessary
+    if (!rom->isHirom() && uses_DSP)                  // Set LoROM DSP flag if necessary
       flags1 |= 0x01;
 
     if (rom->startaddr == 0)

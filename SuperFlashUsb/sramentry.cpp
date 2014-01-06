@@ -62,9 +62,7 @@ void SramEntry::contextMenuEvent(QContextMenuEvent * event)
     QPoint globalPos = event->globalPos();
 
     QMenu myMenu;
-    //int offset=0;
     myMenu.addAction("Load Save");
-    // ...
 
     QAction* selectedItem = myMenu.exec(globalPos);
     if (selectedItem)

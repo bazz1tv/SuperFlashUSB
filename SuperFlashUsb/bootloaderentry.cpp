@@ -5,7 +5,13 @@ BootLoaderEntry::BootLoaderEntry()
     entry = NULL;
 }
 
-void BootLoaderEntry::DownloadBootLoaderRomEntry(int num /* = 1->4 */)
+BootLoaderEntry::BootLoaderEntry(int num)
+{
+    entry = NULL;
+    this->num = num;
+}
+
+void BootLoaderEntry::DownloadBootLoaderRomEntry()
 {
     int sflash_rom_entry_startaddr = (0x7f8000+0x4000+(0x20*(num-1)));
 
@@ -27,19 +33,19 @@ void BootLoaderEntry::DownloadBootLoaderRomEntry(int num /* = 1->4 */)
 
 bool BootLoaderEntry::VerifyBootLoaderRomEntry()
 {
-    if (!isBootLoaderRomTitleVerified(entry))
+    if (!isBootLoaderRomTitleVerified())
     {
         fprintf(stderr, "Rom%d BootLoader Entry: RomTitle Failed Verification\n", num);
         return false;
     }
 
-    if (!isFlag1Verified(entry))
+    if (!isFlag1Verified())
     {
         fprintf(stderr, "Rom%d BootLoader Entry: Flag1 Failed Verification\n", num);
         return false;
     }
 
-    if (!isFlag2Verified(entry))
+    if (!isFlag2Verified())
     {
         fprintf(stderr, "Rom%d BootLoader Entry: Flag1 Failed Verification\n", num);
         return false;
