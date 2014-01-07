@@ -28,6 +28,7 @@ public:
 
     bool end;
     QFile file;
+    uchar data[128];
 
 public slots:
     void canceled(void);

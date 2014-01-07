@@ -37,9 +37,9 @@ ReadRomThread::canceled (void)
 
 void ReadRomThread::LoadReadBuffer()
 {
-    data[0] = aal;
-    data[1] = aah;
-    data[2] = aab;
+    this->data[0] = aal;
+    this->data[1] = aah;
+    this->data[2] = aab;
 
 
 }
@@ -49,13 +49,13 @@ void ReadRomThread::InitRead()
     chunks = numbytes / DERP;
     leftover_bytes = numbytes % DERP;
 
-    LoadReadBuffer();
+    this->LoadReadBuffer();
 
     uint8_t bmrt = LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT;
     cout << "Read: bmrt = ";
     printf ( "%x\n", bmrt);
     redo:
-    r = libusb_control_transfer(dev_handle, bmrt,READ, ADDR, 0x0000, &data[0], READ_PACKET_SIZE, 500);
+    int r = libusb_control_transfer(dev_handle, bmrt,READ, ADDR, 0x0000, &this->data[0], READ_PACKET_SIZE, 500);
     if(r == READ_PACKET_SIZE ) //we wrote successfully
     {
 #ifdef DEBUG
@@ -86,22 +86,24 @@ void ReadRomThread::ReadDataToFile()
                     return;
             }
             // Get a 32K section from USB
+            fprintf(stderr, "Dev Handle = %x\n",dev_handle);// << endl;
+            fprintf(stderr, "Data: %x\n", data);
             restart:
-            r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,READ, FETCH, (uint16_t) DERP, &data[0], 1, 500);
+            r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_OUT,READ, FETCH, (uint16_t) DERP, data, 1, 500);
             if (r ==1)
             {
                 // could print success here :)
             }
             else
             {
-                cout << "Fetch OUT fail\n";
-                cout << "Restart\n";
+                fprintf(stderr,"Fetch OUT fail\n");
+                fprintf(stderr,"Restart\n");
                 goto restart;
             }
 
             for (;;)
             {
-                r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, FETCH, (uint16_t) DERP, &data[0], 1, 500);
+                r = libusb_control_transfer(dev_handle, LIBUSB_RECIPIENT_DEVICE|LIBUSB_REQUEST_TYPE_VENDOR|LIBUSB_ENDPOINT_IN,READ, FETCH, (uint16_t) DERP, data, 1, 500);
                 if (r == 1)
                 {
                     //cout << "Fetch IN success\n";

@@ -75,7 +75,8 @@ void GeneralPurposeThread::run ()
             derp += QString("Your ROM Device-ID: 0x%1 VS. expected: 0x%2\n\n").arg(manuf_id_codes[1],2,16).arg(0x17,2,16);
             derp += "If you are indeed using a Tototek SuperFlash Cartridge, please identify to me the Flash ROM model number\nEmail to mbazzinotti@gmail.com";
             sendmessage(QMessageBox::Warning, "UH OH!", derp);
-            qApp->quit();
+            //qApp->quit();
+            return;
         }
 
          //sendmessage(QMessageBox::Warning, "UH OH!", );
