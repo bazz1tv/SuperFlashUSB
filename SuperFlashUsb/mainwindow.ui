@@ -392,12 +392,12 @@ p, li { white-space: pre-wrap; }
   <customwidget>
    <class>RomEntry</class>
    <extends>QTextEdit</extends>
-   <header location="global">romentry.h</header>
+   <header location="global">datatypes/romentry.h</header>
   </customwidget>
   <customwidget>
    <class>SramEntry</class>
    <extends>QTextEdit</extends>
-   <header location="global">sramentry.h</header>
+   <header location="global">datatypes/sramentry.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

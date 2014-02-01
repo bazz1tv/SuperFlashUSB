@@ -1,4 +1,4 @@
-#include "romentry.h"
+#include "datatypes/romentry.h"
 
 
 RomEntry::RomEntry(QWidget *parent) :

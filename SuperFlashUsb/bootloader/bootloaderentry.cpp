@@ -1,4 +1,4 @@
-#include "bootloaderentry.h"
+#include "bootloader/bootloaderentry.h"
 
 BootLoaderEntry::BootLoaderEntry()
 {

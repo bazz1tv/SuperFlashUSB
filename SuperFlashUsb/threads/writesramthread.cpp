@@ -1,4 +1,4 @@
-#include "writesramthread.h"
+#include "threads/writesramthread.h"
 //#include "usbthread.h"
 #include <libusb.h>
 #include "pc/sflash.h"

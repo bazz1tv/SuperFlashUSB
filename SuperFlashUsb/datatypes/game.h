@@ -1,8 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "bootloaderentry.h"
-#include "rom_t.h"
+#include "bootloader/bootloaderentry.h"
+#include "datatypes/rom_t.h"
 
 #include <QtWidgets>
 

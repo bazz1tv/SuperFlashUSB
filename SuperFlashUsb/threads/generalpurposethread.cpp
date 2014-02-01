@@ -1,4 +1,4 @@
-#include "generalpurposethread.h"
+#include "threads/generalpurposethread.h"
 #include "pc/sflash.h"
 
 void GeneralPurposeThread::message_complete()

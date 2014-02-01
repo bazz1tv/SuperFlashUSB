@@ -4,11 +4,11 @@
 #include <QMainWindow>
 
 #include "utility.h"
-#include "usbthread.h"
-#include "readromthread.h"
-#include "writesramthread.h"
-#include "programcartthread.h"
-#include "generalpurposethread.h"
+#include "threads/usbthread.h"
+#include "threads/readromthread.h"
+#include "threads/writesramthread.h"
+#include "threads/programcartthread.h"
+#include "threads/generalpurposethread.h"
 
 extern QString bootloader;
 

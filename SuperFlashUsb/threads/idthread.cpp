@@ -1,4 +1,4 @@
-#include "idthread.h"
+#include "threads/idthread.h"
 
 /* defined in common.h
 // MAJOR

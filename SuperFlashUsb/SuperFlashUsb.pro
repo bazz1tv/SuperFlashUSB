@@ -24,8 +24,6 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     utility.cpp \
     readcartdialog.cpp \
-    romentry.cpp \
-    sramentry.cpp \
     pc/sflash/erase.cpp \
     pc/sflash/id.cpp \
     pc/sflash/read.cpp \
@@ -34,24 +32,24 @@ SOURCES += main.cpp\
     pc/sflash/write.cpp \
     pc/USB.cpp \
     pc/derp.cpp \
-    usbthread.cpp \
-    readromthread.cpp \
-    writesramthread.cpp \
-    erasethread.cpp \
-    idthread.cpp \
-    programcartthread.cpp \
-    rom_t.cpp \
-    sram_t.cpp \
-    generalpurposethread.cpp \
-    bootloader_file.cpp \
-    bootloaderentry.cpp \
-    game.cpp
+    bootloader/bootloader_file.cpp \
+    bootloader/bootloaderentry.cpp \
+    datatypes/game.cpp \
+    datatypes/rom_t.cpp \
+    datatypes/romentry.cpp \
+    datatypes/sram_t.cpp \
+    datatypes/sramentry.cpp \
+    threads/erasethread.cpp \
+    threads/generalpurposethread.cpp \
+    threads/idthread.cpp \
+    threads/programcartthread.cpp \
+    threads/readromthread.cpp \
+    threads/usbthread.cpp \
+    threads/writesramthread.cpp
 
 HEADERS  += mainwindow.h \
     utility.h \
     readcartdialog.h \
-    romentry.h \
-    sramentry.h \
     pc/sflash.h \
     pc/sflash/erase.h \
     pc/sflash/id.h \
@@ -61,18 +59,20 @@ HEADERS  += mainwindow.h \
     pc/sflash/write.h \
     pc/main.h \
     pc/USB.h \
-    usbthread.h \
     main.h \
-    readromthread.h \
-    writesramthread.h \
-    erasethread.h \
-    idthread.h \
-    programcartthread.h \
-    rom_t.h \
-    sram_t.h \
-    generalpurposethread.h \
-    bootloaderentry.h \
-    game.h
+    bootloader/bootloaderentry.h \
+    datatypes/game.h \
+    datatypes/rom_t.h \
+    datatypes/romentry.h \
+    datatypes/sram_t.h \
+    datatypes/sramentry.h \
+    threads/erasethread.h \
+    threads/generalpurposethread.h \
+    threads/idthread.h \
+    threads/programcartthread.h \
+    threads/readromthread.h \
+    threads/usbthread.h \
+    threads/writesramthread.h
 
 FORMS    += mainwindow.ui \
     readcartdialog.ui

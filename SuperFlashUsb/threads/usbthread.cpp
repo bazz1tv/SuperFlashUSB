@@ -1,4 +1,4 @@
-#include "usbthread.h"
+#include "threads/usbthread.h"
 #include <libusb.h>
 
 void

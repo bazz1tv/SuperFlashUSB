@@ -1,4 +1,4 @@
-#include "readromthread.h"
+#include "threads/readromthread.h"
 //#include "usbthread.h"
 #include <libusb.h>
 #include "pc/sflash.h"

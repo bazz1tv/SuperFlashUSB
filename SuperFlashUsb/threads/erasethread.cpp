@@ -1,4 +1,4 @@
-#include "erasethread.h"
+#include "threads/erasethread.h"
 #include "pc/sflash.h"
 
 //#include <QMes
