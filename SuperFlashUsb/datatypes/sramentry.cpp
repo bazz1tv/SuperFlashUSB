@@ -20,7 +20,7 @@ void SramEntry::setString()
 
 void SramEntry::dragEnterEvent(QDragEnterEvent * event)
 {
-    if (event->mimeData()->hasFormat("text/plain"))
+    if (event->mimeData()->hasFormat("text/plain") || event->mimeData()->hasFormat("text/uri-list") )
     {
         setStyleSheet("background-color: #ccc");
         event->acceptProposedAction();
@@ -59,7 +59,7 @@ void SramEntry::dragLeaveEvent(QDragLeaveEvent * event)
 
 void SramEntry::dragMoveEvent(QDragMoveEvent *event)
 {
-    if (event->mimeData()->hasFormat("text/plain"))
+    if (event->mimeData()->hasFormat("text/plain") || event->mimeData()->hasFormat("text/uri-list"))
     {
         //setStyleSheet("background-color: #ccc");
         event->acceptProposedAction();

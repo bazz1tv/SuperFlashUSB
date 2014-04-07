@@ -25,6 +25,7 @@ ROM_t::ROM_t()
     isAlreadyOnCart = false;
     //deformed_header = false;
     sramsizeinbytes = 0;
+    romsizeinbytes = 0;
 }
 
 ROM_t::~ROM_t()
@@ -138,6 +139,8 @@ int ROM_t::setup()
     SramSizeByte = data[0x7fd8+romheaderoffset];
     // Headered
 
+    qint64 oldromsizeinbytes = romsizeinbytes;
+
     if (deformedHeader())
     {
         //QMessageBox::critical(NULL, QObject::tr("Error"), QObject::tr("Something's Wrong. Did you load the correct file?"));
@@ -169,15 +172,39 @@ int ROM_t::setup()
 
         sramsizeinbytes = SramSizeByte ? 1 << (SramSizeByte + 10) : 0;
 
-        ::totalRomSizeInBytes += romsizeinbytes;
 
-        if (::totalRomSizeInBytes > 0x7f8000)
-        {
-            QMessageBox::critical(NULL, "Too Much Data!", "There is not enough room for this ROM!");
-            clear();
-        }
+
+
 
     }
+
+    qint64 difference=0;
+    if (romsizeinbytes >= oldromsizeinbytes)
+    {
+        difference = romsizeinbytes - oldromsizeinbytes;
+
+    }
+    else // if ( oldromsizeinbytes > romsizeinbytes )
+    {
+        difference = -(oldromsizeinbytes - romsizeinbytes);
+    }
+
+    qint64 newTotalRomSizeInBytes = ::totalRomSizeInBytes + difference;
+    //::totalRomSizeInBytes += difference;
+
+    fprintf(stderr,"Current Total Rom Size: $%x\n", ::totalRomSizeInBytes);
+    fprintf(stderr, "Proposed Total Rom Size: $%x\n\n", newTotalRomSizeInBytes);
+
+    if (newTotalRomSizeInBytes > 0x7f8000)
+    {
+        QString derp = QString("There is not enough room for this ROM!\n$%1").arg(::totalRomSizeInBytes,0,16);
+        QMessageBox::critical(NULL, "Too Much Data!", derp);
+        clear();
+        //::totalRomSizeInBytes -= difference;
+        return -1;
+    }
+
+    ::totalRomSizeInBytes = newTotalRomSizeInBytes;
 
     isAlreadyOnCart = false;
     initialized = true;
@@ -188,6 +215,7 @@ int ROM_t::setup()
 void ROM_t::clear()
 {
     finalString = QString("<b>%1)</b> ").arg(num);
+    romsizeinbytes = 0;
 }
 
 //#define NOTHING 0

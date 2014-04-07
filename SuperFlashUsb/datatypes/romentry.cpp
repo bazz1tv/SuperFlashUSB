@@ -39,7 +39,7 @@ int RomEntry::QueryUSBRomHeader()
 
 void RomEntry::dragEnterEvent(QDragEnterEvent * event)
 {
-    if (event->mimeData()->hasFormat("text/plain"))
+    if (event->mimeData()->hasFormat("text/plain") || event->mimeData()->hasFormat("text/uri-list") )
     {
         setStyleSheet("background-color: #ccc");
         event->acceptProposedAction();
@@ -83,7 +83,8 @@ void RomEntry::dragLeaveEvent(QDragLeaveEvent * event)
 
 void RomEntry::dragMoveEvent(QDragMoveEvent *event)
 {
-    if (event->mimeData()->hasFormat("text/plain"))
+    // text/plain on Linux, text/uri-list on OSX / Windows
+    if (event->mimeData()->hasFormat("text/plain") || event->mimeData()->hasFormat("text/uri-list") )
     {
         //setStyleSheet("background-color: #ccc");
         event->acceptProposedAction();
