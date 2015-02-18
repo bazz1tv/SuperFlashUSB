@@ -221,6 +221,7 @@ void MainWindow::connect_USB()
         //
         gpThread->specialStart(CONNECT);
         //QueryUSBRomHeaders();
+        //queryRomHeaders();
     }
 
 }

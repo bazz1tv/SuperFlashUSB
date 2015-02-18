@@ -26,7 +26,7 @@ LD_FLAGS     =
 
 
 
-LIBUSB_DIR = /usr/include/libusb-1.0
+LIBUSB_DIR = /opt/local/include/libusb-1.0
 
 # Default target
 all: prog
